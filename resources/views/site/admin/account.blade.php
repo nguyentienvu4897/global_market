@@ -132,7 +132,7 @@
                             <ul>
                                 <li>
                                     <a disabled="disabled" class="title-info" title="Thông tin tài khoản"
-                                        href="javascript:void(0);">Thông tin tài khoản</a>
+                                        href="javascript:void(0);" ng-click="showChangePassword = false">Thông tin tài khoản</a>
                                 </li>
                                 <li>
                                     <a class="title-info" href="javascript:void(0)" title="Đổi mật khẩu" ng-click="changePassword(showChangePassword = !showChangePassword)">Đổi mật
@@ -146,8 +146,8 @@
                     </div>
                     <div class="col-xs-12 col-sm-12 col-lg-9 col-right-ac">
                         <h1 class="title-head margin-top-0 d-flex" style="align-items: center; justify-content: space-between;">
-                            <span ng-if="!showChangePassword">Thông tin tài khoản</span>
-                            <span ng-if="showChangePassword">Thay đổi mật khẩu</span>
+                            <span style="font-size: 19px; font-weight: 500;" ng-if="!showChangePassword">Thông tin tài khoản</span>
+                            <span style="font-size: 19px; font-weight: 500;" ng-if="showChangePassword">Thay đổi mật khẩu</span>
                             <div class="ml-auto group-invite-code">
                                 <input class="invite-code" type="text" ng-model="currentUser.invite_code" placeholder="Mã giới thiệu" disabled>
                                 <a class="btn-copy-invite-code" href="javascript:void(0)" ng-click="copyReferralCode($event)" title="Copy mã giới thiệu">

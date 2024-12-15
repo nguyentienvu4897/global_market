@@ -160,6 +160,13 @@
                     </li> --}}
 
                     <li class="nav-item">
+                        <a href="{{ route('tags.index') }}" class="nav-link {{ Request::routeIs('tags.index') ? 'active' : '' }}">
+                            <i class="far fas  fa-angle-right nav-icon"></i>
+                            <p>Danh mục tag</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
                         <a href="{{ route('banners.index') }}" class="nav-link {{ Request::routeIs('banners.index') ? 'active' : '' }}">
                             <i class="far fas  fa-angle-right nav-icon"></i>
                             <p>Danh mục banner trang chủ</p>

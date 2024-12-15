@@ -1,7 +1,7 @@
 <div class="top-header" ng-cloak>
     <div class="container">
         <div class="row">
-            <div class="col-xl-5 col-xlcus-4 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
+            <div class="col-xl-5 col-xlcus-4 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 order-md-1 order-2">
                 <button class="menu-icon" aria-label="Menu" id="btn-menu-mobile" title="Menu">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <line y1="4.5" x2="24" y2="4.5" stroke="#fff"></line>
@@ -49,12 +49,12 @@
                     <img src="/site/images/cs.png" alt="banner" style="width: 100%; height: auto;">
                 </div> --}}
             </div>
-            <div class="col-xl-2 col-xlcus-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 header-logo">
+            <div class="col-xl-2 col-xlcus-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 header-logo order-md-2 order-1">
                 <a href="{{ route('front.home-page') }}" class="logo-wrapper" title="{{$config->web_title}}"><img class="lazyload" width="340" height="104"
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
                         data-src="{{$config->image->path ?? ''}}" /></a>
             </div>
-            <div class="col-xl-5 col-xlcus-6 col-lg-12 box-right">
+            <div class="col-xl-5 col-xlcus-6 col-lg-12 box-right order-md-3 order-3">
                 <div class="box-swisa">
                     <div class="img_hot">
                         <img width="14" height="18"

@@ -126,6 +126,7 @@ class ProductController extends Controller
 
 			$object->syncGalleries($request->galleries);
 			$object->syncDocuments($request->attachments, 'products/attachments/');
+            $object->addTags($request->tag_ids);
 
             if(isset($request->all()['videos'])) {
                 foreach ($request->all()['videos'] as $video) {
@@ -196,6 +197,8 @@ class ProductController extends Controller
 
 			$object->syncGalleries($request->galleries);
             $object->syncDocuments($request->attachments, 'products/attachments/');
+
+            $object->updateTags($request->tag_ids);
 
             if(isset($request->all()['videos'])) {
                 ProductVideo::query()->where('product_id', $object->id)->delete();

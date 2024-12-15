@@ -210,7 +210,7 @@ class Product extends BaseModel
         });
 
         $tags = $product->tags->map(function ($tag) {
-            $tag->name = '<a href="'.route('front.search').'?keyword='.$tag->name.'">'.$tag->name.'</a>' ;
+            // $tag->name = '<a href="'.route('front.search').'?keyword='.$tag->name.'">'.$tag->name.'</a>' ;
             return $tag;
         });
 

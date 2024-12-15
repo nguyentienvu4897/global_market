@@ -35,7 +35,7 @@ table {
 
 .col-left-ac .block-account .title-account {
     font-size: 19px;
-    font-weight: 400;
+    font-weight: 500;
     color: #212B25;
     margin-bottom: 7px;
     margin-top: 0;
@@ -1510,4 +1510,12 @@ div#social_login {
 
 .btn_boz_khac .btn_khac a {
     float: right
+}
+
+@media (max-width: 767px) {
+    .page_customer_account .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        overflow-y: hidden;
+    }
 }

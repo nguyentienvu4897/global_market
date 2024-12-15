@@ -168,7 +168,6 @@
                 revenue_price: this._revenue_price
             }
 
-            console.log(this.use_url_custom);
             data = jsonToFormData(data);
             let image = this.image.submit_data;
             if (image) data.append('image', image);

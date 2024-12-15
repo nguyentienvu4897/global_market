@@ -13,7 +13,7 @@
     <div ng-controller="tags" ng-cloak>
         <div class="row">
             <div class="col-lg-12">
-                <div class="card">
+                <div class="card p-2">
                     <div class="card-block">
                         <div class="button-tool pb-3 text-right">
                             <a href="javascript:void(0)" class="btn btn-info" data-target="#createModal"
