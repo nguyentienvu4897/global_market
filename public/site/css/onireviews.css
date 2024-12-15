@@ -1,0 +1,1544 @@
+
+.onirvapp--shape-container, .onirvapp--shape-select {
+    --onirvapp-shape-icon-solid: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='%23ffb800' stroke='%23ffb800' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.951 2.927c-.299-.921-1.602-.921-1.902 0L9.53 7.601a1 1 0 0 1-.951.69H3.665c-.968 0-1.372 1.24-.588 1.81l3.976 2.888a1 1 0 0 1 .363 1.118l-1.518 4.674c-.3.921.755 1.688 1.538 1.118l3.976-2.888a1 1 0 0 1 1.176 0l3.976 2.888c.783.57 1.838-.196 1.538-1.118l-1.518-4.674a1 1 0 0 1 .363-1.118l3.976-2.888c.783-.57.381-1.81-.588-1.81H15.42a1 1 0 0 1-.95-.69l-1.519-4.674Z'%3E%3C/path%3E%3C/svg%3E");
+    --onirvapp-shape-icon-background: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='%23b3bcc5' stroke='%23b3bcc5' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.951 2.927c-.299-.921-1.602-.921-1.902 0L9.53 7.601a1 1 0 0 1-.951.69H3.665c-.968 0-1.372 1.24-.588 1.81l3.976 2.888a1 1 0 0 1 .363 1.118l-1.518 4.674c-.3.921.755 1.688 1.538 1.118l3.976-2.888a1 1 0 0 1 1.176 0l3.976 2.888c.783.57 1.838-.196 1.538-1.118l-1.518-4.674a1 1 0 0 1 .363-1.118l3.976-2.888c.783-.57.381-1.81-.588-1.81H15.42a1 1 0 0 1-.95-.69l-1.519-4.674Z'%3E%3C/path%3E%3C/svg%3E");
+    --onirvapp-shape-icon-outline: url("data:image/svg+xml,%3Csvg width='24' height='24' fill='%23ffffff' stroke='%23ffb800' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M12.951 2.927c-.299-.921-1.602-.921-1.902 0L9.53 7.601a1 1 0 0 1-.951.69H3.665c-.968 0-1.372 1.24-.588 1.81l3.976 2.888a1 1 0 0 1 .363 1.118l-1.518 4.674c-.3.921.755 1.688 1.538 1.118l3.976-2.888a1 1 0 0 1 1.176 0l3.976 2.888c.783.57 1.838-.196 1.538-1.118l-1.518-4.674a1 1 0 0 1 .363-1.118l3.976-2.888c.783-.57.381-1.81-.588-1.81H15.42a1 1 0 0 1-.95-.69l-1.519-4.674Z'%3E%3C/path%3E%3C/svg%3E");
+}
+
+.onirvapp--shape-xs {
+    --onirvapp-shape-total-width: 75px;
+    --onirvapp-shape-width: 15px;
+    --onirvapp-shape-height: 14px;
+    --onirvapp-shape-position-x: -0px;
+}
+.onirvapp--shape-lg {
+    --onirvapp-shape-total-width: 186px;
+    --onirvapp-shape-width: 38px;
+    --onirvapp-shape-height: 32px;
+    --onirvapp-shape-position-x: -2px;
+}
+.onirvapp--shape-sm {
+    --onirvapp-shape-total-width: 108px;
+    --onirvapp-shape-width: 22px;
+    --onirvapp-shape-height: 18px;
+    --onirvapp-shape-position-x: -1px;
+}
+.onireviewapp-container {
+    background: #fff;
+    margin: 0 auto;
+    max-width: 1400px;
+    padding: 15px;
+    width: 100%;
+}
+.onirvapp-detail-title {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.3;
+    margin: 0 0 10px;
+}
+* {
+    --onirvapp-textgray-900: #111827;
+    --onirvapp-textgray-700: #374151;
+    --onirvapp-textgray-500: #6b7280;
+    --onirvapp-textgray-400: #9ca3af;
+    --onirvapp-textgray-300: #d1d5db;
+    --onirvapp-textgray-200: #e5e7eb;
+    --onirvapp-textgray-100: #f3f4f6;
+    --onirvapp-textgray-50: #f9fafb;
+    --textblue-400: #60a5fa;
+    --textblue-50: #eff6ff;
+    --onirvapp-shape-color: #ffb800;
+    --onirvapp-shape-bgcolor: #b3bcc5;
+    --onirvapp-badge-color: #01ab56;
+    --onirvapp-btn-color: #BB0909;
+}
+@-webkit-keyframes onirvapp-animate-spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(1turn);
+        transform: rotate(1turn);
+    }
+}
+@keyframes onirvapp-animate-spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    to {
+        -webkit-transform: rotate(1turn);
+        transform: rotate(1turn);
+    }
+}
+.onirvapp-hidden {
+    display: none !important;
+}
+.onirvapp-shape-container {
+    display: flex;
+}
+.onirvapp-shape-container .onirvapp--shape-select {
+    margin-left: 1px;
+}
+.onirvapp-dialog {
+    position: relative;
+    z-index: 99999;
+}
+.onirvapp-dialog .onirvapp-dialog-overlay {
+    background-color: rgba(0, 0, 0, 0.5);
+    bottom: 0;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+.onirvapp-dialog .onirvapp-dialog-content {
+    bottom: 0;
+    left: 0;
+    line-height: 1.5;
+    overflow-y: auto;
+    position: fixed;
+    right: 0;
+    top: 0;
+}
+.onirvapp-dialog .onirvapp-dialog-content .onirvapp-dialog-content-container {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    min-height: 100%;
+    padding: 12px;
+}
+.onirvapp-dialog
+    .onirvapp-dialog-content
+    .onirvapp-dialog-content-container
+    .onirvapp-dialog-content-panel {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    max-width: 960px;
+    overflow: hidden;
+    padding: 12px;
+    position: relative;
+    transition-property: all;
+    width: 100%;
+}
+.onirvapp-dialog
+    .onirvapp-dialog-content
+    .onirvapp-dialog-content-container
+    .onirvapp-dialog-content-panel.onirvapp-dialog-content-panel-form {
+    max-width: 480px;
+}
+.onirvapp-dialog
+    .onirvapp-dialog-content
+    .onirvapp-dialog-content-container
+    .onirvapp-dialog-content-panel
+    .onirvapp-dialog-content-title {
+    color: var(--onirvapp-textgray-900);
+    font-size: 18px;
+    font-weight: 700;
+}
+.onirvapp-dialog
+    .onirvapp-dialog-content
+    .onirvapp-dialog-content-container
+    .onirvapp-dialog-content-panel
+    .onirvapp-dialog-content-panel-desc {
+    margin-top: 6px;
+    padding: 12px;
+}
+.onirvapp-dialog
+    .onirvapp-dialog-content
+    .onirvapp-dialog-content-container
+    .onirvapp-dialog-content-panel
+    .onirvapp-dialog-content-panel-desc
+    .onirvapp-dialog-content-panel-text {
+    color: var(--onirvapp-textgray-500);
+    font-size: 14px;
+}
+.onirvapp-dialog
+    .onirvapp-dialog-content
+    .onirvapp-dialog-content-container
+    .onirvapp-dialog-content-panel
+    .onirvapp-dialog-content-panel-action {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+.onirvapp-dialog
+    .onirvapp-dialog-content
+    .onirvapp-dialog-content-container
+    .onirvapp-dialog-content-panel
+    .onirvapp-dialog-content-panel-loading {
+    align-items: center;
+    background-color: hsla(0, 0%, 100%, 0.9);
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 9;
+}
+.onirvapp-dialog
+    .onirvapp-dialog-content
+    .onirvapp-dialog-content-container
+    .onirvapp-dialog-content-panel
+    .onirvapp-dialog-content-panel-alert {
+    align-items: center;
+    color: #059669;
+    display: flex;
+    flex-direction: column;
+}
+.onirvapp-dialog
+    .onirvapp-dialog-content
+    .onirvapp-dialog-content-container
+    .onirvapp-dialog-content-panel
+    .onirvapp-dialog-content-panel-alert
+    svg {
+    height: 16px;
+    width: 16px;
+}
+.onirvapp-btn,
+.onirvapp-dialog
+    .onirvapp-dialog-content
+    .onirvapp-dialog-content-container
+    .onirvapp-dialog-content-panel
+    .onirvapp-dialog-content-panel-alert
+    .onirvapp-dialog-content-panel-alerttext {
+    font-size: 14px;
+}
+.onirvapp-btn {
+    -webkit-appearance: button;
+    appearance: button;
+    background-color: transparent;
+    border: none;
+    border-radius: 6px;
+    color: var(--onirvapp-textgray-700);
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: inherit;
+    margin: 0;
+    outline: 0;
+    padding: 8px 12px;
+    position: relative;
+    text-decoration: none;
+    text-transform: none;
+    white-space: nowrap;
+}
+.onirvapp-btn.onirvapp-btn-default {
+    background-color: #fff;
+    border: 1px solid var(--onirvapp-textgray-200);
+}
+.onirvapp-btn.onirvapp-btn-default:hover {
+    background-color: var(--onirvapp-textgray-50);
+}
+.onirvapp-btn.onirvapp-btn-primary {
+    background-color: var(--onirvapp-btn-color);
+    color: #fff;
+}
+.onirvapp-btn.onirvapp-btn-primary:hover {
+    opacity: 0.95;
+}
+.onirvapp-btn.onirvapp-btn-icon {
+    align-items: center;
+    background-color: #fff;
+    border-radius: 9999px;
+    color: var(--onirvapp-textgray-500);
+    display: flex;
+    height: 36px;
+    justify-content: center;
+    padding: 0;
+    width: 36px;
+}
+.onirvapp-btn.onirvapp-btn-icon svg {
+    height: 18px;
+    width: 18px;
+}
+.onirvapp-btn-close {
+    position: absolute;
+    right: 0;
+    top: 0;
+    z-index: 10;
+}
+.onirvapp-form-input {
+    align-items: center;
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: #fff;
+    border-color: var(--onirvapp-textgray-200);
+    border-radius: 6px;
+    border-style: solid;
+    border-width: 2px;
+    box-shadow: none;
+    color: var(--texgray-700);
+    display: flex;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 400;
+    justify-content: flex-start;
+    margin: 0;
+    outline: 0;
+    padding: 8px 12px;
+    width: 100%;
+}
+.onirvapp-form-input:placeholder {
+    color: var(--texgray-100);
+}
+.onirvapp-form-input:focus {
+    -webkit-animation: onilgapp-pulse 1.8s infinite;
+    animation: onilgapp-pulse 1.8s infinite;
+    background-color: var(--onirvapp-textgray-50);
+    border-color: var(--onirvapp-textgray-400);
+}
+.onirvapp-form-input.onirvapp-form-input-error {
+    border-color: #ef4444;
+    color: #ef4444;
+}
+.onirvapp-form-input.onirvapp-form-input-error:placeholder {
+    color: #f87171;
+}
+.onirvapp-form-input-text-error {
+    color: #ef4444;
+    display: block;
+    font-size: 12px;
+    margin: 5px 0 0;
+    padding: 0;
+}
+.onirvapp-scale-95 {
+    --transform-scale-x: 0.95;
+    --transform-scale-y: 0.95;
+}
+.onirvapp-scale-100 {
+    --transform-scale-x: 1;
+    --transform-scale-y: 1;
+}
+.onirvapp-ease-in {
+    transition-timing-function: cubic-bezier(0.4, 0, 1, 1);
+}
+.onirvapp-ease-out {
+    transition-timing-function: cubic-bezier(0, 0, 0.2, 1);
+}
+.onirvapp-duration-300 {
+    transition-duration: 0.3s;
+}
+.onirvapp-duration-200 {
+    transition-duration: 0.2s;
+}
+.onirvapp-opacity-0 {
+    opacity: 0;
+}
+.onirvapp-opacity-100 {
+    opacity: 1;
+}
+.onirvapp-loading {
+    -webkit-animation: onirvapp-animate-spin 1s linear infinite;
+    animation: onirvapp-animate-spin 1s linear infinite;
+    color: var(--onirvapp-btn-color);
+    height: 24px;
+    width: 24px;
+}
+.onirvapp-loading circle {
+    opacity: 0.25;
+}
+.onirvapp-loading path {
+    opacity: 0.75;
+}
+.onirvapp-detail {
+    display: flex;
+    flex-direction: column;
+}
+.onirvapp-detail * {
+    box-sizing: border-box;
+    line-height: 1.5;
+    outline: 0;
+}
+.onirvapp-detail button {
+    -webkit-appearance: button;
+    appearance: button;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    line-height: inherit;
+    margin: 0;
+    outline: 0;
+    position: relative;
+    text-decoration: none;
+    text-transform: none;
+}
+.onirvapp-detail .onirvapp-filters {
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+}
+.onirvapp-detail .onirvapp-filters .onirvapp-filters-title {
+    color: var(--onirvapp-textgray-700);
+    font-size: 14px;
+    margin-bottom: 5px;
+}
+.onirvapp-detail .onirvapp-filters .onirvapp-filters-list {
+    display: flex;
+}
+@media (max-width: 1023px) {
+    .onirvapp-detail .onirvapp-filters .onirvapp-filters-list {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+    }
+}
+.onirvapp-detail
+    .onirvapp-filters
+    .onirvapp-filters-list
+    .onirvapp-filters-btn {
+    align-items: center;
+    background-color: var(--onirvapp-textgray-100);
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    color: var(--onirvapp-textgray-700);
+    display: flex;
+    font-size: 13px;
+    justify-content: center;
+    margin-right: 12px;
+    min-width: 70px;
+    padding: 5px 18px;
+}
+.onirvapp-detail
+    .onirvapp-filters
+    .onirvapp-filters-list
+    .onirvapp-filters-btn:hover {
+    background-color: var(--onirvapp-textgray-100);
+}
+.onirvapp-detail
+    .onirvapp-filters
+    .onirvapp-filters-list
+    .onirvapp-filters-btn.onirvapp-filters-btn-active {
+    border-color: var(--onirvapp-btn-color);
+    color: var(--onirvapp-btn-color);
+}
+.onirvapp-images {
+    display: flex;
+}
+.onirvapp-images .onirvapp-imageitem {
+    display: block;
+    margin-right: 5px;
+}
+.onirvapp-images .onirvapp-imageitem .onirvapp-imageitem-container {
+    align-items: center;
+    border: 1px solid var(--onirvapp-textgray-100);
+    border-radius: 6px;
+    padding: 0;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+}
+.onirvapp-images .onirvapp-imageitem .onirvapp-imageitem-container:hover {
+    opacity: 90%;
+}
+.onirvapp-images
+    .onirvapp-imageitem
+    .onirvapp-imageitem-container
+    .onirvapp-image-img {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+.onirvapp-images .onirvapp-moreimage {
+    display: flex;
+    overflow: hidden;
+}
+.onirvapp-images .onirvapp-moreimage .onirvapp-moreimage-container {
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: 1px solid var(--onirvapp-textgray-100);
+    border-radius: 6px;
+    color: #fff;
+    display: flex;
+    font-size: 12px;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+}
+.onirvapp-images-withupload {
+    display: flex;
+    flex-wrap: wrap;
+}
+.onirvapp-images-withupload .onirvapp-images-withupload-list {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: 5px;
+}
+.onirvapp-images-withupload
+    .onirvapp-images-withupload-list
+    .onirvapp-images-withupload-item {
+    height: 60px;
+    margin-right: 5px;
+    position: relative;
+    width: 60px;
+}
+.onirvapp-images-withupload
+    .onirvapp-images-withupload-list
+    .onirvapp-images-withupload-item
+    .onirvapp-images-withupload-item-container {
+    align-items: center;
+    border: 1px solid var(--onirvapp-textgray-100);
+    border-radius: 6px;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    overflow: hidden;
+    width: 100%;
+}
+.onirvapp-images-withupload
+    .onirvapp-images-withupload-list
+    .onirvapp-images-withupload-item
+    .onirvapp-images-withupload-item-container
+    .onirvapp-images-withupload-item-img {
+    display: block;
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
+}
+.onirvapp-images-withupload
+    .onirvapp-images-withupload-list
+    .onirvapp-images-withupload-item
+    .onirvapp-images-withupload-item-btn {
+    align-items: center;
+    background-color: #f87171;
+    border-radius: 9999px;
+    color: var(--onirvapp-textgray-50);
+    display: flex;
+    height: 16px;
+    justify-content: center;
+    padding: 0;
+    position: absolute;
+    right: -3px;
+    top: -3px;
+    width: 16px;
+}
+.onirvapp-images-withupload
+    .onirvapp-images-withupload-list
+    .onirvapp-images-withupload-item
+    .onirvapp-images-withupload-item-btn:hover {
+    background-color: #ef4444;
+}
+.onirvapp-images-withupload
+    .onirvapp-images-withupload-list
+    .onirvapp-images-withupload-item
+    .onirvapp-images-withupload-item-btn
+    svg {
+    height: 10px;
+    width: 10px;
+}
+.onirvapp-images-withupload .onirvapp-images-withupload-action {
+    display: flex;
+    height: 60px;
+    width: 60px;
+}
+.onirvapp-images-withupload
+    .onirvapp-images-withupload-action
+    input[type="file"] {
+    display: none !important;
+}
+.onirvapp-images-withupload
+    .onirvapp-images-withupload-action
+    .onirvapp-images-withupload-action-label {
+    align-items: center;
+    background-color: var(--onirvapp-textgray-100);
+    border: 1px solid var(--onirvapp-textgray-100);
+    border-radius: 6px;
+    color: var(--onirvapp-textgray-500);
+    cursor: pointer;
+    display: flex !important;!i;!;
+    flex-direction: column;
+    font-weight: 500;
+    height: 100%;
+    justify-content: center;
+    padding: 5px;
+    width: 100%;
+}
+.onirvapp-images-withupload
+    .onirvapp-images-withupload-action
+    .onirvapp-images-withupload-action-label
+    svg {
+    height: 18px;
+    width: 18px;
+}
+.onirvapp-images-withupload
+    .onirvapp-images-withupload-action
+    .onirvapp-images-withupload-action-label
+    .onirvapp-images-withupload-action-labeltext {
+    color: var(--onirvapp-textgray-500);
+    font-size: 13px;
+    white-space: nowrap;
+}
+.onirvapp-form-container {
+    width: 100%;
+}
+.onirvapp-form-container .onirvapp-form-container-title {
+    color: var(--onirvapp-textgray-900);
+    font-size: 16px;
+    font-weight: 700;
+}
+.onirvapp-form-container .onirvapp-form-action {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.onirvapp-form-container .onirvapp-form-content {
+    margin-top: 10px;
+}
+.onirvapp-form-container .onirvapp-form-content .onirvapp-form-group {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+.onirvapp-form-container
+    .onirvapp-form-content
+    .onirvapp-form-group
+    .onirvapp-form-label {
+    color: var(--onirvapp-textgray-700);
+    display: block;
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.onirvapp-form-container
+    .onirvapp-form-content
+    .onirvapp-form-group
+    .onirvapp-form-label
+    span {
+    color: #dc2626;
+    display: inline-block;
+    margin-left: 2px;
+}
+.onirvapp-form-container
+    .onirvapp-form-content
+    .onirvapp-form-group
+    .onirvapp-form-label
+    .onirvapp-form-label-desc {
+    color: var(--onirvapp-textgray-500);
+    font-size: 10px;
+    font-weight: 400;
+}
+.onirvapp-form-container .onirvapp-form-content .onirvapp-form-images,
+.onirvapp-form-container .onirvapp-form-content .onirvapp-form-shape-container {
+    display: block;
+}
+.onirvapp-form-container
+    .onirvapp-form-content
+    .onirvapp-form-rating-container {
+    display: none;
+    margin-top: 10px;
+}
+@media (min-width: 1200px) {
+    .onirvapp-form-container
+        .onirvapp-form-content
+        .onirvapp-form-rating-container {
+        display: block;
+    }
+}
+.onirvapp-form-container
+    .onirvapp-form-content
+    .onirvapp-form-rating-container
+    .onirvapp-form-rating-item {
+    background-color: var(--onirvapp-textgray-100);
+    border-radius: 9999px;
+    color: var(--onirvapp-textgray-500);
+    display: inline-flex;
+    font-size: 12px;
+    justify-content: center;
+    margin-right: 5px;
+    padding: 4px 10px;
+}
+.onirvapp-form-container
+    .onirvapp-form-content
+    .onirvapp-form-rating-container
+    .onirvapp-form-rating-item:hover {
+    background-color: var(--onirvapp-textgray-200);
+}
+#onirvapp-detail-header {
+    display: flex;
+    margin-top: 10px;
+}
+@media (max-width: 767px) {
+    #onirvapp-detail-header {
+        flex-wrap: wrap;
+    }
+}
+#onirvapp-detail-header .onirvapp-detail-headersummary-container {
+    width: 100%;
+}
+@media (min-width: 768px) {
+    #onirvapp-detail-header .onirvapp-detail-headersummary-container {
+        width: 50%;
+    }
+}
+@media (min-width: 1024px) {
+    #onirvapp-detail-header .onirvapp-detail-headersummary-container {
+        width: 33.33333%;
+    }
+}
+#onirvapp-detail-header .onirvapp-detail-headerimages-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+@media (min-width: 768px) {
+    #onirvapp-detail-header .onirvapp-detail-headerimages-container {
+        padding-left: 30px;
+        width: 50%;
+    }
+}
+@media (min-width: 1024px) {
+    #onirvapp-detail-header .onirvapp-detail-headerimages-container {
+        padding-left: 30px;
+        width: 66.66667%;
+    }
+}
+#onirvapp-detail-header
+    .onirvapp-detail-headerimages-container
+    .onirvapp-detail-headerimages-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+#onirvapp-detail-header
+    .onirvapp-detail-headerimages-container
+    .onirvapp-detail-headerimages-list {
+    margin-bottom: 10px;
+    width: 100%;
+}
+#onirvapp-detail-header .onirvapp-detail-summary {
+    display: flex;
+    flex-direction: column;
+}
+#onirvapp-detail-header .onirvapp-detail-summary .onirvapp-detail-summary-info {
+    align-items: flex-start;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+#onirvapp-detail-header
+    .onirvapp-detail-summary
+    .onirvapp-detail-summary-info
+    .onirvapp-detail-summary-info-stars {
+    display: flex;
+    flex-direction: column;
+}
+#onirvapp-detail-header
+    .onirvapp-detail-summary
+    .onirvapp-detail-summary-info
+    .onirvapp-detail-summary-info-stars
+    .onirvapp-detail-summary-info-stars-container {
+    width: 100%;
+}
+#onirvapp-detail-header
+    .onirvapp-detail-summary
+    .onirvapp-detail-summary-info
+    .onirvapp-detail-summary-info-stars
+    .onirvapp-detail-summary-info-stars-text {
+    color: var(--onirvapp-textgray-500);
+    font-size: 12px;
+    margin-top: 2px;
+    text-align: center;
+}
+#onirvapp-detail-header
+    .onirvapp-detail-summary
+    .onirvapp-detail-summary-info
+    .onirvapp-detail-summary-info-avg {
+    font-size: 32px;
+    font-weight: 700;
+}
+#onirvapp-detail-header
+    .onirvapp-detail-summary
+    .onirvapp-detail-summary-lines {
+    display: flex;
+    flex-direction: column;
+}
+#onirvapp-detail-header
+    .onirvapp-detail-summary
+    .onirvapp-detail-summary-lines
+    .onirvapp-detail-summary-line {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 2px;
+    margin-top: 2px;
+    width: 100%;
+}
+#onirvapp-detail-header
+    .onirvapp-detail-summary
+    .onirvapp-detail-summary-lines
+    .onirvapp-detail-summary-line
+    .onirvapp-detail-summary-line-icon {
+    color: var(--onirvapp-textgray-500);
+    font-size: 13px;
+    text-align: left;
+    width: 25%;
+}
+#onirvapp-detail-header
+    .onirvapp-detail-summary
+    .onirvapp-detail-summary-lines
+    .onirvapp-detail-summary-line
+    .onirvapp-detail-summary-line-bar {
+    width: 66.66667%;
+}
+#onirvapp-detail-header
+    .onirvapp-detail-summary
+    .onirvapp-detail-summary-lines
+    .onirvapp-detail-summary-line
+    .onirvapp-detail-summary-line-text {
+    color: var(--onirvapp-textgray-500);
+    font-size: 13px;
+    padding-left: 8px;
+    text-align: left;
+    width: 8.33333%;
+}
+#onirvapp-detail-body {
+    display: flex;
+    flex-direction: column;
+    margin-top: 20px;
+}
+#onirvapp-detail-body .onirvapp-detail-tabs {
+    align-items: center;
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: center;
+    margin-bottom: 10px;
+    white-space: nowrap;
+}
+@media (min-width: 768px) {
+    #onirvapp-detail-body .onirvapp-detail-tabs {
+        flex-direction: row;
+    }
+}
+#onirvapp-detail-body .onirvapp-detail-tabs-list {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+}
+#onirvapp-detail-body .onirvapp-tab {
+    color: var(--onirvapp-textgray-700);
+    display: flex;
+    flex-wrap: nowrap;
+    font-size: 14px;
+    font-weight: 700;
+    overflow-x: auto;
+    width: 100%;
+}
+#onirvapp-detail-body .onirvapp-tab .onirvapp-tab-btn {
+    background-color: transparent;
+    border-bottom: 2px solid transparent;
+    margin-right: 20px;
+    padding: 3px 0;
+}
+#onirvapp-detail-body .onirvapp-tab .onirvapp-tab-btn.onirvapp-tab-btn-active {
+    border-color: var(--onirvapp-btn-color);
+    color: var(--onirvapp-btn-color);
+}
+#onirvapp-detail-body .onirvapp-tab-action {
+    display: flex;
+}
+@media (max-width: 767px) {
+    #onirvapp-detail-body .onirvapp-tab-action {
+        margin-bottom: 15px;
+        width: 100%;
+    }
+    #onirvapp-detail-body .onirvapp-tab-action .onirvapp-btn {
+        width: 100%;
+    }
+}
+#onirvapp-detail-body .onirvapp-comments-list {
+    display: flex;
+    flex-direction: column;
+}
+#onirvapp-detail-body .onirvapp-comments-list .onirvapp-comments-loading {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 16px;
+}
+#onirvapp-detail-body
+    .onirvapp-comments-list
+    .onirvapp-comments-loading
+    .onirvapp-comments-loading-alert {
+    color: var(--onirvapp-textgray-500);
+    font-size: 12px;
+}
+#onirvapp-detail-body .onirvapp-paginate {
+    display: flex;
+    justify-content: flex-end;
+}
+#onirvapp-detail-body .onirvapp-paginate > li {
+    display: flex;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+#onirvapp-detail-body .onirvapp-paginate .onirvapp-paginate-item {
+    align-items: center;
+    background-color: var(--onirvapp-textgray-100);
+    border-radius: 9999px;
+    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.05);
+    color: var(--onirvapp-textgray-500);
+    display: inline-flex;
+    height: 32px;
+    justify-content: center;
+    width: 32px;
+}
+#onirvapp-detail-body .onirvapp-paginate .onirvapp-paginate-item:hover {
+    background-color: var(--onirvapp-textgray-200);
+}
+#onirvapp-detail-body
+    .onirvapp-paginate
+    .onirvapp-paginate-item.onirvapp-paginate-item-active {
+    background-color: var(--onirvapp-btn-color) !important;
+    color: var(--onirvapp-textgray-100) !important;
+    pointer-events: none;
+}
+#onirvapp-detail-body
+    .onirvapp-paginate
+    .onirvapp-paginate-item.onirvapp-paginate-item-break {
+    background-color: #fff;
+    pointer-events: none;
+}
+#onirvapp-detail-body .onirvapp-comments-empty {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 24px;
+    padding-top: 24px;
+}
+#onirvapp-detail-body .onirvapp-comments-empty .onirvapp-comments-empty-text {
+    color: var(--onirvapp-textgray-700);
+    display: inline-block;
+    font-size: 14px;
+}
+.onirvapp-quickform {
+    width: 100%;
+}
+.onirvapp-quickform .onirvapp-quickform-container {
+    display: flex;
+    justify-content: flex-start;
+}
+.onirvapp-quickform .onirvapp-quickform-container .onirvapp-quickform-loading {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+.onirvapp-quickform
+    .onirvapp-quickform-container
+    .onirvapp-quickform-loading
+    .onirvapp-quickform-loading-alert {
+    color: var(--onirvapp-textgray-500);
+    font-size: 12px;
+}
+.onirvapp-quickform .onirvapp-quickform-container .onirvapp-btn {
+    margin-left: 5px;
+}
+.onirvapp-avatar {
+    background-color: var(--onirvapp-textgray-200);
+    color: var(--onirvapp-textgray-500);
+    font-size: 13px;
+    font-weight: 700;
+    height: 100%;
+    position: relative;
+    text-transform: uppercase;
+    width: 100%;
+}
+.onirvapp-avatar,
+.onirvapp-avatar .onirvapp-avatar-tick {
+    align-items: center;
+    border-radius: 9999px;
+    display: flex;
+    justify-content: center;
+}
+.onirvapp-avatar .onirvapp-avatar-tick {
+    background-color: var(--textblue-400);
+    height: 14px;
+    position: absolute;
+    right: -1px;
+    top: -1px;
+    width: 14px;
+}
+.onirvapp-avatar .onirvapp-avatar-tick svg {
+    stroke: #fff;
+    fill: none;
+    height: 10px;
+    width: 10px;
+}
+.onirvapp-comment-item {
+    align-items: flex-start;
+    display: flex;
+    margin-top: 15px;
+}
+.onirvapp-comment-item .onirvapp-comment-item-avatar {
+    height: 40px;
+    width: 40px;
+}
+.onirvapp-comment-item .onirvapp-comment-item-content {
+    display: flex;
+    flex: 1 1;
+    flex-direction: column;
+    padding-left: 10px;
+}
+@media (max-width: 767px) {
+    .onirvapp-comment-item .onirvapp-comment-item-content {
+        padding-left: 0;
+    }
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-info {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-info
+    .onirvapp-comment-item-content-person {
+    align-items: center;
+    display: flex;
+}
+@media (min-width: 768px) {
+    .onirvapp-comment-item
+        .onirvapp-comment-item-content
+        .onirvapp-comment-item-content-info
+        .onirvapp-comment-item-content-person {
+        flex-direction: column;
+    }
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-info
+    .onirvapp-comment-item-content-person
+    .onirvapp-comment-item-avatar {
+    display: inline-block;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-info
+    .onirvapp-comment-item-content-info-container {
+    align-items: flex-start;
+    display: flex;
+    flex-direction: column;
+}
+@media (max-width: 767px) {
+    .onirvapp-comment-item
+        .onirvapp-comment-item-content
+        .onirvapp-comment-item-content-info
+        .onirvapp-comment-item-content-info-container {
+        padding-left: 10px;
+    }
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-info
+    .onirvapp-comment-item-content-info-container
+    .onirvapp-comment-item-content-info-name {
+    color: var(--onirvapp-textgray-700);
+    font-size: 14px;
+    font-weight: 500;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-info
+    .onirvapp-comment-item-content-info-shape {
+    align-items: flex-end;
+    display: flex;
+    flex-direction: column;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-desc {
+    margin-top: 5px;
+    width: 100%;
+}
+@media (max-width: 767px) {
+    .onirvapp-comment-item
+        .onirvapp-comment-item-content
+        .onirvapp-comment-item-content-desc {
+        margin-top: 10px;
+    }
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-desc
+    .onirvapp-comment-item-content-desc-container {
+    background-color: var(--onirvapp-textgray-100);
+    border-radius: 6px;
+    color: var(--onirvapp-textgray-700);
+    font-size: 13px;
+    padding: 12px 16px;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-desc
+    .onirvapp-comment-item-content-desc-container
+    .onirvapp-comment-item-content-desc-title {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-desc
+    .onirvapp-comment-item-content-desc-container
+    .onirvapp-comment-item-content-desc-detail {
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 5px;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-desc
+    .onirvapp-comment-item-content-desc-container
+    .onirvapp-comment-item-content-images {
+    display: flex;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-desc
+    .onirvapp-comment-item-content-desc-container
+    .onirvapp-comment-item-content-video {
+    display: flex;
+    overflow: hidden;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-desc
+    .onirvapp-comment-item-content-desc-container
+    .onirvapp-comment-item-content-video
+    .onirvapp-comment-item-content-video-btn {
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.6);
+    border: 1px solid var(--onirvapp-textgray-100);
+    border-radius: 6px;
+    color: #fff;
+    display: flex;
+    height: 100%;
+    justify-content: center;
+    width: 100%;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-content-desc
+    .onirvapp-comment-item-content-desc-container
+    .onirvapp-comment-item-content-video
+    .onirvapp-comment-item-content-video-btn
+    svg {
+    fill: none;
+    stroke: var(--onirvapp-textgray-200);
+    stroke-width: 1px;
+    height: 28px;
+    width: 28px;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-content
+    .onirvapp-comment-item-time {
+    color: var(--onirvapp-textgray-500);
+    font-size: 12px;
+    margin-top: 5px;
+    text-transform: lowercase;
+}
+.onirvapp-comment-item .onirvapp-comment-item-action {
+    align-items: center;
+    display: flex;
+    margin-top: 10px;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-action
+    .onirvapp-comment-item-upvote {
+    align-items: center;
+    background-color: var(--onirvapp-textgray-100);
+    border-radius: 9999px;
+    color: var(--onirvapp-textgray-500);
+    display: inline-flex;
+    height: 36px;
+    justify-content: center;
+    padding: 0;
+    position: relative;
+    width: 36px;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-action
+    .onirvapp-comment-item-upvote.onirvapp-comment-item-upvoted {
+    background-color: var(--textblue-50);
+    color: var(--onirvapp-btn-color);
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-action
+    .onirvapp-comment-item-upvote
+    svg {
+    height: 18px;
+    width: 18px;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-action
+    .onirvapp-comment-item-upvote
+    .onirvapp-comment-item-upvote-badge {
+    background-color: var(--onirvapp-btn-color);
+    border-radius: 9999px;
+    color: var(--onirvapp-textgray-100);
+    font-size: 9px;
+    height: 14px;
+    position: absolute;
+    right: -2px;
+    top: -2px;
+    width: 14px;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-action
+    .onirvapp-comment-item-showreply {
+    color: var(--onirvapp-btn-color);
+    font-size: 14px;
+    font-weight: 500;
+    margin-left: 15px;
+    padding: 0;
+}
+.onirvapp-comment-item .onirvapp-comment-item-replies {
+    padding-left: 0;
+}
+@media (max-width: 767px) {
+    .onirvapp-comment-item .onirvapp-comment-item-replies {
+        padding-left: 30px;
+    }
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-replies.onirvapp-comment-item-replies-havechild {
+    margin-top: 10px;
+    padding-left: 0;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-replies
+    .onirvapp-comment-item-replies-loading {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+.onirvapp-comment-item .onirvapp-comment-item-replies-action {
+    margin-top: 10px;
+}
+.onirvapp-comment-item
+    .onirvapp-comment-item-replies-action.onirvapp-comment-item-replies-action-haveitems {
+    padding-left: 50px;
+}
+@media (max-width: 767px) {
+    .onirvapp-comment-item
+        .onirvapp-comment-item-replies-action.onirvapp-comment-item-replies-action-haveitems {
+        padding-left: 0;
+    }
+}
+.onirvapp-comment-item .onirvapp-comment-item-replies-alert {
+    color: var(--onirvapp-textgray-500);
+    font-size: 12px;
+    margin: 10px 0 0;
+    padding: 0;
+    text-align: center;
+}
+.onirvapp-dialog-info-loading {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding-bottom: 48px;
+    padding-top: 48px;
+}
+.onirvapp-dialog-info-content {
+    display: flex;
+    flex-wrap: wrap;
+    min-height: 600px;
+    overflow: hidden;
+}
+.onirvapp-dialog-info-content .onirvapp-dialog-info-carousel {
+    display: flex;
+    width: 100%;
+}
+@media (min-width: 768px) {
+    .onirvapp-dialog-info-content .onirvapp-dialog-info-carousel {
+        width: 50%;
+    }
+}
+.onirvapp-dialog-info-content
+    .onirvapp-dialog-info-carousel
+    .onirvapp-dialog-info-video {
+    aspect-ratio: 16/9;
+    border: none;
+    width: 100%;
+}
+.onirvapp-dialog-info-content .onirvapp-dialog-info-detail {
+    display: block;
+    max-height: 600px;
+    overflow-y: auto;
+    padding: 4px 12px;
+    width: 100%;
+}
+@media (min-width: 768px) {
+    .onirvapp-dialog-info-content .onirvapp-dialog-info-detail {
+        width: 50%;
+    }
+}
+.onirvapp-dialog-detail.onirvapp-dialog .onirvapp-dialog-content-panel {
+    padding: 0 !important;
+}
+.onirvapp-carousel-container {
+    display: block;
+    position: relative;
+    width: 100%;
+}
+.onirvapp-carousel-container .onirvapp-carousel .slider-container {
+    display: block !important;
+}
+.onirvapp-carousel-container
+    .onirvapp-carousel
+    .slider-container
+    .slider-control-bottomcenter {
+    display: none !important;
+}
+.onirvapp-carousel-container
+    .onirvapp-carousel
+    .slider-container
+    .onirvapp-carousel-item {
+    display: block !important;
+}
+.onirvapp-carousel-container
+    .onirvapp-carousel
+    .slider-container
+    .onirvapp-carousel-item
+    .slider-list,
+.onirvapp-carousel-container
+    .onirvapp-carousel
+    .slider-container
+    .onirvapp-carousel-item
+    .slider-list
+    .slide {
+    display: flex !important;
+}
+.onirvapp-carousel-container
+    .onirvapp-carousel
+    .slider-container
+    .onirvapp-carousel-item
+    .onirvapp-carousel-item-container {
+    align-items: center;
+    display: flex;
+    height: 300px;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+}
+@media (min-width: 768px) {
+    .onirvapp-carousel-container
+        .onirvapp-carousel
+        .slider-container
+        .onirvapp-carousel-item
+        .onirvapp-carousel-item-container {
+        height: 600px;
+    }
+}
+.onirvapp-carousel-container
+    .onirvapp-carousel
+    .slider-container
+    .onirvapp-carousel-item
+    .onirvapp-carousel-item-container
+    .onirvapp-carousel-item-container-bg {
+    display: block;
+    -webkit-filter: blur(24px);
+    filter: blur(24px);
+    height: 100%;
+    left: 0;
+    opacity: 0.7;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+}
+.onirvapp-carousel-container
+    .onirvapp-carousel
+    .slider-container
+    .onirvapp-carousel-item
+    .onirvapp-carousel-item-container
+    .onirvapp-carousel-item-container-bg-img {
+    display: block;
+    height: 100%;
+    object-fit: contain;
+    width: 100%;
+}
+.onirvapp-carousel-container .onirvapp-carousel .onirvapp-carousel-control {
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 9999px;
+    color: var(--onirvapp-textgray-100);
+    display: flex;
+    height: 32px;
+    justify-content: center;
+    padding: 0;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 32px;
+    z-index: 20;
+}
+.onirvapp-carousel-container
+    .onirvapp-carousel
+    .onirvapp-carousel-control:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+.onirvapp-carousel-container .onirvapp-carousel .onirvapp-carousel-control svg {
+    height: 16px;
+    width: 16px;
+}
+.onirvapp-carousel-container
+    .onirvapp-carousel
+    .onirvapp-carousel-control.onirvapp-carousel-control-prev {
+    left: 4px;
+}
+.onirvapp-carousel-container
+    .onirvapp-carousel
+    .onirvapp-carousel-control.onirvapp-carousel-control-next {
+    right: 4px;
+}
+.onirvapp--shape-lg,
+.onirvapp--shape-md,
+.onirvapp--shape-sm,
+.onirvapp--shape-xs {
+    width: var(--onirvapp-shape-total-width);
+}
+.onirvapp--shape-lg .onirvapp--shape-container,
+.onirvapp--shape-md .onirvapp--shape-container,
+.onirvapp--shape-sm .onirvapp--shape-container,
+.onirvapp--shape-xs .onirvapp--shape-container {
+    height: var(--onirvapp-shape-height);
+    overflow: hidden;
+    position: relative;
+}
+.onirvapp--shape-lg .onirvapp--shape-container .onirvapp--shape-background,
+.onirvapp--shape-lg .onirvapp--shape-container .onirvapp--shape-outline,
+.onirvapp--shape-lg .onirvapp--shape-container .onirvapp--shape-solid,
+.onirvapp--shape-md .onirvapp--shape-container .onirvapp--shape-background,
+.onirvapp--shape-md .onirvapp--shape-container .onirvapp--shape-outline,
+.onirvapp--shape-md .onirvapp--shape-container .onirvapp--shape-solid,
+.onirvapp--shape-sm .onirvapp--shape-container .onirvapp--shape-background,
+.onirvapp--shape-sm .onirvapp--shape-container .onirvapp--shape-outline,
+.onirvapp--shape-sm .onirvapp--shape-container .onirvapp--shape-solid,
+.onirvapp--shape-xs .onirvapp--shape-container .onirvapp--shape-background,
+.onirvapp--shape-xs .onirvapp--shape-container .onirvapp--shape-outline,
+.onirvapp--shape-xs .onirvapp--shape-container .onirvapp--shape-solid {
+    background-position-x: var(--onirvapp-shape-position-x);
+    background-repeat: repeat-x;
+    background-size: var(--onirvapp-shape-width) var(--onirvapp-shape-height);
+    height: var(--onirvapp-shape-height);
+    left: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+}
+.onirvapp--shape-lg .onirvapp--shape-container .onirvapp--shape-solid,
+.onirvapp--shape-md .onirvapp--shape-container .onirvapp--shape-solid,
+.onirvapp--shape-sm .onirvapp--shape-container .onirvapp--shape-solid,
+.onirvapp--shape-xs .onirvapp--shape-container .onirvapp--shape-solid {
+    background-image: var(--onirvapp-shape-icon-solid);
+}
+.onirvapp--shape-lg .onirvapp--shape-container .onirvapp--shape-outline,
+.onirvapp--shape-md .onirvapp--shape-container .onirvapp--shape-outline,
+.onirvapp--shape-sm .onirvapp--shape-container .onirvapp--shape-outline,
+.onirvapp--shape-xs .onirvapp--shape-container .onirvapp--shape-outline {
+    background-image: var(--onirvapp-shape-icon-outline);
+}
+.onirvapp--shape-lg .onirvapp--shape-container .onirvapp--shape-background,
+.onirvapp--shape-md .onirvapp--shape-container .onirvapp--shape-background,
+.onirvapp--shape-sm .onirvapp--shape-container .onirvapp--shape-background,
+.onirvapp--shape-xs .onirvapp--shape-container .onirvapp--shape-background {
+    background-image: var(--onirvapp-shape-icon-background);
+}
+.onirvapp--shape-lg.onirvapp--shape-single,
+.onirvapp--shape-md.onirvapp--shape-single,
+.onirvapp--shape-sm.onirvapp--shape-single,
+.onirvapp--shape-xs.onirvapp--shape-single {
+    width: var(--onirvapp-shape-width);
+}
+.onirvapp--shape-select {
+    height: 42px;
+    width: 42px;
+}
+.onirvapp--shape-select > label {
+    background-image: var(--onirvapp-shape-icon-background);
+    background-repeat: no-repeat;
+    background-size: contain;
+    cursor: pointer;
+    display: flex;
+    height: 100%;
+    width: 100%;
+}
+.onirvapp--shape-select > label.onirvapp--shape-select-active {
+    background-image: var(--onirvapp-shape-icon-solid);
+}
+.onirvapp-verify-badge {
+    align-items: center;
+    color: var(--onirvapp-badge-color);
+    display: inline-flex;
+    font-size: 12px;
+}
+.onirvapp-verify-badge svg {
+    height: 18px;
+    margin-right: 2px;
+    width: 18px;
+}
+.onirvapp-processline {
+    background: var(--onirvapp-shape-bgcolor);
+    border-radius: 5px;
+    height: 6px;
+    overflow: hidden;
+}
+.onirvapp-processline .onirvapp-processline-item {
+    background-color: var(--onirvapp-shape-color);
+    height: 6px;
+    -webkit-transform-origin: 0;
+    transform-origin: 0;
+    transition: -webkit-transform 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out;
+    transition: transform 0.5s ease-in-out, -webkit-transform 0.5s ease-in-out;
+}
+.onirvapp-moreimage,
+.onirvapp-video {
+    background-image: url(https://assets.onistudio.net/video_files_fu10.jpg);
+    background-position: 50%;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+.onireviewapp-loop {
+    display: inline-block;
+}
+.onireviewapp-loopitem {
+    align-items: center;
+    display: flex;
+}
+.onireviewapp-loopitem .onireviewapp-loopitem-title {
+    color: #777;
+    display: inline-block;
+    font-size: 12px;
+    margin-left: 5px;
+}
+.onirvapp-form-group input[type="text"], .onirvapp-form-group input[type="email"], .onirvapp-form-group input[type="password"], .onirvapp-form-group input[type="tel"] {
+    margin-bottom: 0 !important;
+}
+.onirvapp-form-group .invalid-feedback {
+    display: none;
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 70%;
+    color: #dc3545;
+}
+/* Thu nhỏ độ rộng của thanh cuộn */
+.onirvapp-dialog .onirvapp-dialog-content::-webkit-scrollbar {
+    width: 6px; /* Độ rộng của thanh cuộn dọc */
+    height: 6px; /* Độ rộng của thanh cuộn ngang */
+}
