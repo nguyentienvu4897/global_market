@@ -1253,7 +1253,8 @@ div#social_login {
     margin-bottom: 15px;
     width: 100%;
     outline: none;
-    border: initial
+    border: initial;
+    font-size: 15px;
 }
 
 .page-login .form-signup .form-group input::-webkit-input-placeholder {

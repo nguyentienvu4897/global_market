@@ -224,7 +224,7 @@
                             <li class="nav-item {{ Route::currentRouteName() == 'front.user-level' ? 'active' : '' }}">
                                 <a class="nav-link" href="{{route('front.user-level')}}" title="Quản lý cấp bậc">Quản lý cấp bậc</a>
                             </li>
-                            <li class="nav-item {{ Route::currentRouteName() == 'front.user-level' ? 'active' : '' }}">
+                            <li class="nav-item ">
                                 <a class="nav-link" href="javascript:void(0)" title="Liên hệ" ng-click="changeMenuClient($event)">Quay lại menu chính</a>
                             </li>
                         </ul>

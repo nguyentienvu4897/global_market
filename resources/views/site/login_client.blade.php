@@ -55,7 +55,7 @@
                                                 </div>
                                                 <div class="btn_boz_khac">
                                                     <div class="btn_khac">
-                                                        <span class="quenmk">Quên mật khẩu?</span>
+                                                        {{-- <span class="quenmk">Quên mật khẩu?</span> --}}
                                                         <a href="javascript:void(0)" ng-click="showFormRegister()" class="btn-link-style btn-register"
                                                             title="Đăng ký tại đây">Đăng ký tại đây</a>
                                                     </div>

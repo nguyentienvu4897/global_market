@@ -56,35 +56,36 @@ class OrderRevenueDetail extends Model
             ->where('users.status', 1)->where('users.type', 10)
             ->has('order_revenue_details')
             ->select('users.*',
-            \DB::raw('SUM(order_revenue_details.revenue_amount) as total_amount'),
             \DB::raw('SUM(alias.total_amount_pending) as total_amount_pending'),
             \DB::raw('SUM(alias2.total_amount_wait_payment) as total_amount_wait_payment'),
             \DB::raw('SUM(alias3.total_amount_paid) as total_amount_paid'))
             ->leftJoinSub(function($query) {
                 $query->from('order_revenue_details')
-                    ->select(['user_id', \DB::raw('SUM(revenue_amount) as total_amount_pending')])
+                    ->leftJoin('users', 'users.id', '=', 'order_revenue_details.user_id')
+                    ->select(['users.id as user_id', \DB::raw('SUM(revenue_amount) as total_amount_pending')])
                     ->whereIn('order_revenue_details.status', [self::STATUS_PENDING, self::STATUS_PAID])
-                    ->groupBy('user_id');
+                    ->groupBy('users.id');
             }, 'alias', function($join) {
                 $join->on('alias.user_id', '=', 'users.id');
             })
             ->leftJoinSub(function($query) {
                 $query->from('order_revenue_details')
-                    ->select(['user_id', \DB::raw('SUM(revenue_amount) as total_amount_wait_payment')])
+                    ->leftJoin('users', 'users.id', '=', 'order_revenue_details.user_id')
+                    ->select(['users.id as user_id', \DB::raw('SUM(revenue_amount) as total_amount_wait_payment')])
                     ->whereIn('order_revenue_details.status', [self::STATUS_WAIT_QUYET_TOAN])
-                    ->groupBy('user_id');
+                    ->groupBy('users.id');
             }, 'alias2', function($join) {
                 $join->on('alias2.user_id', '=', 'users.id');
             })
             ->leftJoinSub(function($query) {
                 $query->from('order_revenue_details')
-                    ->select(['user_id', \DB::raw('SUM(revenue_amount) as total_amount_paid')])
+                    ->leftJoin('users', 'users.id', '=', 'order_revenue_details.user_id')
+                    ->select(['users.id as user_id', \DB::raw('SUM(revenue_amount) as total_amount_paid')])
                     ->whereIn('order_revenue_details.status', [self::STATUS_QUYET_TOAN])
-                    ->groupBy('user_id');
+                    ->groupBy('users.id');
             }, 'alias3', function($join) {
                 $join->on('alias3.user_id', '=', 'users.id');
             })
-            ->leftJoin('order_revenue_details', 'order_revenue_details.user_id', '=', 'users.id')
             ->groupBy('users.id');
 
         if (!empty($request->user_id)) {

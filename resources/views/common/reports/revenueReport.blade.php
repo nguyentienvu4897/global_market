@@ -73,8 +73,8 @@
 								<th>Số điện thoại</th>
                                 <th>Email</th>
 								<th>Tổng hoa hồng chờ xử lý</th>
-								<th>Tổng hoa hồng chờ thanh toán</th>
-								<th>Tổng hoa hồng đã thanh toán</th>
+								<th>Tổng hoa hồng chờ quyết toán</th>
+								<th>Tổng hoa hồng đã quyết toán</th>
 								<th>Tổng hoa hồng</th>
 							</tr>
 						</thead>
@@ -87,20 +87,20 @@
 							</tr>
                             <tr ng-if="!loading.search && details && details.length">
 								<td class="text-center" colspan="4"><b>Tổng cộng</b></td>
-								<td class="text-right"><b><% summary.total_amount_pending | number %></b></td>
-								<td class="text-right"><b><% summary.total_amount_wait_payment | number %></b></td>
-								<td class="text-right"><b><% summary.total_amount_paid | number %></b></td>
-								<td class="text-right"><b><% summary.total_amount | number %></b></td>
+								<td class="text-right"><b><% (summary.total_amount_pending ? (summary.total_amount_pending | number) : '-') %></b></td>
+								<td class="text-right"><b><% (summary.total_amount_wait_payment ? (summary.total_amount_wait_payment | number) : '-') %></b></td>
+								<td class="text-right"><b><% (summary.total_amount_paid ? (summary.total_amount_paid | number) : '-') %></b></td>
+								<td class="text-right"><b><% (summary.total_amount ? (summary.total_amount | number) : '-') %></b></td>
 							</tr>
 							<tr ng-if="!loading.search && details && details.length" ng-repeat="d in details">
 								<td class="text-center"><% $index + 1 + (current.page - 1) * per_page %></td>
                                 <td><% d.name %></td>
-								<td><% d.phone %></td>
+								<td><% d.phone_number %></td>
 								<td><% d.email %></td>
-								<td class="text-right"><% d.total_amount_pending | number %></td>
-								<td class="text-right"><% d.total_amount_wait_payment | number %></td>
-								<td class="text-right"><% d.total_amount_paid | number %></td>
-								<td class="text-right"><% d.total_amount | number %></td>
+								<td class="text-right"><% (d.total_amount_pending ? (d.total_amount_pending | number) : '-') %></td>
+								<td class="text-right"><% (d.total_amount_wait_payment ? (d.total_amount_wait_payment | number) : '-') %></td>
+								<td class="text-right"><% (d.total_amount_paid ? (d.total_amount_paid | number) : '-') %></td>
+								<td class="text-right"><% (d.total_amount ? (d.total_amount | number) : '-') %></td>
 							</tr>
 						</tbody>
 					</table>
@@ -124,7 +124,6 @@
         $scope.form = {};
 		$scope.details = [];
 		$scope.users = @json(App\Model\Common\User::getForSelectUserClients());
-        console.log($scope.users);
 
         let draw = 0;
         $scope.current = {
@@ -135,6 +134,7 @@
         $scope.loading = {
             search: false
         };
+        $scope.summary = {};
 
 		$scope.filter = function(page = 1) {
 			draw++;
@@ -155,13 +155,17 @@
                 success: function(response) {
                     if (response.success && response.draw == draw) {
 						$scope.details = response.data.data;
+                        $scope.details.map(d => {
+                            d.total_amount = Number(d.total_amount_pending) + Number(d.total_amount_wait_payment) + Number(d.total_amount_paid);
+                            return d;
+                        });
 						$scope.total_items = response.data.total;
 						$scope.current.page = response.data.current_page;
 						$scope.summary = {
-                            total_amount_pending: $scope.details.reduce((sum, d) => sum + d.total_amount_pending, 0),
-                            total_amount_wait_payment: $scope.details.reduce((sum, d) => sum + d.total_amount_wait_payment, 0),
-                            total_amount_paid: $scope.details.reduce((sum, d) => sum + d.total_amount_paid, 0),
-                            total_amount: $scope.details.reduce((sum, d) => sum + d.total_amount, 0)
+                            total_amount_pending: $scope.details.reduce((sum, d) => sum + Number(d.total_amount_pending), 0),
+                            total_amount_wait_payment: $scope.details.reduce((sum, d) => sum + Number(d.total_amount_wait_payment), 0),
+                            total_amount_paid: $scope.details.reduce((sum, d) => sum + Number(d.total_amount_paid), 0),
+                            total_amount: $scope.details.reduce((sum, d) => sum + Number(d.total_amount), 0)
                         };
 					}
 				},
