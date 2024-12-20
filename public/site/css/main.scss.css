@@ -2451,7 +2451,7 @@ ul.tabs li.current {
 }
 
 .top-header .header-logo {
-    height: 150px;
+    height: 128px;
     line-height: 104px;
     padding: 5px 10px
 }
@@ -2484,7 +2484,7 @@ ul.tabs li.current {
 .top-header .header-logo a img {
     position: absolute;
     top: 0;
-    /* left: 0; */
+    left: 0;
     right: 0;
     bottom: 0;
     width: auto;
