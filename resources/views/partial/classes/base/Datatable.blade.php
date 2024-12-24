@@ -108,6 +108,12 @@
                         <i class="fa fa-plus"></i> Tạo mới
                     </a>`;
                 }
+                if (options.print_link) {
+                    html += `<a class="btn btn-primary print-button mr-1" href="${options.print_link}"> <i class ="fa fa-print"></i> In</a>`;
+                }
+                if (options.export_link) {
+                    html += `<a class="btn btn-primary export-button mr-1" id="${options.subject !== undefined ? options.subject : ''}" href="${options.export_link}"><i class="fa fa-file-excel-o"></i> Xuất excel</a>`;
+                }
                 if (options.create_modal_2) {
                     html += `<a class="btn btn-info create-modal" href="javascript:void(0)">
                         <i class="fa fa-plus"></i> Tạo mới

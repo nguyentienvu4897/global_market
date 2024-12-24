@@ -71,7 +71,81 @@ class Order extends Model
             $result = $result->where('customer_email', $request->employee_email);
         }
 
+        if (!empty($request->startDate)) {
+            $result = $result->where('created_at', '>=', $request->startDate);
+        }
+
+        if (!empty($request->endDate)) {
+            $result = $result->where('created_at', '<', addDay($request->endDate));
+        }
+
+        if (!empty($request->status)) {
+            $result = $result->where('status', $request->status);
+        }
+
+        if (!empty($request->customer_name)) {
+            $result = $result->where('customer_name', 'like', '%' . $request->customer_name . '%');
+        }
+
+        if (!empty($request->customer_phone)) {
+            $result = $result->where('customer_phone', 'like', '%' . $request->customer_phone . '%');
+        }
+
         $result = $result->orderBy('created_at', 'desc')->get();
         return $result;
+    }
+
+    public static function getTableList($data)
+    {
+        $rows = '';
+
+        foreach ($data as $index => $item) {
+            $details = $item->details;
+            $status = array_find_el(self::STATUSES, function($el) use ($item) {
+                return $el['id'] == $item->status;
+            })['name'];
+            $rows .= '<tr style="font-size: 16px;">';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; text-align: center" ><b>' . ($index + 1) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->code) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->customer_name) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->customer_phone) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->customer_email) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->customer_address) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $status) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;"><b></b></td>';
+            $rows .= '</tr>';
+            foreach ($details as $detail) {
+                $rows .= '<tr style="font-size: 14px;">';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; height: 40px;" ></td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; height: 40px;" >' . (isset($detail->product) ? str_replace('&', ' &amp; ', $detail->product->name) : '') . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; height: 40px;" ></td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; height: 40px; text-align: center" >' . formatCurrency($detail->qty) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; height: 40px; text-align: right" >' . formatCurrency($detail->price) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; height: 40px; text-align: right" >' . formatCurrency($detail->price * $detail->qty) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; height: 40px;" ></td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; height: 40px;" ></td>';
+                $rows .= '</tr>';
+            }
+        }
+
+        $table = '<table style="width: 100%">
+            <thead>
+                <tr style="background-color: #0000000d;">
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 7px"><b>STT</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 48px"><b>Tên hàng hóa</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 30px"><b>Phân loại</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 12px"><b>Số lượng</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 18px"><b>Đơn giá</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 28px"><b>Thành tiền</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 18px"><b>Trạng thái</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 28px"><b>Ghi chú</b></td>
+                </tr>
+            </thead>
+            <tbody>'
+            . $rows .
+            '</tbody>
+        </table>';
+
+        return $table;
     }
 }

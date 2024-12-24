@@ -106,7 +106,12 @@ Quản lý đơn hàng
         ],
         search_columns: [
             {data: 'code', search_type: "text", placeholder: "Mã đơn hàng"},
+            {data: 'customer_name', search_type: "text", placeholder: "Tên khách hàng"},
+            {data: 'customer_phone', search_type: "text", placeholder: "SĐT khách hàng"},
+            {data: 'status', search_type: "select", placeholder: "Trạng thái", column_data: @json(\App\Model\Admin\Order::STATUSES)},
         ],
+        search_by_time: true,
+        export_link: "{!! route('orders.exportList') !!}",
     }).datatable;
 
     createReviewCallback = (response) => {

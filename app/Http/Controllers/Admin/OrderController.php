@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\ExcelExports\OrderExcel;
 use App\Model\Admin\Order;
 use Illuminate\Http\Request;
 use App\Model\Admin\Order as ThisModel;
@@ -95,5 +96,17 @@ class OrderController extends Controller
         }
 
         return Response::json(['success' => true, 'message' => 'cập nhật trạng thái đơn hàng thành công']);
+    }
+
+    public function exportList(Request $request) {
+        $data = Order::searchByFilter($request);
+        $result['CHI_TIET'] = Order::getTableList($data);
+        $result['COLSPAN'] = 8;
+        $result['FROM_DATE'] = Carbon::parse($request->startDate)->format('d/m/Y');
+        $result['TO_DATE'] = Carbon::parse($request->endDate)->format('d/m/Y');
+
+        return (new OrderExcel())
+            ->forData($result)
+            ->download('danh_sach_don_hang.xlsx');
     }
 }
