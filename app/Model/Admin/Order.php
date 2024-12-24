@@ -131,14 +131,14 @@ class Order extends Model
         $table = '<table style="width: 100%">
             <thead>
                 <tr style="background-color: #0000000d;">
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 7px"><b>STT</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 48px"><b>Tên hàng hóa</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 30px"><b>Phân loại</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 12px"><b>Số lượng</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 18px"><b>Đơn giá</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 28px"><b>Thành tiền</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 18px"><b>Trạng thái</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 28px"><b>Ghi chú</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 70px"><b>STT</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 480px"><b>Tên hàng hóa</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 300px"><b>Phân loại</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 120px"><b>Số lượng</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 180px"><b>Đơn giá</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 280px"><b>Thành tiền</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 180px"><b>Trạng thái</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 280px"><b>Ghi chú</b></td>
                 </tr>
             </thead>
             <tbody>'
