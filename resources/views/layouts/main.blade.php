@@ -148,6 +148,16 @@
             $('select.select2').select2();
         });
 
+        function mergeSearchV2(object) {
+            $('.search-column [data-column]').each(function() {
+                if ($(this).data('column')) {
+                    let column = $(this).data('column');
+                    object[column] = $(this).val();
+                }
+            })
+            object.startDate = $('#startDate').val() ? moment($('#startDate').val(), 'DD/MM/YYYY').format('YYYY-MM-DD') : '';
+            object.endDate = $('#endDate').val() ? moment($('#endDate').val(), 'DD/MM/YYYY').format('YYYY-MM-DD') : '';
+        }
 
         toastr.options.escapeHtml = false;
         @if(Session::has('message'))

@@ -161,6 +161,13 @@ Quản lý đơn hàng
                 }
             });
         }
+
+        $(document).on('click', '.export-button', function(event) {
+            event.preventDefault();
+            let data = {};
+            mergeSearchV2(data);
+            window.location.href = $(this).attr('href') + "?" + $.param(data);
+        })
     })
 
 
