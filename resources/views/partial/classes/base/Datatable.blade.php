@@ -64,10 +64,10 @@
             let html = `<div class="row search-column mb-3">`;
             if (options.search_by_time) {
                 html += `<div class="col-md-3 mb-3">
-                    <input type="text" class="form-control startDate date" placeholder="Từ ngày">
+                    <input id="startDate" type="text" class="form-control startDate date" placeholder="Từ ngày">
                 </div>
                 <div class="col-md-3 mb-3">
-                    <input type="text" class="form-control endDate date" placeholder="Đến ngày">
+                    <input id="endDate" type="text" class="form-control endDate date" placeholder="Đến ngày">
                 </div>`;
             }
 

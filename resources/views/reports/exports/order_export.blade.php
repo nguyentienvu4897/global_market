@@ -15,10 +15,12 @@
         <td colspan="{{$data['COLSPAN']}}" style="text-align: center; font-weight: bold; font-size: 20px;">DANH SÁCH ĐƠN HÀNG
         </td>
     </tr>
+    @if(isset($data['FROM_DATE']) && isset($data['TO_DATE']))
     <tr>
         <td colspan="{{$data['COLSPAN']}}" style="text-align: center; font-size: 14px;">Từ ngày: {{$data['FROM_DATE']}} đến ngày: {{$data['TO_DATE']}}
         </td>
     </tr>
+    @endif
     </thead>
 </table>
 
