@@ -102,8 +102,8 @@ class OrderController extends Controller
         $data = Order::searchByFilter($request);
         $result['CHI_TIET'] = Order::getTableList($data);
         $result['COLSPAN'] = 8;
-        $result['FROM_DATE'] = Carbon::parse($request->startDate)->format('d/m/Y');
-        $result['TO_DATE'] = Carbon::parse($request->endDate)->format('d/m/Y');
+        $result['FROM_DATE'] = $request->startDate ? Carbon::parse($request->startDate)->format('d/m/Y') : '';
+        $result['TO_DATE'] = $request->endDate ? Carbon::parse($request->endDate)->format('d/m/Y') : '';
 
         return (new OrderExcel())
             ->forData($result)
