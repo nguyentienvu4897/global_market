@@ -54,7 +54,6 @@
                     url: '{{ route('orders.searchData') }}',
                     data: function (d, context) {
                         DATATABLE.mergeSearch(d, context);
-                        d.employee_email = "{{ Auth::guard('client')->user()->email }}";
                     },
                 },
                 columns: [

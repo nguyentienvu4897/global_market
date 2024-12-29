@@ -40,31 +40,31 @@ class OrderController extends Controller
             ->addColumn('total_price', function ($object) {
                 return number_format($object->total_price);
             })
-            // ->editColumn('code', function ($object) {
-            //     return '<a href = "'.route('orders.show', $object->id).'" title = "Xem chi tiết">' . $object->code . '</a>';
-            // })
+            ->editColumn('code', function ($object) {
+                return '<a href = "'.route('orders.show', $object->id).'" title = "Xem chi tiết">' . $object->code . '</a>';
+            })
             ->editColumn('code_client', function ($object) {
                 return '<a href = "javascript:void(0)" title = "Xem chi tiết" class="show-order-client">' . $object->code . '</a>';
             })
             ->editColumn('created_at', function ($object) {
                 return formatDate($object->created_at);
             })
-            // ->addColumn('action', function ($object) {
-            //     $result = '<div class="btn-group btn-action">
-            //     <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            //     <i class = "fa fa-cog"></i>
-            //     </button>
-            //     <div class="dropdown-menu">';
-            //     $result = $result . ' <a href="" title="đổi trạng thái" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Đổi trạng thái</a>';
-            //     $result = $result . ' <a href="'.route('orders.show', $object->id).'" title="đổi trạng thái" class="dropdown-item"><i class="fa fa-angle-right"></i>Xem chi tiết</a>';
-            //     $result = $result . '</div></div>';
-            //     return $result;
-            // })
+            ->addColumn('action', function ($object) {
+                $result = '<div class="btn-group btn-action">
+                <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class = "fa fa-cog"></i>
+                </button>
+                <div class="dropdown-menu">';
+                $result = $result . ' <a href="" title="đổi trạng thái" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Đổi trạng thái</a>';
+                $result = $result . ' <a href="'.route('orders.show', $object->id).'" title="đổi trạng thái" class="dropdown-item"><i class="fa fa-angle-right"></i>Xem chi tiết</a>';
+                $result = $result . '</div></div>';
+                return $result;
+            })
             ->addColumn('action_client', function ($object) {
                 return '<a href="javascript:void(0)" title="xem chi tiết" class="dropdown-item show-order-client"><i class="fa fa-eye"></i> Xem chi tiết</a>';
             })
             ->addIndexColumn()
-            ->rawColumns(['code_client', 'action_client'])
+            ->rawColumns(['code', 'action', 'action_client', 'code_client'])
             ->make(true);
     }
 
