@@ -2590,7 +2590,7 @@
             </div>
         </div>
     </button>
-    {{-- <div class="content content-second">
+    <div class="content content-second">
         <div class="wrap">
             <div class="sidebar sidebar-second">
                 <div class="sidebar-content">
@@ -2664,7 +2664,7 @@
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
     <div class="content">
         <div class="wrap">
             <div class="sidebar">
@@ -2707,7 +2707,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            {{-- <div class="order-summary-section order-summary-section-discount"
+                            <div class="order-summary-section order-summary-section-discount"
                                 data-order-summary-section="discount">
                                     <div class="fieldset">
                                         <div class="field  ">
@@ -2748,7 +2748,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
                             <div class="order-summary-section order-summary-section-total-lines payment-lines"
                                 data-order-summary-section="payment-lines">
                                 <table class="total-line-table">
@@ -3229,7 +3229,7 @@
                 customer_district: '',
                 customer_ward: '',
             };
-            
+
             if($scope.currentUser) {
                 $scope.form.customer_name = $scope.currentUser.name;
                 $scope.form.customer_phone = $scope.currentUser.phone_number;
@@ -3258,6 +3258,8 @@
                 $scope.ward_options = $scope.wards.filter(function(ward) {
                     return ward.parent_code == $scope.form.customer_district;
                 });
+                $('#customer_shipping_ward').trigger($scope.ward_options)
+                console.log($scope.ward_options);
             }
 
             $scope.showVoucher = function() {

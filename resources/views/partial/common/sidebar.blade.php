@@ -76,14 +76,14 @@
                 </ul>
             </li>
 
-            {{-- <li class="nav-item has-treeview">
+            <li class="nav-item has-treeview">
                 <a href="{{route('vouchers.index')}}" class="nav-link">
                     <i class="nav-icon fas fa-tag"></i>
                     <p>
                         Danh mục mã giảm giá
                     </p>
                 </a>
-            </li> --}}
+            </li>
 
             <li class="nav-item has-treeview  {{ request()->is('admin/posts') || request()->is('admin/posts/*') || request()->is('admin/post-categories') || request()->is('admin/post-categories/*') ? 'menu-open' : '' }} ">
 
