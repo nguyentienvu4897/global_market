@@ -82,6 +82,12 @@
             $scope.isAdminClient = @json(Auth::guard('client')->check());
             $scope.showMenuAdminClient = localStorage.getItem('showMenuAdminClient') ? localStorage.getItem('showMenuAdminClient') : false;
 
+            const currentUrl = window.location.href;
+            if (currentUrl != "{{route('front.client-account')}}" && currentUrl != "{{route('front.user-order')}}" && currentUrl != "{{route('front.user-revenue')}}" && currentUrl != "{{route('front.user-level')}}") {
+                $scope.showMenuAdminClient = false;
+                localStorage.removeItem('showMenuAdminClient');
+            }
+
             $scope.changeMenuClient = function($event){
                 $event.preventDefault();
                 $scope.showMenuAdminClient = !$scope.showMenuAdminClient;
