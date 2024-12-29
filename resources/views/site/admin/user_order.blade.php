@@ -60,16 +60,14 @@
                 columns: [
                     {data: 'DT_RowIndex', orderable: false, title: "STT", className: "text-center"},
                     {data: 'code_client', title: 'Mã'},
-                    // {data: 'customer_name', title: 'Tên khách hàng'},
-                    // {data: 'customer_phone', title: 'SĐT khách hàng'},
                     {data: 'total_price', title: 'Tổng tiền'},
                     {
                         data: 'status',
                         title: "Trạng thái",
-                        // render: function (data) {
-                        //     return getStatus(data, @json(\App\Model\Admin\Order::STATUSES));
-                        // },
-                        // className: "text-center"
+                        render: function (data) {
+                            return getStatus(data, @json(\App\Model\Admin\Order::STATUSES));
+                        },
+                        className: "text-center"
                     },
                     {data: 'created_at', title: 'Ngày đặt hàng'},
                     // {data: 'action_client', orderable: false, title: "Hành động", style: "width: 100px;"}
@@ -77,7 +75,6 @@
                 search_columns: [
                     // {data: 'code_client', search_type: "text", placeholder: "Mã đơn hàng"},
                 ],
-                // search_by_time: true,
             }).datatable;
 
             $('#table-list').on('click', '.show-order-client', function () {

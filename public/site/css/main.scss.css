@@ -5320,3 +5320,44 @@ header .menu_mega:hover .title_menu {
     border-bottom-right-radius: 0 !important;
 }
 
+.pagination {
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+    list-style: none;
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Nền tổng thể */
+}
+
+.page-item {
+    margin: 0 5px;
+}
+
+.page-item .page-link {
+    color: #0974ba; /* Màu chủ đạo */
+    text-decoration: none;
+    border: 1px solid #ddd; /* Viền */
+    padding: 8px 12px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    background-color: #fff;
+}
+
+.page-item.active .page-link {
+    color: #fff; /* Chữ màu trắng */
+    background-color: #0974ba; /* Màu nền khi active */
+    border-color: #0974ba; /* Viền khi active */
+}
+
+.page-item.disabled .page-link {
+    color: #bbb; /* Màu chữ khi disabled */
+    background-color: #f1f1f1; /* Màu nền khi disabled */
+    border-color: #ddd;
+    cursor: not-allowed;
+}
+
+.page-item:hover .page-link:not(.active):not(.disabled) {
+    background-color: #e6f4fc; /* Nền khi hover */
+    border-color: #0974ba;
+    color: #0974ba;
+}
