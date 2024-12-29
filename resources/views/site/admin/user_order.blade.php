@@ -66,10 +66,10 @@
                     {
                         data: 'status',
                         title: "Trạng thái",
-                        render: function (data) {
-                            return getStatus(data, @json(\App\Model\Admin\Order::STATUSES));
-                        },
-                        className: "text-center"
+                        // render: function (data) {
+                        //     return getStatus(data, @json(\App\Model\Admin\Order::STATUSES));
+                        // },
+                        // className: "text-center"
                     },
                     {data: 'created_at', title: 'Ngày đặt hàng'},
                     // {data: 'action_client', orderable: false, title: "Hành động", style: "width: 100px;"}

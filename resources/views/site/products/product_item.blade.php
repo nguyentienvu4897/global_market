@@ -18,8 +18,10 @@
             ngay
         </a>
     </div>
+    @if ($product->base_price > 0)
     <div class="sale-label"><span class="smart">-
             {{ round((($product->base_price - $product->price) / $product->base_price) * 100) }}% </span></div>
+    @endif
     {{-- <a href="javascript:void(0)" class="setWishlist" data-wish="{{ $product->id }}" tabindex="0"
         title="Thêm vào yêu thích" ng-click="addToWishlist({{ $product->id }})">
         <img width="24" height="24" src="/site/images/heart.png?1729657650563" alt="Thêm vào yêu thích" />
@@ -38,10 +40,16 @@
     </div>
     <h3 class="product-name"><a href="{{ route('front.show-product-detail', $product->slug) }}"
             title="{{ $product->name }}">{{ $product->name }}</a></h3>
+    @if ($product->base_price > 0)
     <div class="price-box">
         <span class="price">{{ formatCurrency($product->price) }}₫</span>
         <span class="compare-price">{{ formatCurrency($product->base_price) }}₫</span>
     </div>
+    @else
+    <div class="price-box">
+        <span class="price">{{ formatCurrency($product->price) }}₫</span>
+    </div>
+    @endif
     <div style="font-size: 16px">
         <span><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 14px">Thưởng hoa hồng</i> <span style="color: #0974ba">{{ formatCurrency($product->revenue_price) }}₫</span></span>
     </div>

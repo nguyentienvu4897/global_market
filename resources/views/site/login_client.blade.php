@@ -272,6 +272,7 @@
                         toastr.success(response.message);
                         window.location.href = '{{route('front.client-account')}}';
                         localStorage.setItem('{{ env("prefix") }}-token', response.data.token);
+                        localStorage.setItem('showMenuAdminClient', true);
                     }else{
                         toastr.error(response.message);
                     }
