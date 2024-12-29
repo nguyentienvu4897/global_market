@@ -389,7 +389,7 @@
                                     <li class="tab-link active" data-tab="#tab-1">
                                         <h3>Mô tả sản phẩm</h3>
                                     </li>
-                                    <li class="tab-link" data-tab="#tab-2">
+                                    <li class="tab-link" data-tab="#tab-2" >
                                         <h3>Đánh giá sản phẩm</h3>
                                     </li>
                                 </ul>

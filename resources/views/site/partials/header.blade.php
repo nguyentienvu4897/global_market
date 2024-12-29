@@ -71,7 +71,7 @@
                         </div>
                         <span>Sản phẩm <br>yêu thích</span>
                     </a> --}}
-                    <a href="/dang-ky-ctv-dai-ly" class="header-acc" title="Đăng ký CTV/Đại lý">
+                    <a href="{{route('front.connect-us')}}" class="header-acc" title="Đăng ký CTV/Đại lý">
                         <div class="img_acc">
                             <img width="22" height="22"
                                 src="/site/images/icon_res.png?1729657650563"

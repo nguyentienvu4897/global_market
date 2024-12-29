@@ -12,7 +12,7 @@ Quản lý liên hệ
 @endsection
 
 @section('buttons')
-<a href="javascript:void(0)" class="btn btn-outline-success" data-toggle="modal" data-target="#create-ad-cate" class="btn btn-info" ng-click="errors = null"><i class="fa fa-plus"></i> Thêm mới</a>
+{{-- <a href="javascript:void(0)" class="btn btn-outline-success" data-toggle="modal" data-target="#create-ad-cate" class="btn btn-info" ng-click="errors = null"><i class="fa fa-plus"></i> Thêm mới</a> --}}
 @endsection
 @section('content')
 <div ng-cloak>
@@ -56,6 +56,18 @@ Quản lý liên hệ
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="form-label">Ngày gửi: <% contact.day_send %></label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12" ng-if="contact.location">
+                                <div class="form-group">
+                                    <label class="form-label">Khu vực đăng ký: <% contact.location %></label>
+                                </div>
+                            </div>
+                            <div class="col-md-12" ng-if="contact.address">
+                                <div class="form-group">
+                                    <label class="form-label">Địa chỉ khách hàng: <% contact.address %></label>
                                 </div>
                             </div>
                         </div>

@@ -272,6 +272,12 @@ class FrontController extends Controller
         return view('site.about_us');
     }
 
+    // Đăng ký cộng tác viên
+    public function connectUs()
+    {
+        return view('site.connect_register');
+    }
+
     // Liên hệ
     public function contactUs()
     {
@@ -306,6 +312,7 @@ class FrontController extends Controller
         $contact->email = $request->your_email;
         $contact->phone_number = $request->your_phone;
         $contact->content = $request->your_message;
+        $contact->location = $request->your_location ?? null;
         $contact->save();
 
         return $this->responseSuccess('Gửi yêu cầu thành công!');

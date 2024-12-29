@@ -39,6 +39,7 @@ Route::group(['namespace' => 'Front'], function () {
     });
 
     // Liên hệ
+    Route::get('/dang-ky-cong-tac-vien.html','FrontController@connectUs')->name('front.connect-us');
     Route::get('/lien-he.html','FrontController@contactUs')->name('front.contact-us');
     Route::post('/lien-he','FrontController@postContact')->name('front.post-contact');
 

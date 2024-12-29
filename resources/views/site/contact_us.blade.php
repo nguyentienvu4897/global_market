@@ -71,7 +71,7 @@
                                             </div>
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="margin-bottom: 10px;">
-                                            <input type="number" placeholder="Điện thoại" style="margin-bottom: 0;"
+                                            <input type="text" placeholder="Điện thoại" style="margin-bottom: 0;"
                                                 class="form-control form-control-lg" required ng-model="your_phone" ng-class="{'is-invalid': errors && errors.your_phone}">
                                             <div class="invalid-feedback d-block error" role="alert">
                                                 <span ng-if="errors && errors.your_phone">
