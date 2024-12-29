@@ -5320,27 +5320,33 @@ header .menu_mega:hover .title_menu {
     border-bottom-right-radius: 0 !important;
 }
 
+/* Pagination */
 .pagination {
     display: flex;
     justify-content: center;
-    padding: 10px;
+    align-items: center;
     list-style: none;
-    border-radius: 5px;
-    background-color: #f9f9f9; /* Nền tổng thể */
+    padding: 10px;
+    gap: 5px; /* Khoảng cách giữa các nút */
 }
 
 .page-item {
-    margin: 0 5px;
+    display: flex;
 }
 
 .page-item .page-link {
     color: #0974ba; /* Màu chủ đạo */
     text-decoration: none;
     border: 1px solid #ddd; /* Viền */
-    padding: 8px 12px;
-    border-radius: 4px;
+    padding: 6px 10px; /* Giảm padding cho nút gọn hơn */
+    border-radius: 4px; /* Bo tròn góc nút */
     transition: all 0.3s ease;
     background-color: #fff;
+    font-size: 14px; /* Kích thước chữ nhỏ hơn */
+    height: 32px; /* Đặt chiều cao đồng nhất */
+    display: flex;
+    align-items: center; /* Căn giữa nội dung nút */
+    justify-content: center;
 }
 
 .page-item.active .page-link {
@@ -5361,3 +5367,9 @@ header .menu_mega:hover .title_menu {
     border-color: #0974ba;
     color: #0974ba;
 }
+
+/* Điều chỉnh khoảng cách giữa các nút */
+.page-item + .page-item {
+    margin-left: 0; /* Loại bỏ khoảng cách mặc định */
+}
+
