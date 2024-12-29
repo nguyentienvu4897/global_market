@@ -69,7 +69,7 @@
                                                 @endforeach
                                             </div>
                                         </div>
-                                        <div class="product-wish">
+                                        {{-- <div class="product-wish">
                                             <a href="javascript:void(0)" class="setWishlist btn-anima"
                                                 data-wish="{{ $product->slug }}" tabindex="0"
                                                 title="Thêm vào yêu thích">
@@ -78,7 +78,7 @@
                                                     data-src="//bizweb.dktcdn.net/100/489/005/themes/912542/assets/heart.png?1729657650563"
                                                     alt="Thêm vào yêu thích" />
                                             </a>
-                                        </div>
+                                        </div> --}}
                                         <div class="swiper-container gallery-thumbs">
                                             <div class="swiper-wrapper">
                                                 @foreach ($product->galleries as $item)

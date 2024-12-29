@@ -178,6 +178,11 @@ class FrontController extends Controller
         if($category) {
             $category_parent_id = $category->parent ? $category->parent->id : null;
             $arr_category_id = array_merge($category->childs->pluck('id')->toArray(), [$category->id, $category_parent_id]);
+            if ($category->childs) {
+                foreach ($category->childs as $child) {
+                    $arr_category_id = array_merge($arr_category_id, $child->childs->pluck('id')->toArray());
+                }
+            }
 
             $products = Product::with([
                 'product_rates' => function($q) {
@@ -193,6 +198,10 @@ class FrontController extends Controller
             ])->where('status', 1)->orderBy('created_at', 'desc')->paginate(12);
         }
 
+        $title = $category->name;
+        $short_des = $category->short_des;
+        $title_sub = $category->name;
+
         $categorySpecial = CategorySpecial::query()->with(['products' => function($q) {$q->where('status', 1)->limit(5);}])
             ->has('products')
             ->where('type',10)
@@ -203,7 +212,7 @@ class FrontController extends Controller
             return view('site.errors');
         }
 
-        return view('site.products.product_category', compact('categories', 'category', 'sort', 'categorySpecial', 'products'));
+        return view('site.products.product_category', compact('categories', 'category', 'sort', 'categorySpecial', 'products', 'title', 'short_des', 'title_sub'));
     }
 
     public function loadMoreProduct(Request $request)
@@ -319,7 +328,7 @@ class FrontController extends Controller
         ])->where(['parent_id' => 0, 'show_home_page' => 1])->latest()->get();
         $data['newBlogs'] = Post::with(['image'])->where(['status'=>1])
             ->orderBy('id','DESC')
-            ->select(['id','name','slug'])
+            ->select(['id','name','slug', 'created_at'])
             ->limit(6)->get();
         return view('site.blogs.list', $data);
     }
@@ -339,7 +348,7 @@ class FrontController extends Controller
         ])->where(['parent_id' => 0, 'show_home_page' => 1])->latest()->get();
         $data['newBlogs'] = Post::with(['image'])->where(['status'=>1])
             ->orderBy('id','DESC')
-            ->select(['id','name','slug'])
+            ->select(['id','name','slug', 'created_at'])
             ->limit(6)->get();
 
         return view('site.blogs.list', $data);
@@ -362,7 +371,7 @@ class FrontController extends Controller
         ])->where(['parent_id' => 0, 'show_home_page' => 1])->latest()->get();
         $data['newBlogs'] = Post::with(['image'])->where(['status'=>1])
         ->orderBy('id','DESC')
-        ->select(['id','name','slug'])
+        ->select(['id','name','slug', 'created_at'])
         ->limit(6)->get();
         $data['blog'] = $blog;
         $data['blog_slug'] = $blog->slug;
@@ -482,5 +491,23 @@ class FrontController extends Controller
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
+    }
+
+    // Tìm kiếm trang list product
+    public function search(Request $request) {
+        $query = Product::query()->where('status', 1);
+        if (!empty($request->keyword)) {
+            $query->where('name', 'like', '%' . $request->keyword . '%');
+        }
+        if (!empty($request->tag)) {
+            $query->whereHas('tags', function ($query) use ($request) {
+                $query->where('name', $request->tag);
+            });
+        }
+        $products = $query->paginate(12);
+        $title = 'Tìm kiếm';
+        $short_des = 'Kết quả tìm kiếm';
+        $title_sub = 'Tìm thấy '.count($products).' kết quả phù hợp';
+        return view('site.products.product_category', compact('products', 'title', 'short_des', 'title_sub'));
     }
 }

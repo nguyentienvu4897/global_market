@@ -29,7 +29,7 @@
         .form-control {
             display: block;
             width: 100%;
-            height: calc(2.25rem + 2px) !important;
+            /* height: calc(2.25rem + 2px) !important; */
             padding: 0.375rem 0.75rem;
             font-size: 1rem;
             font-weight: 400;

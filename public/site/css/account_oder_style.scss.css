@@ -87,7 +87,8 @@ button {
 }
 
 .page_customer_account {
-    margin-bottom: 30px
+    margin-bottom: 30px;
+    font-size: 16px;
 }
 
 .page_customer_account .col-right-ac .name-account {
@@ -1517,5 +1518,11 @@ div#social_login {
         width: 100%;
         overflow-x: auto;
         overflow-y: hidden;
+    }
+}
+
+@media (min-width: 960px) {
+    .table-responsive {
+        font-size: 14px !important;
     }
 }

@@ -1,12 +1,12 @@
 <div class="top-header" ng-cloak>
     <div class="container">
         <div class="row">
-            <div class="col-xl-2 col-xlcus-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 header-logo order-md-1 order-1">
+            <div class="col-xl-2 col-xlcus-2 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 header-logo">
                 <a href="{{ route('front.home-page') }}" class="logo-wrapper" title="{{$config->web_title}}"><img class="lazyload" width="340" height="104"
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
                         data-src="{{$config->image->path ?? ''}}" /></a>
             </div>
-            <div class="col-xl-5 col-xlcus-4 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 order-md-2 order-2">
+            <div class="col-xl-5 col-xlcus-4 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
                 <button class="menu-icon" aria-label="Menu" id="btn-menu-mobile" title="Menu">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <line y1="4.5" x2="24" y2="4.5" stroke="#fff"></line>
@@ -15,24 +15,22 @@
                     </svg>
                 </button>
                 <ul class="list-search-key">
-                    <li><a href="/search?q=tags:(Th%E1%BB%A9c+%C4%83n+v%E1%BA%B7t)&type=product"
-                            title="Thức ăn vặt">Thức ăn vặt </a>
+                    @foreach($tag_search as $key => $tag)
+                    @if ($key == 3)
+                    <li><a href="{{ route('front.search').'?tag='.$tag->name }}" title="{{ $tag->name }}">{{ $tag->name }} </a>
+                    </li>
+                    @else
+                    <li><a href="{{ route('front.search').'?tag='.$tag->name }}" title="{{ $tag->name }}">{{ $tag->name }} </a>
                         <span>|</span>
                     </li>
-                    <li><a href="/search?q=tags:(B%C3%A1nh+k%E1%BA%B9o)&type=product" title="Bánh kẹo">Bánh kẹo </a>
-                        <span>|</span>
-                    </li>
-                    <li><a href="/search?q=tags:(Snack)&type=product" title="Snack">Snack </a>
-                        <span>|</span>
-                    </li>
-                    <li><a href="/search?q=tags:(Ng%C5%A9+c%E1%BB%91c)&type=product" title="Ngũ cốc">Ngũ cốc </a>
-                    </li>
+                    @endif
+                    @endforeach
                 </ul>
                 <div class="list-top-item header_tim_kiem">
-                    <form class="header-search-form input-group search-bar"
+                    <form action="{{ route('front.search') }}" method="get" class="header-search-form input-group search-bar"
                         role="search">
                         <div class="box-search">
-                            <input type="text" name="query" required id="live-search"
+                            <input type="text" name="keyword" required id="live-search"
                                 class="input-group-field auto-search search-auto form-control"
                                 placeholder="Tìm sản phẩm..." autocomplete="off">
                             <button type="submit" class="btn icon-fallback-text" aria-label="Tìm kiếm"
@@ -54,25 +52,25 @@
                     <img src="/site/images/cs.png" alt="banner" style="width: 100%; height: auto;">
                 </div> --}}
             </div>
-            <div class="col-xl-5 col-xlcus-6 col-lg-12 box-right order-md-3 order-3">
+            <div class="col-xl-5 col-xlcus-6 col-lg-12 box-right">
                 <div class="box-swisa">
                     <div class="img_hot">
                         <img width="14" height="18"
                             src="/site/images/icon_hot.png?1729657650563"
                             alt="Icon" />
                     </div>
-                    <div class="fullpage"><span class="quotes">Đặt hàng nhập khẩu chính hãng!!!</span><span
-                            class="quotes">Dễ dang mua hàng nhanh chóng, tện lợi</span><span class="quotes">Chiết khấu hoa hồng sản phẩm cao</span> </div>
+                    <div class="fullpage"><span class="quotes" style="font-size: 15px;">Đặt hàng nhập khẩu chính hãng!!!</span><span
+                            class="quotes" style="font-size: 15px;">Dễ dàng mua hàng nhanh chóng, tện lợi</span><span class="quotes" style="font-size: 15px;">Chiết khấu hoa hồng sản phẩm cao</span> </div>
                 </div>
                 <div class="box-icon-right">
-                    <a href="/san-pham-yeu-thich" class="header-acc" title="Sản phẩm yêu thích">
+                    {{-- <a href="/san-pham-yeu-thich" class="header-acc" title="Sản phẩm yêu thích">
                         <div class="img_acc">
                             <img width="22" height="22"
                                 src="/site/images/icon_favo.png?1729657650563"
                                 alt="Sản phẩm yêu thích" />
                         </div>
                         <span>Sản phẩm <br>yêu thích</span>
-                    </a>
+                    </a> --}}
                     <a href="/dang-ky-ctv-dai-ly" class="header-acc" title="Đăng ký CTV/Đại lý">
                         <div class="img_acc">
                             <img width="22" height="22"
@@ -171,27 +169,27 @@
                                 <div class="nav_item nav-item lv1 li_check">
                                     <div class="box-menu">
                                         <a href="{{ route('front.show-product-category', $category->slug) }}" title="{{ $category->name }}" class="no-img">
-                                            <div class="box-icon-cate">
+                                            {{-- <div class="box-icon-cate">
                                                 <img width="24" height="24"
                                                     src="//bizweb.dktcdn.net/100/489/005/themes/912542/assets/icon_megamenu_2.png?1729657650563"
                                                     alt="Bánh Kẹo" />
-                                            </div>
+                                            </div> --}}
                                             {{ $category->name }}
                                         </a>
                                         @if($category->childs->count() > 0)
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512">
+                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512" class="active">
                                             <path
                                                 d="M342.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-192 192c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L274.7 256 105.4 86.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l192 192z" />
                                         </svg>
                                         <div class="ul_content_right_1">
                                             @foreach($category->childs as $child)
                                             <div class="nav_item nav-item lv2">
-                                                <a href="{{ route('front.show-product-category', $child->slug) }}" title="{{ $child->name }}">{{ $child->name }}</a>
+                                                <a href="{{ route('front.show-product-category', $child->slug) }}" title="{{ $child->name }}">|-- {{ $child->name }}</a>
                                                 @if($child->childs->count() > 0)
                                                 <div class="ul_content_right_2">
                                                     @foreach($child->childs as $childChild)
                                                     <div class="nav_item nav-item lv3">
-                                                        <a href="{{ route('front.show-product-category', $childChild->slug) }}" title="{{ $childChild->name }}">{{ $childChild->name }}</a>
+                                                        <a href="{{ route('front.show-product-category', $childChild->slug) }}" title="{{ $childChild->name }}">|-- |-- {{ $childChild->name }}</a>
                                                     </div>
                                                     @endforeach
                                                 </div>
@@ -216,16 +214,16 @@
                                 <a class="nav-link" href="{{route('front.client-account')}}" title="Quản lý tải khoản">Quản lý tài khoản</a>
                             </li>
                             <li class="nav-item {{ Route::currentRouteName() == 'front.user-order' ? 'active' : '' }}">
-                                <a class="nav-link" href="{{route('front.user-order')}}" title="Quản lý đơn hàng">Quản lý đơn hàng</a>
+                                <a class="nav-link" href="{{route('front.user-order')}}" title="Đơn hàng">Đơn hàng</a>
                             </li>
                             <li class="nav-item {{ Route::currentRouteName() == 'front.user-revenue' ? 'active' : '' }}">
-                                <a class="nav-link" href="{{route('front.user-revenue')}}" title="Quản lý hoa hồng">Quản lý hoa hồng</a>
+                                <a class="nav-link" href="{{route('front.user-revenue')}}" title="Hoa hồng">Hoa hồng</a>
                             </li>
                             <li class="nav-item {{ Route::currentRouteName() == 'front.user-level' ? 'active' : '' }}">
-                                <a class="nav-link" href="{{route('front.user-level')}}" title="Quản lý cấp bậc">Quản lý cấp bậc</a>
+                                <a class="nav-link" href="{{route('front.user-level')}}" title="Cấp bậc">Cấp bậc</a>
                             </li>
                             <li class="nav-item ">
-                                <a class="nav-link" href="javascript:void(0)" title="Liên hệ" ng-click="changeMenuClient($event)">Quay lại menu chính</a>
+                                <a class="nav-link" href="javascript:void(0)" title="Quay lại" ng-click="changeMenuClient($event)">Quay lại</a>
                             </li>
                         </ul>
                         <ul id="nav" class="nav" ng-if="!isAdminClient || !showMenuAdminClient">

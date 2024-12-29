@@ -20,10 +20,10 @@
     </div>
     <div class="sale-label"><span class="smart">-
             {{ round((($product->base_price - $product->price) / $product->base_price) * 100) }}% </span></div>
-    <a href="javascript:void(0)" class="setWishlist" data-wish="{{ $product->id }}" tabindex="0"
+    {{-- <a href="javascript:void(0)" class="setWishlist" data-wish="{{ $product->id }}" tabindex="0"
         title="Thêm vào yêu thích" ng-click="addToWishlist({{ $product->id }})">
         <img width="24" height="24" src="/site/images/heart.png?1729657650563" alt="Thêm vào yêu thích" />
-    </a>
+    </a> --}}
 </form>
 <div class="product-info">
     <div class="onireviewapp-loop">

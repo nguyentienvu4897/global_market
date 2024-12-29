@@ -353,15 +353,17 @@ if (wDWs > 992) {
 			}
 		}
 	}
-	$( document ).scroll(function(){
-		var scroll	=	$(window).scrollTop();
-		/* set sticky menu */
-		if( scroll >= 105){
-			$(".menu_mega").addClass("pos_active");
-		}else{
-			$(".menu_mega").removeClass("pos_active");
-		}
-	});
+
+    // create sticky menu
+	// $( document ).scroll(function(){
+	// 	var scroll	=	$(window).scrollTop();
+	// 	/* set sticky menu */
+	// 	if( scroll >= 105){
+	// 		$(".menu_mega").addClass("pos_active");
+	// 	}else{
+	// 		$(".menu_mega").removeClass("pos_active");
+	// 	}
+	// });
 }
 $(document).ready(function ($) {
 	if(window.matchMedia('(min-width: 992px)').matches){

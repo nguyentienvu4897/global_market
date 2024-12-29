@@ -50,6 +50,7 @@ Route::group(['namespace' => 'Front'], function () {
 
     // Tìm kiếm
     Route::post('/auto-search-complete','FrontController@autoSearchComplete')->name('front.auto-search-complete');
+    Route::get('/search','FrontController@search')->name('front.search');
 
 
     // reset data

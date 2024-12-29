@@ -89,6 +89,11 @@ class Product extends BaseModel
         return $this->hasMany(ProductRate::class, 'product_id', 'id');
     }
 
+    public function tags()
+    {
+        return $this->morphToMany(Tag::class, 'tagable');
+    }
+
     public function category()
     {
         return $this->belongsTo(Category::class, 'cate_id', 'id');

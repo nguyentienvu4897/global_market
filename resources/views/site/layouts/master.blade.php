@@ -59,9 +59,9 @@
             font-size: 14px;
         }
         @media (min-width: 768px) {
-            body {
+            /* body {
                 zoom: 0.9;
-            }
+            } */
         }
     </style>
 
@@ -320,18 +320,17 @@
     @include('site.partials.header')
     <div class="bodywrap active">
         @yield('content')
-
         @include('site.partials.footer')
     </div>
     <div class="backdrop__body-backdrop___1rvky"></div>
-    <div id="list-favorite" class="d-none">
+    {{-- <div id="list-favorite" class="d-none">
         <div class="list-favorite-right container" data-type="wishlist">
             <div class="list-favorite-main">
                 <div class="list-favorite-list row">
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
     <link rel="preload" as="style" href="/site/css/ajaxcart.scss.css?1729657650563" type="text/css">
     <link href="/site/css/ajaxcart.scss.css?1729657650563" rel="stylesheet" type="text/css" media="all" />
     <script type="text/javascript">

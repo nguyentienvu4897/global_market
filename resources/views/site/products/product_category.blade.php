@@ -1,9 +1,9 @@
 @extends('site.layouts.master')
 @section('title')
-    {{ $category->meta_title ? $category->meta_title : $category->name }}
+    {{ $title }}
 @endsection
 @section('description')
-    {{ $category->meta_des ? $category->meta_des : $category->short_des }}
+    {{ $short_des }}
 @endsection
 @section('css')
 <link href="/site/css/sidebar_style.scss.css?1729657650563" rel="stylesheet" type="text/css" media="all" />
@@ -24,7 +24,7 @@
                             <a href="{{route('front.home-page')}}"><span>Trang chủ</span></a>
                             <span class="mr_lr">/</span>
                         </li>
-                        <li><strong><span> {{$category->name}}</span></strong></li>
+                        <li><strong><span> {{$title}}</span></strong></li>
                     </ul>
                 </div>
             </section>
@@ -32,7 +32,7 @@
                 <div class="row">
                     <div class="block-collection col-xl-12 col-lg-12 col-12">
                         <div class="section-box-bg">
-                            <h1 class="title-page d-md-block">{{$category->name}}</h1>
+                            <h1 class="title-page d-md-block">{{$title_sub}}</h1>
                             <div class="evo-sidebar-collection">
                                 <div class="evo-sort-category">
                                     <div id="sort-by">
@@ -82,29 +82,6 @@
         </div>
         <div class="opacity_sidebar"></div>
         <script>
-
-            // var colId = 3176597;
-
-            // var selectedViewData = "data";
-            // $('.add_to_cart').click(function(e) {
-            //     e.preventDefault();
-            //     var $this = $(this);
-            //     var form = $this.parents('form');
-            //     $.ajax({
-            //         type: 'POST',
-            //         url: '/cart/add.js',
-            //         async: false,
-            //         data: form.serialize(),
-            //         dataType: 'json',
-            //         beforeSend: function() {},
-            //         success: function(line_item) {
-            //             ajaxCart.load();
-            //             $('.popup-cart-mobile, .backdrop__body-backdrop___1rvky').addClass('active');
-            //             AddCartMobile(line_item);
-            //         },
-            //         cache: false
-            //     });
-            // });
             $('.bolocs').click(function(e) {
                 e.stopPropagation();
                 $('.aside-filter').slideToggle();

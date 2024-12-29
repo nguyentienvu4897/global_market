@@ -1,6 +1,6 @@
 .section_slider {
     position: relative;
-    margin-bottom: 30px !important
+    /* margin-bottom: 30px !important; */
 }
 
 @media (max-width: 991px) {
