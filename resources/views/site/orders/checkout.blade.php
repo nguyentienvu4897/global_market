@@ -3258,8 +3258,6 @@
                 $scope.ward_options = $scope.wards.filter(function(ward) {
                     return ward.parent_code == $scope.form.customer_district;
                 });
-                $('#customer_shipping_ward').trigger($scope.ward_options)
-                console.log($scope.ward_options);
             }
 
             $scope.showVoucher = function() {
