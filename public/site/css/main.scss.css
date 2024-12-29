@@ -5347,6 +5347,7 @@ header .menu_mega:hover .title_menu {
     display: flex;
     align-items: center; /* Căn giữa nội dung nút */
     justify-content: center;
+    margin: 0 !important;
 }
 
 .page-item.active .page-link {
