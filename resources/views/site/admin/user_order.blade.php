@@ -54,6 +54,7 @@
                     url: '{{ route('orders.searchData') }}',
                     data: function (d, context) {
                         DATATABLE.mergeSearch(d, context);
+                        d.employee_email = "{{ Auth::guard('client')->user()->email }}";
                     },
                 },
                 columns: [
@@ -69,10 +70,8 @@
                         className: "text-center"
                     },
                     {data: 'created_at', title: 'Ngày đặt hàng'},
-                    // {data: 'action_client', orderable: false, title: "Hành động", style: "width: 100px;"}
                 ],
                 search_columns: [
-                    // {data: 'code_client', search_type: "text", placeholder: "Mã đơn hàng"},
                 ],
             }).datatable;
 
