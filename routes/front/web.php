@@ -11,6 +11,7 @@ Route::group(['namespace' => 'Front'], function () {
             Route::get('/account', 'ClientRegisterController@account')->name('front.client-account');
             Route::get('/update-invite-code','ClientRegisterController@updateInviteCode')->name('front.update-invite-code');
             Route::get('/quan-ly-don-hang','ClientRegisterController@userOrder')->name('front.user-order');
+            Route::get('/quan-ly-don-hang/search-data','ClientRegisterController@userOrderSearchData')->name('front.user-order-search-data');
             Route::get('/quan-ly-cap-bac','ClientRegisterController@userLevel')->name('front.user-level');
             Route::get('/bao-cao-hoa-hong','ClientRegisterController@userRevenue')->name('front.user-revenue');
             Route::get('/bao-cao-hoa-hong/search-data','ClientRegisterController@userRevenueSearchData')->name('front.user-revenue-search-data');

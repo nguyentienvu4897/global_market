@@ -51,7 +51,7 @@
         app.controller('UserOrderController', function($scope) {
             let datatable = new DATATABLE('table-list', {
                 ajax: {
-                    url: '{{ route('orders.searchData') }}',
+                    url: '{{ route('front.user-order-search-data') }}',
                     data: function (d, context) {
                         DATATABLE.mergeSearch(d, context);
                         d.employee_email = "{{ Auth::guard('client')->user()->email }}";

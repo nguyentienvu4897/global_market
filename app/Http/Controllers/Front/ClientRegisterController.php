@@ -14,6 +14,7 @@ use App\Http\Traits\ResponseTrait;
 use App\Model\Admin\OrderRevenueDetail;
 use JWTAuth;
 use App\Helpers\FileHelper;
+use App\Model\Admin\Order;
 use Illuminate\Support\Facades\Hash;
 
 class ClientRegisterController extends Controller
@@ -235,6 +236,34 @@ class ClientRegisterController extends Controller
 
     public function userOrder() {
         return view('site.admin.user_order');
+    }
+
+    public function userOrderSearchData(Request $request) {
+        $objects = Order::searchByFilter($request);
+        return Datatables::of($objects)
+            ->addColumn('total_price', function ($object) {
+                return number_format($object->total_price);
+            })
+            ->editColumn('code_client', function ($object) {
+                return '<a href = "javascript:void(0)" title = "Xem chi tiết" class="show-order-client">' . $object->code . '</a>';
+            })
+            ->editColumn('created_at', function ($object) {
+                return formatDate($object->created_at);
+            })
+            ->addColumn('action_client', function ($object) {
+                $result = '<div class="btn-group btn-action">
+                <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class = "fa fa-cog"></i>
+                </button>
+                <div class="dropdown-menu">';
+                $result = $result . ' <a href="" title="Hủy đơn hàng" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Hủy đơn hàng</a>';
+                $result = $result . ' <a href="'.route('orders.show', $object->id).'" title="xem chi tiết" class="dropdown-item"><i class="fa fa-angle-right"></i>Xem chi tiết</a>';
+                $result = $result . '</div></div>';
+                return $result;
+            })
+            ->addIndexColumn()
+            ->rawColumns(['action_client', 'code_client'])
+            ->make(true);
     }
 
     public function userRevenue() {
