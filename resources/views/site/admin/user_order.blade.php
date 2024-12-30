@@ -71,8 +71,9 @@
                     },
                     {data: 'created_at', title: 'Ngày đặt hàng'},
                 ],
-                search_columns: [
-                ],
+                // search_columns: [
+
+                // ],
             }).datatable;
 
             $('#table-list').on('click', '.show-order-client', function () {
