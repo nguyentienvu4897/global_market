@@ -60,11 +60,11 @@ class OrderController extends Controller
             //     $result = $result . '</div></div>';
             //     return $result;
             // })
-            ->addColumn('action_client', function ($object) {
-                return '<a href="javascript:void(0)" title="xem chi tiết" class="dropdown-item show-order-client"><i class="fa fa-eye"></i> Xem chi tiết</a>';
-            })
+            // ->addColumn('action_client', function ($object) {
+            //     return '<a href="javascript:void(0)" title="xem chi tiết" class="dropdown-item show-order-client"><i class="fa fa-eye"></i> Xem chi tiết</a>';
+            // })
             ->addIndexColumn()
-            ->rawColumns(['action_client', 'code_client'])
+            ->rawColumns(['code_client'])
             ->make(true);
     }
 
