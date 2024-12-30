@@ -37,18 +37,18 @@ class OrderController extends Controller
     {
         $objects = ThisModel::searchByFilter($request);
         return Datatables::of($objects)
-            ->addColumn('total_price', function ($object) {
-                return number_format($object->total_price);
-            })
+            // ->addColumn('total_price', function ($object) {
+            //     return number_format($object->total_price);
+            // })
             // ->editColumn('code', function ($object) {
             //     return '<a href = "'.route('orders.show', $object->id).'" title = "Xem chi tiết">' . $object->code . '</a>';
             // })
             ->editColumn('code_client', function ($object) {
                 return '<a href = "javascript:void(0)" title = "Xem chi tiết" class="show-order-client">' . $object->code . '</a>';
             })
-            ->editColumn('created_at', function ($object) {
-                return formatDate($object->created_at);
-            })
+            // ->editColumn('created_at', function ($object) {
+            //     return formatDate($object->created_at);
+            // })
             // ->addColumn('action', function ($object) {
             //     $result = '<div class="btn-group btn-action">
             //     <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
