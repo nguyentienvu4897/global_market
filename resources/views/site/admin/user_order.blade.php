@@ -54,7 +54,7 @@
                     url: '{{ route('orders.searchData') }}',
                     data: function (d, context) {
                         DATATABLE.mergeSearch(d, context);
-                        // d.employee_email = "{{ Auth::guard('client')->user()->email }}";
+                        d.employee_email = "{{ Auth::guard('client')->user()->email }}";
                     },
                 },
                 columns: [
@@ -64,16 +64,15 @@
                     {
                         data: 'status',
                         title: "Trạng thái",
-                        // render: function (data) {
-                        //     return getStatus(data, @json(\App\Model\Admin\Order::STATUSES));
-                        // },
-                        // className: "text-center"
+                        render: function (data) {
+                            return getStatus(data, @json(\App\Model\Admin\Order::STATUSES));
+                        },
+                        className: "text-center"
                     },
                     {data: 'created_at', title: 'Ngày đặt hàng'},
                 ],
-                // search_columns: [
-
-                // ],
+                search_columns: [
+                ],
             }).datatable;
 
             $('#table-list').on('click', '.show-order-client', function () {
