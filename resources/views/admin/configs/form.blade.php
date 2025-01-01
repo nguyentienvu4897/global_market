@@ -114,7 +114,7 @@
                         </div>
                     </div>
 				</div>
-				<div class="form-group">
+				{{-- <div class="form-group">
 					<label class="form-label">Tùy chọn khác</label>
 					<div class="custom-control custom-checkbox">
 						<input id="call" class="custom-control-input" type="checkbox" ng-model="form.click_call" ng-true-value="1" ng-false-value="0">
@@ -128,7 +128,7 @@
 						<input id="zalo-chat" class="custom-control-input" type="checkbox" ng-model="form.zalo_chat"  ng-true-value="1" ng-false-value="0">
 						<label for="zalo-chat" class="custom-control-label">Zalo chat</label>
 					</div>
-				</div>
+				</div> --}}
 				<div class="form-group custom-group">
 					<label class="form-label required-label">Mô tả web</label>
 					<textarea id="my-textarea" class="form-control" ng-model="form.web_des" rows="3"></textarea>

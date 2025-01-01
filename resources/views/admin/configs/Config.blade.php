@@ -31,7 +31,7 @@
         }
 
         set revenue_percent_5(value) {
-            this._revenue_percent_5= value ? parseFloat(value) : 0;
+            this._revenue_percent_5= value || 0;
         }
 
         get revenue_percent_4() {
@@ -39,7 +39,7 @@
         }
 
         set revenue_percent_4(value) {
-            this._revenue_percent_4= value ? parseFloat(value) : 0;
+            this._revenue_percent_4= value || 0;
         }
 
         get revenue_percent_3() {
@@ -47,7 +47,7 @@
         }
 
         set revenue_percent_3(value) {
-            this._revenue_percent_3= value ? parseFloat(value) : 0;
+            this._revenue_percent_3= value || 0;
         }
 
         get revenue_percent_2() {
@@ -55,7 +55,7 @@
         }
 
         set revenue_percent_2(value) {
-            this._revenue_percent_2= value ? parseFloat(value) : 0;
+            this._revenue_percent_2= value || 0;
         }
 
         get revenue_percent_1() {
@@ -63,7 +63,7 @@
         }
 
         set revenue_percent_1(value) {
-            this._revenue_percent_1= value ? parseFloat(value) : 0;
+            this._revenue_percent_1= value || 0;
         }
 
         clearFavicon() {

@@ -167,7 +167,9 @@ class ClientRegisterController extends Controller
 			$object->save();
 
 			if($request->image) {
-				FileHelper::forceDeleteFiles($object->image->id, $object->id, User::class, 'image');
+                if ($object->image) {
+                    FileHelper::forceDeleteFiles($object->image->id, $object->id, User::class, 'image');
+                }
 				FileHelper::uploadFile($request->image, 'users', $object->id, User::class, 'image');
 			}
 
