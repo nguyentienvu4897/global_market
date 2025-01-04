@@ -149,11 +149,12 @@
                             <span style="font-size: 19px; font-weight: 500;" ng-if="!showChangePassword">Thông tin tài khoản</span>
                             <span style="font-size: 19px; font-weight: 500;" ng-if="showChangePassword">Thay đổi mật khẩu</span>
                             <div class="ml-auto group-invite-code">
+                                <label style="font-weight: 600; font-size: 16px; margin-bottom: 0 !important; margin-right: 10px;">Mã giới thiệu: </label>
                                 <input class="invite-code" type="text" ng-model="currentUser.invite_code" placeholder="Mã giới thiệu" disabled>
-                                <a class="btn-copy-invite-code" href="javascript:void(0)" ng-click="copyReferralCode($event)" title="Copy mã giới thiệu">
+                                <a class="btn-copy-invite-code" href="javascript:void(0)" ng-click="copyReferralCode($event)" title="Copy mã giới thiệu" style="border-right: 1px solid #ccc;">
                                     <i class="fa fa-copy"></i>
                                 </a>
-                                <a class="btn-update-invite-code" href="javascript:void(0)" ng-click="updateReferralCode($event)" title="Tạo lại mã giới thiệu">
+                                <a class="btn-update-invite-code" href="javascript:void(0)" ng-click="updateReferralCode($event)" title="Tạo lại mã giới thiệu" ng-if="!currentUser.invite_code">
                                     <i class="fas fa-sync-alt"></i>
                                 </a>
                             </div>

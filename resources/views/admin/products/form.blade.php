@@ -113,6 +113,34 @@
                 </strong>
             </span>
         </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <label>Phân loại sản phẩm <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="Dành cho các sản phẩm có nhiều loại (phân loại, màu sắc, kích thước ...)"></i></label>
+                <button class="btn btn-info btn-sm float-right" ng-click="form.addAttribute()">
+                    <i class="fa fa-plus"></i> Thêm
+                </button>
+                <div class="d-flex mt-2" ng-repeat="attribute in form.attribute_values track by $index">
+                    <div class="form-group">
+                        <ui-select class="" remove-selected="true" ng-model="attribute.attribute_id" theme="select2">
+                            <ui-select-match placeholder="Chọn phân loại">
+                                <% $select.selected.name %>
+                            </ui-select-match>
+                            <ui-select-choices repeat="t.id as t in (attributes | filter: $select.search)">
+                                <span ng-bind="t.name"></span>
+                            </ui-select-choices>
+                        </ui-select>
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="attribute.value" placeholder="Giá trị">
+                    </div>
+                    <div>
+                        <button class="btn btn-danger btn-sm p-2" ng-click="form.removeAttribute($index)">
+                            <i class="fa fa-times"></i> Xóa
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="form-group custom-group mb-4">
             <label class="form-label">Chọn tags</label>
             <ui-select remove-selected="false" multiple ng-model="form.tag_ids">

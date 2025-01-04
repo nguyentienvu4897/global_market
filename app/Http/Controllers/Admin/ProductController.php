@@ -128,6 +128,10 @@ class ProductController extends Controller
 			$object->syncDocuments($request->attachments, 'products/attachments/');
             $object->addTags($request->tag_ids);
 
+            if($request->input('attributes')) {
+                $object->syncAttributes($request->input('attributes'));
+            }
+
             if(isset($request->all()['videos'])) {
                 foreach ($request->all()['videos'] as $video) {
                     ProductVideo::query()->create([
@@ -199,6 +203,9 @@ class ProductController extends Controller
             $object->syncDocuments($request->attachments, 'products/attachments/');
 
             $object->updateTags($request->tag_ids);
+            if($request->input('attributes')) {
+                $object->syncAttributes($request->input('attributes'));
+            }
 
             if(isset($request->all()['videos'])) {
                 ProductVideo::query()->where('product_id', $object->id)->delete();

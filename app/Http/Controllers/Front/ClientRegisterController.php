@@ -240,6 +240,18 @@ class ClientRegisterController extends Controller
         return view('site.admin.user_order');
     }
 
+    public function showOrderDetail($id) {
+        $order = Order::query()->with(['details.product'])->find($id);
+        return view('site.admin.user_order_detail', compact('order'));
+    }
+
+    public function cancelOrder($id) {
+        $order = Order::findOrFail($id);
+        $order->status = 0;
+        $order->save();
+        return $this->responseSuccess('Đã hủy đơn hàng');
+    }
+
     public function userOrderSearchData(Request $request) {
         $objects = Order::searchByFilter($request);
         return Datatables::of($objects)
@@ -253,14 +265,10 @@ class ClientRegisterController extends Controller
                 return formatDate($object->created_at);
             })
             ->addColumn('action_client', function ($object) {
-                $result = '<div class="btn-group btn-action">
-                <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <i class = "fa fa-cog"></i>
-                </button>
-                <div class="dropdown-menu">';
-                $result = $result . ' <a href="" title="Hủy đơn hàng" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Hủy đơn hàng</a>';
-                $result = $result . ' <a href="'.route('orders.show', $object->id).'" title="xem chi tiết" class="dropdown-item"><i class="fa fa-angle-right"></i>Xem chi tiết</a>';
-                $result = $result . '</div></div>';
+                $result = '<div class="btn-group btn-action">';
+                $result = $result . ' <a href="'.route('front.show-order-detail', $object->id).'" title="xem chi tiết" class="btn btn-info"><i class="fa fa-eye"></i></a>';
+                $result = $result . ' <a href="javascript:void(0)" title="Hủy đơn hàng" class="btn btn-danger update-status"><i class="fa fa-trash"></i></a>';
+                $result = $result . '</div>';
                 return $result;
             })
             ->addIndexColumn()

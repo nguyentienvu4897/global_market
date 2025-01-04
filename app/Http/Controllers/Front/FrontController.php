@@ -139,6 +139,18 @@ class FrontController extends Controller
         try {
             $categories = Category::getAllCategory();
             $product = Product::findSlug($slug);
+            $attributes = [];
+            foreach ($product->attributeValues as $attribute) {
+                if(!isset($attributes[$attribute->id])) {
+                    $attributes[$attribute->id] = [
+                        'name' => $attribute->name,
+                        'values' => [$attribute->pivot->value]
+                    ];
+                } else {
+                    $attributes[$attribute->id]['values'][] = $attribute->pivot->value;
+                }
+            }
+            $product->attributes = $attributes;
 
             // sản phẩm tương tự
             $productsRelated = $product->category->products()->with([
@@ -188,14 +200,14 @@ class FrontController extends Controller
                 'product_rates' => function($q) {
                     $q->where('status', 2);
                 }
-            ])->where('status', 1)->whereIn('cate_id', $arr_category_id)->orderBy('created_at', 'desc')->paginate(12);
+            ])->where('status', 1)->whereIn('cate_id', $arr_category_id)->orderBy('created_at', 'desc')->paginate(15);
         } else {
             $category = CategorySpecial::findBySlug($categorySlug);
             $products = $category->products()->with([
                 'product_rates' => function($q) {
                     $q->where('status', 2);
                 }
-            ])->where('status', 1)->orderBy('created_at', 'desc')->paginate(12);
+            ])->where('status', 1)->orderBy('created_at', 'desc')->paginate(15);
         }
 
         $title = $category->name;

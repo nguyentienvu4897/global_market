@@ -26,6 +26,38 @@
         .hidden {
             display: none;
         }
+
+        .product-attributes {
+            margin-bottom: 0 !important;
+        }
+        .product-attributes label {
+            font-weight: 600;
+            margin-bottom: 0 !important;
+        }
+        .product-attribute-values {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .product-attribute-values .badge, .product-attribute-values .badge+ .badge {
+            width: auto;
+            border: 1px solid #0974ba;
+            padding: 2px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            color: #0974ba;
+            height: 30px;
+            cursor: pointer;
+            pointer-events: auto;
+        }
+        .product-attribute-values .badge:hover {
+            background-color: #0974ba;
+            color: #fff;
+        }
+        .product-attribute-values .badge.active {
+            background-color: #0974ba;
+            color: #fff;
+        }
     </style>
 @endsection
 
@@ -119,8 +151,8 @@
                                     <form class="form-inline">
                                         <div class="inventory_quantity">
                                             <span class="mb-break">
-                                                <span class="stock-brand-title">Phân loại:</span>
-                                                <span class="a-vendor">{{ $product->category->name }}
+                                                <span class="stock-brand-title">Danh mục:</span>
+                                                <span class="a-vendor" style="cursor: pointer;" onclick="window.location.href='{{ route('front.show-product-category', $product->category->slug) }}'">{{ $product->category->name }}
                                                 </span>
                                             </span>
                                         </div>
@@ -150,6 +182,18 @@
                                                 {!! $product->intro !!}
                                             </div>
                                         </div>
+                                        @if(isset($product->attributes) && count($product->attributes) > 0)
+                                        @foreach ($product->attributes as $index => $attribute)
+                                            <div class="mt-2 product-attributes">
+                                                <label>{{ $attribute['name'] }}</label>
+                                                <div class="product-attribute-values">
+                                                    @foreach ($attribute['values'] as $value)
+                                                        <div class="badge badge-primary" data-value="{{ $value }}" data-name="{{ $attribute['name'] }}" data-index="{{ $index }}">{{ $value }}</div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                        @endif
                                         <div class="form-product  ">
                                             <div class="clearfix form-group ">
                                                 <div class="flex-quantity">
@@ -661,6 +705,30 @@
             quantity: 1
         };
 
+        $scope.selectedAttributes = [];
+        jQuery('.product-attribute-values .badge').click(function() {
+            if(!jQuery(this).hasClass('active')) {
+                jQuery(this).parent().find('.badge').removeClass('active');
+                jQuery(this).addClass('active');
+                if ($scope.selectedAttributes.length > 0 && $scope.selectedAttributes.find(item => item.index == jQuery(this).data('index'))) {
+                    $scope.selectedAttributes.find(item => item.index == jQuery(this).data('index')).value = jQuery(this).data('value');
+                } else {
+                    let index = jQuery(this).data('index');
+                    $scope.selectedAttributes.push({
+                        index: index,
+                        name: jQuery(this).data('name'),
+                        value: jQuery(this).data('value'),
+                    });
+                }
+            } else {
+                jQuery(this).parent().find('.badge').removeClass('active');
+                jQuery(this).removeClass('active');
+                $scope.selectedAttributes = $scope.selectedAttributes.filter(item => item.index != jQuery(this).data('index'));
+            }
+            $scope.$apply();
+            console.log($scope.selectedAttributes);
+        });
+
         $scope.addToCartFromProductDetail = function() {
             let quantity = $('form input[name="quantity"]').val();
             url = "{{route('cart.add.item', ['productId' => 'productId'])}}";
@@ -673,7 +741,8 @@
                     'X-CSRF-TOKEN': "{{csrf_token()}}"
                 },
                 data: {
-                    'qty': parseInt(quantity)
+                    'qty': parseInt(quantity),
+                    'attributes': $scope.selectedAttributes
                 },
                 success: function (response) {
                     if (response.success) {
@@ -712,7 +781,8 @@
                     'X-CSRF-TOKEN': "{{csrf_token()}}"
                 },
                 data: {
-                    'qty': parseInt(quantity)
+                    'qty': parseInt(quantity),
+                    'attributes': $scope.selectedAttributes
                 },
                 success: function (response) {
                     if (response.success) {
@@ -728,7 +798,7 @@
                             cartItemSync.count = response.count;
                         }, 1000);
                         toastr.success('Thao tác thành công !')
-                        window.location.href = "{{route('cart.checkout')}}";
+                        window.location.href = "{{route('cart.index')}}";
                     }
                 },
                 error: function () {

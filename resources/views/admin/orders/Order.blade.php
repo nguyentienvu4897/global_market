@@ -1,3 +1,4 @@
+@include('admin.orders.OrderDetail')
 <script>
     class Order extends BaseClass {
         no_set = [];
@@ -19,8 +20,13 @@
         //     this._image = new Image(value, this);
         // }
 
+        set details(value) {
+            this._details = (value || []).map(val => new OrderDetail(val, this));
+        }
 
-
+        get details() {
+            return this._details;
+        }
 
     }
 </script>

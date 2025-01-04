@@ -40,9 +40,20 @@ class CartController extends Controller
     public function addItem(Request $request, $productId)
     {
         $product = Product::query()->find($productId);
+        $arr_index = [];
+        if(isset($request['attributes'])) {
+            foreach ($request['attributes'] as $attribute) {
+                $arr_index[] = [
+                    'index' => intval($attribute['index']),
+                    'value' => $attribute['value']
+                ];
+            }
+            sort($arr_index);
+        }
+        $uniqueId = isset($arr_index) ? $product->id . '-' . json_encode($arr_index) : $product->id;
 
         \Cart::add([
-            'id' => $product->id,
+            'id' => $uniqueId,
             'name' => $product->name,
             'price' => $product->price,
             'quantity' => $request->qty ? (int)$request->qty : 1,
@@ -50,6 +61,7 @@ class CartController extends Controller
                 'image' => $product->image->path ?? '',
                 'slug' => $product->slug,
                 'base_price' => $product->base_price,
+                'attributes' => $request['attributes']
             ]
         ]);
 
@@ -102,11 +114,7 @@ class CartController extends Controller
     // áp dụng mã giảm giá (boolean)
     public function applyVoucher(Request $request) {
         $voucher = Voucher::query()->where('code', $request->code)->first();
-        $cartCollection = \Cart::getContent();
-        $total_price = \Cart::getTotal();
-        $total_qty = \Cart::getContent()->sum('quantity');
-        // dd($total_price, $total_qty, $voucher);
-        if(isset($voucher) && (($total_price >= $voucher->limit_bill_value && $voucher->limit_bill_value > 0) || ($voucher->limit_product_qty > 0 && $total_qty >= $voucher->limit_product_qty))) {
+        if(isset($voucher) && (($request->total >= $voucher->limit_bill_value && $voucher->limit_bill_value > 0) || ($voucher->limit_product_qty > 0 && $request->qty >= $voucher->limit_product_qty))) {
             return Response::json(['success' => true, 'voucher' => $voucher, 'message' => 'Áp dụng mã giảm giá thành công']);
         }
         return Response::json(['success' => false, 'message' => 'Không đủ điều kiện áp mã giảm giá']);
@@ -156,7 +164,7 @@ class CartController extends Controller
             $customer_address = $request->customer_address . ', ' . $ward->path_with_type;
 
             $lastId = Order::query()->latest('id')->first()->id ?? 1;
-            $total_price = \Cart::getTotal();
+            $total_price = $request->total;
 
             $order = Order::query()->create([
                 'customer_name' => $request->customer_name,
@@ -178,19 +186,21 @@ class CartController extends Controller
             $revenue_amount_level_5 = 0;
             $config = \App\Model\Admin\Config::where('id',1)->select('revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5')->first();
             foreach ($request->items as $item) {
+                $product = Product::query()->where('slug', $item['attributes']['slug'])->first();
                 $detail = new OrderDetail();
                 $detail->order_id = $order->id;
-                $detail->product_id = $item['id'];
+                $detail->product_id = $product->id;
                 $detail->qty = $item['quantity'];
                 $detail->price = $item['price'];
-
+                $detail->attributes = isset($item['attributes']['attributes']) ? json_encode($item['attributes']['attributes']) : null;
                 $detail->save();
-                $product = Product::query()->find($detail->product_id);
                 $revenue_amount_level_1 += $product->revenue_price * $config->revenue_percent_1 / 100;
                 $revenue_amount_level_2 += $product->revenue_price * $config->revenue_percent_2 / 100;
                 $revenue_amount_level_3 += $product->revenue_price * $config->revenue_percent_3 / 100;
                 $revenue_amount_level_4 += $product->revenue_price * $config->revenue_percent_4 / 100;
                 $revenue_amount_level_5 += $product->revenue_price * $config->revenue_percent_5 / 100;
+
+                \Cart::remove($item['id']);
             }
 
             $current_user = User::query()->with([
@@ -276,7 +286,9 @@ class CartController extends Controller
                 $order_revenue_detail->save();
             }
 
-            \Cart::clear();
+            if(\Cart::getContent()->sum('quantity') == 0) {
+                \Cart::clear();
+            }
 
             $voucher = Voucher::query()->where('code', $request->discount_code)->first();
             if ($voucher) {

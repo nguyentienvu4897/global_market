@@ -106,6 +106,12 @@
                                                 <div class="grid__item cart_info">
                                                     <div class="ajaxcart__product-name-wrapper cart_name">
                                                         <a ng-href="/san-pham/<% item.attributes.slug %>.html" class="ajaxcart__product-name h4" title="<% item.name %>"><% item.name %></a>
+                                                        <div class="cart_attribute">
+                                                            <div ng-repeat="attribute in item.attributes.attributes" style="line-height: 1;">
+                                                                <span class="cart_attribute_name" style="margin-left: 8px; font-weight: 600; font-size: 14px;"><% attribute.name %> :</span>
+                                                                <span class="cart_attribute_value" style="font-size: 14px;"><% attribute.value %></span>
+                                                            </div>
+                                                        </div>
                                                         <a title="Xóa" class="cart__btn-remove remove-item-cart ajaxifyCart--remove" href="javascript:;" data-line="1" ng-click='removeItem(item.id)'></a>
                                                     </div>
                                                     <div class="grid">
@@ -136,7 +142,7 @@
                                             </div>
                                         </div>
                                         <div class="cart__btn-proceed-checkout-dt ">
-                                            <button onclick="location.href='{{ route('cart.checkout') }}'" type="button" class="button btn btn-default cart__btn-proceed-checkout" id="btn-proceed-checkout" title="Thanh toán" style="margin-bottom: 10px;">Thanh toán</button>
+                                            {{-- <button onclick="location.href='{{ route('cart.checkout') }}'" type="button" class="button btn btn-default cart__btn-proceed-checkout" id="btn-proceed-checkout" title="Thanh toán" style="margin-bottom: 10px;">Thanh toán</button> --}}
                                             <button onclick="location.href='{{ route('cart.index') }}'" type="button" class="button btn btn-default cart__btn-proceed-checkout" id="btn-proceed-checkout" title="Xem giỏ hàng">Xem giỏ hàng</button>
                                         </div>
                                     </div>

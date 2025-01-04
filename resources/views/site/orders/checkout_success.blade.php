@@ -2131,9 +2131,16 @@
                                     </td>
                                     <td class="product-description">
                                     <span class="product-description-name order-summary-emphasis">{{$detail->product->name}}</span>
+                                    @php
+                                    $attributes = json_decode($detail->attributes, true);
+                                    @endphp
+                                    @if($attributes)
                                     <span class="product-description-variant order-summary-small-text">
-                                    {{$detail->product->name}}
+                                    @foreach($attributes as $attribute)
+                                    {{$attribute['name']}}: <span style="font-weight: 400; color: #338dbc;">{{$attribute['value']}}</span>
+                                    @endforeach
                                     </span>
+                                    @endif
                                     </td>
                                     <td class="product-quantity visually-hidden">{{$detail->qty}}</td>
                                     <td class="product-price">

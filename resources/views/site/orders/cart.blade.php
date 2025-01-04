@@ -42,25 +42,37 @@
                                     <div class="CartPageContainer" style="font-size: 16px;">
                                         <form class="cart ajaxcart cartpage">
                                             <div class="cart-header-info">
+                                                <div>Chọn
+                                                    <input style="cursor: pointer; min-height: 18px; height: 18px; top: 12px;" type="checkbox" ng-model="selectAll" ng-change="selectAllItems()">
+                                                </div>
                                                 <div>Thông tin sản phẩm</div>
                                                 <div>Đơn giá</div>
                                                 <div>Số lượng</div>
                                                 <div>Thành tiền</div>
+                                                <div>Hành động</div>
                                             </div>
                                             <div class="ajaxcart__inner ajaxcart__inner--has-fixed-footer cart_body items">
-                                                <div class="ajaxcart__row" ng-repeat="item in items">
+                                                <div class="ajaxcart__row" ng-repeat="item in items track by $index">
                                                     <div class="ajaxcart__product cart_product" data-line="1">
+                                                        <div class="ajaxcart__product-select cart_select">
+                                                            <input style="cursor: pointer; min-height: 18px; height: 18px;" type="checkbox" ng-model="item.selected" ng-change="selectItem(item)">
+                                                        </div>
                                                         <a href="/san-pham/<%item.attributes.slug%>.html" class="ajaxcart__product-image cart_image" title="<%item.name%>">
                                                             <img ng-src="<%item.attributes.image%>" alt="<%item.name%>">
                                                         </a>
                                                         <div class="grid__item cart_info">
                                                         <div class="ajaxcart__product-name-wrapper cart_name">
                                                             <a href="/san-pham/<%item.attributes.slug%>.html" class="ajaxcart__product-name h4" title="<%item.name%>"><%item.name%></a>
-                                                            <a title="Xóa" class="cart__btn-remove remove-item-cart ajaxifyCart--remove" href="javascript:;" data-line="1" ng-click="removeItem(item.id)">Xóa</a>
+                                                            <div class="cart_attribute">
+                                                                <div ng-repeat="attribute in item.attributes.attributes" style="line-height: 1;">
+                                                                    <span class="cart_attribute_name" style="margin-left: 8px; font-weight: 600; font-size: 14px;"><% attribute.name %> :</span>
+                                                                    <span class="cart_attribute_value" style="font-size: 14px;"><% attribute.value %></span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="grid">
                                                             <div class="grid__item one-half text-right cart_prices">
-                                                                <span class="cart-price"><% item.attributes.price | number %>₫</span>
+                                                                <span class="cart-price"><% item.price | number %>₫</span>
                                                             </div>
                                                         </div>
                                                         <div class="grid">
@@ -81,6 +93,12 @@
                                                                 <span class="cart-price"><% item.price * item.quantity | number %>₫</span>
                                                             </div>
                                                         </div>
+                                                        <div class="grid">
+                                                            <div class="grid__item one-half text-right cart_prices">
+                                                                <a title="Xóa" class="cart__btn-remove remove-item-cart ajaxifyCart--remove" href="javascript:;" data-line="1" ng-click="removeItem(item.id)"><i class="fa fa-trash"></i> Xóa</a>
+                                                            </div>
+                                                        </div>
+
                                                         </div>
                                                     </div>
                                                 </div>
@@ -94,11 +112,11 @@
                                                         <div class="ajaxcart__subtotal">
                                                         <div class="cart__subtotal">
                                                             <div class="cart__col-6">Tổng tiền:</div>
-                                                            <div class="text-right cart__totle"><span class="total-price"><% total | number %>₫</span></div>
+                                                            <div class="text-right cart__totle"><span class="total-price"><% total_selected | number %>₫</span></div>
                                                         </div>
                                                         </div>
                                                         <div class="cart__btn-proceed-checkout-dt">
-                                                        <button onclick="window.location.href = '{{ route('cart.checkout') }}'" type="button" class="button btn btn-default cart__btn-proceed-checkout" id="btn-proceed-checkout" title="Thanh toán">Thanh toán</button>
+                                                        <button ng-click="submitCart()" type="button" class="button btn btn-default cart__btn-proceed-checkout" id="btn-proceed-checkout" title="Thanh toán">Thanh toán</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -111,7 +129,10 @@
                                 <div class="CartMobileContainer">
                                     <form class="cart ajaxcart cart-mobile">
                                         <div class="ajaxcart__inner ajaxcart__inner--has-fixed-footer cart_body">
-                                            <div class="ajaxcart__row" ng-repeat="item in items">
+                                            <div class="ajaxcart__row" ng-repeat="item in items" style="display: flex;">
+                                                <div class="ajaxcart__product-select cart_select_mobile" style="width: 5%;">
+                                                    <input style="cursor: pointer; min-height: 75px; height: 75px; width: 4%;" type="checkbox" ng-model="item.selected" ng-change="selectItem(item)">
+                                                </div>
                                                 <div class="ajaxcart__product cart_product" data-line="1">
                                                     <a href="/san-pham/<%item.attributes.slug%>.html" class="ajaxcart__product-image cart_image" title="<%item.name%>">
                                                         <img ng-src="<%item.attributes.image%>" alt="<%item.name%>">
@@ -119,6 +140,12 @@
                                                     <div class="grid__item cart_info">
                                                     <div class="ajaxcart__product-name-wrapper cart_name">
                                                         <a href="/san-pham/<%item.attributes.slug%>.html" class="ajaxcart__product-name h4" title="<%item.name%>"><%item.name%></a>
+                                                    </div>
+                                                    <div class="cart_attribute">
+                                                        <div ng-repeat="attribute in item.attributes.attributes" style="line-height: 1;">
+                                                            <span class="cart_attribute_name" style="margin-left: 8px; font-weight: 600; font-size: 14px;"><% attribute.name %> :</span>
+                                                            <span class="cart_attribute_value" style="font-size: 14px;"><% attribute.value %></span>
+                                                        </div>
                                                     </div>
                                                     <div class="grid">
                                                         <div class="grid__item one-half cart_select cart_item_name">
@@ -145,14 +172,14 @@
                                             <div class="ajaxcart__subtotal">
                                                 <div class="cart__subtotal">
                                                     <div class="cart__col-6">Tổng tiền:</div>
-                                                    <div class="text-right cart__totle"><span class="total-price"><% total | number %>₫</span></div>
+                                                    <div class="text-right cart__totle"><span class="total-price"><% total_selected | number %>₫</span></div>
                                                 </div>
                                             </div>
                                             <div class="cart_btn_continue">
-                                                <a class="btn-proceed-checkout btn-checkouts" title="Tiếp tục mua hàng" href="collections/all">Tiếp tục mua hàng</a>
+                                                <a class="btn-proceed-checkout btn-checkouts" title="Tiếp tục mua hàng" href="{{ route('front.home-page') }}">Tiếp tục mua hàng</a>
                                             </div>
                                             <div class="cart__btn-proceed-checkout-dt">
-                                                <button onclick="window.location.href = '{{ route('cart.checkout') }}'" type="button" class="button btn btn-default cart__btn-proceed-checkout" id="btn-proceed-checkout" title="Thanh toán">Thanh toán</button>
+                                                <button ng-click="submitCart()" type="button" class="button btn btn-default cart__btn-proceed-checkout" id="btn-proceed-checkout" title="Thanh toán">Thanh toán</button>
                                             </div>
                                         </div>
                                     </form>
@@ -411,9 +438,13 @@
     <script>
         app.controller('CartController', function($scope, cartItemSync, $interval, $rootScope) {
             $scope.items = @json($cartCollection);
-            $scope.total = "{{ $total_price }}";
+            Object.keys($scope.items).forEach(function(item) {
+                $scope.items[item].selected = false;
+            });
+            $scope.total_selected = 0;
             $scope.total_qty = "{{ $total_qty }}";
             $scope.checkCart = true;
+            $scope.cart_items_selected = [];
 
             $scope.countItem = Object.keys($scope.items).length;
 
@@ -423,6 +454,56 @@
                     $scope.$applyAsync();
                 }
             })
+
+            $scope.selectAllItems = function() {
+                $scope.total_selected = 0;
+                $scope.cart_items_selected = [];
+                Object.keys($scope.items).forEach(function(item) {
+                    $scope.items[item].selected = $scope.selectAll;
+                    if ($scope.items[item].selected) {
+                        $scope.cart_items_selected.push($scope.items[item]);
+                    } else {
+                        $scope.cart_items_selected.splice($scope.cart_items_selected.indexOf($scope.items[item].id), 1);
+                    }
+                });
+                $scope.total_selected = $scope.cart_items_selected.reduce(function(total, item) {
+                    return total + item.price * item.quantity;
+                }, 0);
+                $scope.$applyAsync();
+            }
+
+            $scope.selectItem = function(item) {
+                const existingItemIndex = $scope.cart_items_selected.findIndex(selectedItem => selectedItem.id === item.id);
+                if (existingItemIndex == -1 && item.selected) {
+                    $scope.cart_items_selected.push(item);
+                } else {
+                    $scope.cart_items_selected.splice(existingItemIndex, 1);
+                }
+                $scope.total_selected = $scope.cart_items_selected.reduce(function(total, item) {
+                    return total + item.price * item.quantity;
+                }, 0);
+
+                let check = true;
+                Object.keys($scope.items).forEach(function(item) {
+                    if (!$scope.items[item].selected) {
+                        check = false;
+                        return;
+                    }
+                });
+                $scope.selectAll = check;
+
+                $scope.$applyAsync();
+            }
+
+            $scope.submitCart = function() {
+                if ($scope.cart_items_selected.length == 0 || $scope.total_selected == 0) {
+                    toastr.warning('Chọn sản phẩm thanh toán');
+                    return;
+                }
+                localStorage.setItem('cart_items_selected', JSON.stringify($scope.cart_items_selected));
+                localStorage.setItem('total_selected', $scope.total_selected);
+                window.location.href = "{{ route('cart.checkout') }}";
+            }
 
             $scope.changeQty = function(qty, product_id) {
                 updateCart(qty, product_id)
@@ -452,6 +533,8 @@
                             $scope.items = response.items;
                             $scope.total = response.total;
                             $scope.total_qty = response.count;
+                            $scope.total_selected = 0;
+                            $scope.cart_items_selected = [];
                             $interval.cancel($rootScope.promise);
 
                             $rootScope.promise = $interval(function() {
@@ -484,6 +567,8 @@
                             $scope.items = response.items;
                             $scope.total = response.total;
                             $scope.total_qty = response.count;
+                            $scope.total_selected = 0;
+                            $scope.cart_items_selected = [];
                             if ($scope.total == 0) {
                                 $scope.checkCart = false;
                             }

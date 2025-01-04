@@ -82,7 +82,6 @@
                     } else if (col.search_type == 'select') {
                         html += `<div class="col-md-3 mb-3">
                             <div class="form-group custom-group">
-                            <label>${col.placeholder}</label>
                             <select class="form-control select2-dynamic" data-column="${col.data}">
                                 <option value="">${col.placeholder}</option>`;
                         (col.column_data || []).forEach(function (el) {

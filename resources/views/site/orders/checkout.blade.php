@@ -2698,6 +2698,11 @@
                                             </td>
                                             <td class="product-description">
                                                 <span class="product-description-name order-summary-emphasis"><% item.name %></span>
+                                                <div ng-if="item.attributes">
+                                                    <div ng-repeat="attribute in item.attributes.attributes">
+                                                        <% attribute.name %>: <span style="font-weight: 400; color: #338dbc;"><% attribute.value %></span>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td class="product-quantity visually-hidden"><% item.quantity | number %></td>
                                             <td class="product-price">
@@ -2827,7 +2832,7 @@
                     </style>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="{{route('cart.index')}}">Giỏ hàng</a>
+                            <a href="javascript:void(0)" ng-click="clearCart()">Giỏ hàng</a>
                         </li>
                         <li class="breadcrumb-item breadcrumb-item-current">
                             Thông tin giao hàng
@@ -3117,11 +3122,11 @@
                             </div>
                         </div>
                         <div class="step-footer" id="step-footer-checkout">
-                            <button type="submit" class="step-footer-continue-btn btn" ng-click="submitOrder()">
+                            <button type="submit" class="step-footer-continue-btn btn" ng-click="submitOrder()" ng-disabled="loading">
                                 <span class="btn-content">Hoàn tất đơn hàng</span>
-                                <i class="btn-spinner icon icon-button-spinner"></i>
+                                <i class="btn-spinner icon icon-button-spinner" ng-show="loading"></i>
                             </button>
-                            <a class="step-footer-previous-link" href="{{ route('cart.index') }}">
+                            <a class="step-footer-previous-link" href="javascript:void(0)" ng-click="clearCart()">
                                 Giỏ hàng
                             </a>
                         </div>
@@ -3213,13 +3218,20 @@
     </div>
     <script>
         app.controller('CheckoutController', function($scope, $http) {
-            $scope.cart = @json($cartCollection);
-            $scope.total = @json($total);
+            let cart_items_selected = JSON.parse(localStorage.getItem('cart_items_selected'));
+            let total_selected = localStorage.getItem('total_selected');
+            if (cart_items_selected.length == 0 || total_selected == 0) {
+                window.location.href = "{{ route('cart.index') }}";
+            }
+            console.log(cart_items_selected, total_selected);
+            $scope.cart = cart_items_selected ?? @json($cartCollection);
+            $scope.total = total_selected ?? @json($total);
             $scope.vouchers = @json($vouchers);
             $scope.provinces = @json($provinces);
             $scope.districts = @json($districts);
             $scope.wards = @json($wards);
             $scope.currentUser = @json(Auth::guard('client')->user());
+            $scope.loading = false;
             $scope.form = {
                 customer_name: '',
                 customer_phone: '',
@@ -3273,7 +3285,8 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}',
                     },
                     data: {
-                        code: code
+                        code: code,
+                        total: $scope.total,
                     },
                     success: function(response) {
                         if(response.success) {
@@ -3293,11 +3306,19 @@
                 });
             }
 
+            $scope.clearCart = function() {
+                localStorage.removeItem('cart_items_selected');
+                localStorage.removeItem('total_selected');
+                window.location.href = "{{ route('cart.index') }}";
+            }
+
             $scope.submitOrder = function() {
+                $scope.loading = true;
                 let data = $scope.form;
                 data.discount_code = $scope.discount.code;
                 data.discount_value = $scope.discount.value;
                 data.items = $scope.cart;
+                data.total = $scope.total;
 
                 $scope.errors = {};
                 $.ajax({
@@ -3311,13 +3332,17 @@
                         if (response.success) {
                             toastr.success(response.message);
                             window.location.href = '{{route('cart.checkout.success')}}';
+                            localStorage.removeItem('cart_items_selected');
+                            localStorage.removeItem('total_selected');
                         } else {
                             $scope.errors = response.errors;
                             toastr.error(response.message);
+                            $scope.loading = false;
                         }
                     },
                     error: function(response) {
                         toastr.error('Thao tác thất bại');
+                        $scope.loading = false;
                     },
                     complete: function() {
                         $scope.$applyAsync();
