@@ -62,7 +62,8 @@ class OrderRevenueDetail extends Model
             ->leftJoinSub(function($query) {
                 $query->from('order_revenue_details')
                     ->leftJoin('users', 'users.id', '=', 'order_revenue_details.user_id')
-                    ->select(['users.id as user_id', \DB::raw('SUM(revenue_amount) as total_amount_pending')])
+                    ->select(['users.id as user_id',
+                    \DB::raw('SUM(revenue_amount) as total_amount_pending')])
                     ->whereIn('order_revenue_details.status', [self::STATUS_PENDING, self::STATUS_PAID])
                     ->groupBy('users.id');
             }, 'alias', function($join) {
@@ -71,7 +72,8 @@ class OrderRevenueDetail extends Model
             ->leftJoinSub(function($query) {
                 $query->from('order_revenue_details')
                     ->leftJoin('users', 'users.id', '=', 'order_revenue_details.user_id')
-                    ->select(['users.id as user_id', \DB::raw('SUM(revenue_amount) as total_amount_wait_payment')])
+                    ->select(['users.id as user_id',
+                    \DB::raw('SUM(revenue_amount - settlement_amount) as total_amount_wait_payment')])
                     ->whereIn('order_revenue_details.status', [self::STATUS_WAIT_QUYET_TOAN])
                     ->groupBy('users.id');
             }, 'alias2', function($join) {
@@ -80,8 +82,15 @@ class OrderRevenueDetail extends Model
             ->leftJoinSub(function($query) {
                 $query->from('order_revenue_details')
                     ->leftJoin('users', 'users.id', '=', 'order_revenue_details.user_id')
-                    ->select(['users.id as user_id', \DB::raw('SUM(revenue_amount) as total_amount_paid')])
-                    ->whereIn('order_revenue_details.status', [self::STATUS_QUYET_TOAN])
+                    ->select(['users.id as user_id',
+                    \DB::raw('SUM(settlement_amount) as total_amount_paid')])
+                    ->where(function($que) {
+                        $que->whereIn('order_revenue_details.status', [self::STATUS_QUYET_TOAN])
+                        ->orWhere(function($q) {
+                            $q->whereIn('order_revenue_details.status', [self::STATUS_WAIT_QUYET_TOAN])
+                            ->where('settlement_amount', '>', 0);
+                        });
+                    })
                     ->groupBy('users.id');
             }, 'alias3', function($join) {
                 $join->on('alias3.user_id', '=', 'users.id');
@@ -109,5 +118,41 @@ class OrderRevenueDetail extends Model
         }
 
         return $users;
+    }
+
+    public static function searchByFilter($request) {
+        $results = self::where('user_id', \Auth::guard('client')->user()->id);
+
+        if (!empty($request->order_code)) {
+            $results->where('order_code', $request->order_code);
+        }
+
+        if (!empty($request->order_employee)) {
+            $results->whereHas('order', function($query) use ($request) {
+                $query->where('customer_name', 'like', '%' . $request->order_employee . '%')->orWhere('customer_email', 'like', '%' . $request->order_employee . '%');
+            });
+        }
+
+        if (!empty($request->status)) {
+            $results->where('status', $request->status);
+        }
+
+        if (isset($request->status) && $request->status == self::STATUS_PENDING) {
+            $results->where('status', self::STATUS_PENDING);
+        }
+
+        if (!empty($request->from_date)) {
+            $results->where('created_at', '>=', $request->from_date);
+        }
+
+        if (!empty($request->to_date)) {
+            $results->where('created_at', '<=', $request->to_date);
+        }
+
+        if (empty($request->order)) {
+            $results->orderBy('id', 'desc');
+        }
+
+        return $results->get();
     }
 }

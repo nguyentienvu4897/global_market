@@ -51,7 +51,7 @@
     <script src="{{ asset('libs/angularjs/select.js') }}"></script>
 
     <script src="{{ asset('js/angular.js') }}?version={{ env('APP_VERSION', '1') }}"></script>
-{{--    <script src="{{ asset('libs/angularjs/app.directive.js') }}"></script>--}}
+    <script src="{{ asset('libs/angularjs/app.directive.js') }}"></script>
 
 
     @include('partial.classes.base.Datatable')

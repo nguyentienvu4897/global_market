@@ -48,6 +48,10 @@ class Order extends Model
         return $this->hasMany(OrderDetail::class, 'order_id');
     }
 
+    public function canCancel() {
+        return $this->status == self::MOI && \Auth::guard('client')->user()->email == $this->customer_email;
+    }
+
     public function getTotalPriceAttribute()
     {
         if ($this->total_after_discount > 0) {

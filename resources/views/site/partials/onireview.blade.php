@@ -168,7 +168,9 @@
             <div id="onirvapp-detail-body">
                 <div class="onirvapp-detail-tabs">
                     <div class="onirvapp-tab"><button type="button" class="onirvapp-tab-btn-active onirvapp-tab-btn">Danh sách đánh giá (<% product.product_rates.length | number %>)</button></div>
+                    @if($canReview)
                     <div class="onirvapp-tab-action"><button type="button" class="onirvapp-btn onirvapp-btn-primary" ng-click="writeReview()">Viết đánh giá mới</button></div>
+                    @endif
                 </div>
                 <div id="onirvapp-review-list" class="onirvapp-comments-list">
                     <div class="onirvapp-comment-item" ng-repeat="rate in product.product_rates track by $index">

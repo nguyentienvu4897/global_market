@@ -16,6 +16,8 @@ use Response;
 use App\Http\Controllers\Controller;
 use App\Model\Admin\Banner;
 use App\Model\Admin\Contact;
+use App\Model\Admin\Order;
+use App\Model\Admin\OrderDetail;
 use App\Model\Admin\Partner;
 use App\Model\Admin\Post;
 use App\Model\Admin\PostCategory;
@@ -174,7 +176,16 @@ class FrontController extends Controller
                 }
             }
 
-            return view('site.products.product_detail', compact('categories', 'product', 'productsRelated', 'category', 'arr_product_rate_images', 'bestSellerProducts'));
+            $canReview = false;
+            $existsOrder = OrderDetail::where('product_id', $product->id)
+            ->leftJoin('orders', 'order_details.order_id', '=', 'orders.id')
+            ->where('orders.customer_email', \Auth::guard('client')->user()->email)
+            ->where('orders.status', Order::THANH_CONG)->exists();
+            if($existsOrder) {
+                $canReview = true;
+            }
+
+            return view('site.products.product_detail', compact('categories', 'product', 'productsRelated', 'category', 'arr_product_rate_images', 'bestSellerProducts', 'canReview'));
         }catch (\Exception $exception) {
             return view('site.errors');
             Log::error($exception);

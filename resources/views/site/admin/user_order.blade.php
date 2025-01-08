@@ -58,7 +58,7 @@
         .table-responsive .btn {
             height: 38px !important;
             line-height: 38px !important;
-            padding: 0 18px !important;
+            padding: 0 12px !important;
             border-radius: 5px !important;
         }
         .table-responsive .btn.btn-success {
@@ -72,6 +72,9 @@
         .table-responsive .btn.btn-info {
             background-color: #0974ba !important;
             color: #fff !important;
+        }
+        .text-right {
+            text-align: right !important;
         }
     </style>
 @endsection
@@ -87,36 +90,26 @@
                 </div>
             </div>
         </section>
+        @include('site.admin.user_order_detail_popup')
     </div>
 @endsection
 @push('script')
-
+    <!-- Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <!-- DataTables -->
     <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
     <script src="{{ asset('plugins/datatables-responsive/js/dataTables.responsive.min.js') }}"></script>
-    {{-- <script src="{{ asset('libs/datepicker/datepicker.full.min.js') }}"></script> --}}
     <script src="{{ asset('libs/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-    <!-- daterangepicker -->
-    {{-- <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script> --}}
     <script src="{{ asset('js/adminlte.js') }}"></script>
-    {{-- <script src="{{ asset('plugins/moment/moment.min.js') }}"></script> --}}
+    <script src="{{ asset('libs/sweetalert/js/sweetalert.min.js') }}"></script>
 
     <script src="{{ asset('js/constant.js') }}?version={{ env('APP_VERSION', '1') }}"></script>
     <script src="{{ asset('js/custom.js') }}?version={{ env('APP_VERSION', '1') }}"></script>
     @include('partial.classes.base.Datatable')
 
     <script>
-        // $('#startDate').daterangepicker({
-        //     singleDatePicker: true,
-        //     startDate: moment().subtract(6, 'days')
-        // });
-
-        // $('#endDate').daterangepicker({
-        //     singleDatePicker: true,
-        //     startDate: moment()
-        // });
         app.controller('UserOrderController', function($scope) {
             let datatable = new DATATABLE('table-list', {
                 ajax: {
@@ -139,7 +132,7 @@
                         className: "text-center"
                     },
                     {data: 'created_at', title: 'Ngày đặt hàng'},
-                    // {data: 'action_client', title: 'Hành động', orderable: false, searchable: false},
+                    {data: 'action_client', title: 'Hành động', orderable: false, searchable: false},
                 ],
                 search_columns: [
                     {data: 'code', search_type: "text", placeholder: "Mã đơn hàng"},
@@ -148,14 +141,81 @@
                 // search_by_time: true,
             }).datatable;
 
-            $('#table-list').on('click', '.show-order-client', function () {
+            $('#table-list').on('click', '.cancel-order', function () {
                 event.preventDefault();
-                $scope.data = datatable.row($(this).parents('tr')).data();
-                console.log($scope.data);
-                $scope.form.status = $scope.data.status;
-                $scope.$apply();
-                $('#update-status').modal('show');
+                let url = $(this).data('href');
+                swal({
+                    title: "Xác nhận hủy đơn hàng!",
+                    text: `Đơn hàng sẽ được hủy và không thể khôi phục lại<br>
+                    <label style="float: left;">Lý do hủy đơn hàng<span style="color: red;">*</span></label>
+                    <textarea class="form-control" rows="2" style="width: 100%;" id="cancel-order-reason"></textarea><br>
+                    <div id="cancel-order-reason-error" style="display: none; color: red;">Lý do hủy đơn hàng không được để trống</div>`,
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Xác nhận",
+                    cancelButtonText: "Hủy",
+                    closeOnConfirm: false,
+                    closeOnCancel: true,
+                    html: true,
+                }, function(isConfirm) {
+                    if (isConfirm) {
+                        let reason = $('#cancel-order-reason').val();
+                        if (reason) {
+                            $.ajax({
+                                url: url,
+                                type: 'GET',
+                                data: {reason: reason},
+                                success: function (response) {
+                                    if (response.success) {
+                                        toastr.success('Đã hủy đơn hàng');
+                                        swal.close();
+                                        datatable.ajax.reload();
+                                    }
+                                },
+                                error: function (error) {
+                                    console.log(error);
+                                },
+                                complete: function () {
+                                }
+                            });
+                        } else {
+                            $('#cancel-order-reason-error').show();
+                        }
+                    }
+                });
             });
+
+            $('#table-list').on('click', '.show-order-detail', function () {
+                event.preventDefault();
+                let url = $(this).data('href');
+                $.ajax({
+                    url: url,
+                    type: 'GET',
+                    success: function (response) {
+                        if (response.success) {
+                            $scope.detail = response.data;
+                            $scope.detail.status = getStatus($scope.detail.status, @json(\App\Model\Admin\Order::STATUSES));
+                            $scope.detail.details = $scope.detail.details.map(item => {
+                                item.attributes = JSON.parse(item.attributes);
+                                return item;
+                            });
+                            $scope.$apply();
+                        }
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    },
+                    complete: function () {
+                        $('#show-order-detail-popup').modal('show');
+                    }
+                });
+            });
+
+            $scope.getStatus = function (status, statuses) {
+                let obj = statuses.find(val => val.id == status);
+                return obj.name;
+            }
         })
     </script>
 @endpush

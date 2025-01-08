@@ -282,50 +282,197 @@ app
             }
         };
     })
+    // .directive("onlyNumber", function ($timeout) {
+    //     return {
+    //         restrict: 'EA',
+    //         require: 'ngModel',
+    //         link: function (scope, element, attrs, ngModel) {
+    //             function removeTrailingZeros(value) {
+    //                 if (value && value.includes(".")) {
+    //                     let parts = String(value).split(".");
+    //                     parts[1] = parts[1].replace(/0+$/, ""); // Loại bỏ số 0 cuối
+    //                     if (!parts[1]) return parts[0]; // Nếu không còn phần thập phân, chỉ giữ phần nguyên
+    //                     return parts.join(".");
+    //                 }
+    //                 return value;
+    //             }
+    //             function formatWithCommas(value) {
+    //                 if (value == null || value === "") return value;
+    //                 let parts = String(value).split(".");
+    //                 parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Chèn dấu phẩy vào phần nguyên
+    //                 return parts.join(".");
+    //             }
+
+    //             function removeCommas(value) {
+    //                 return String(value).replace(/,/g, "");
+    //             }
+
+    //             // Xử lý giá trị ban đầu khi directive được khởi tạo
+    //             $timeout(function () {
+    //                 let initialValue = removeTrailingZeros(ngModel.$modelValue);
+    //                 if (initialValue !== ngModel.$modelValue) {
+    //                     ngModel.$setViewValue(formatWithCommas(initialValue));
+    //                     ngModel.$render();
+    //                 }
+    //             });
+    //             scope.$watch(attrs.ngModel, function (newValue, oldValue) {
+    //                 if (newValue) {
+    //                     newValue = removeCommas(newValue); // Loại bỏ dấu phẩy trước khi xử lý
+    //                     let spiltArray = String(newValue).split("");
+
+    //                     if (attrs.allowNegative === "false") {
+    //                         if (spiltArray[0] === '-') {
+    //                             newValue = newValue.replace("-", "");
+    //                             ngModel.$setViewValue(removeZeros(newValue));
+    //                             ngModel.$render();
+    //                         }
+    //                     }
+
+    //                     if (attrs.allowDecimal === "false") {
+    //                         newValue = parseInt(newValue);
+    //                         ngModel.$setViewValue(removeZeros(newValue));
+    //                         ngModel.$render();
+    //                     }
+
+    //                     if (attrs.allowDecimal !== "false") {
+    //                         if (attrs.decimalUpto) {
+    //                             let n = String(newValue).split(".");
+    //                             if (n[1]) {
+    //                                 let n2 = n[1].slice(0, attrs.decimalUpto);
+    //                                 newValue = [n[0], n2].join(".");
+    //                                 ngModel.$setViewValue(removeZeros(newValue));
+    //                                 ngModel.$render();
+    //                             }
+    //                         }
+    //                     }
+
+    //                     if (attrs.allowDecimal !== "false") {
+    //                         if (attrs.decimalUpto2) {
+    //                             let n = String(newValue).split(".");
+    //                             if (n[1]) {
+    //                                 let n2 = n[1].slice(0, attrs.decimalUpto2);
+    //                                 newValue = [n[0], n2].join(".");
+    //                                 ngModel.$setViewValue(newValue);
+    //                                 ngModel.$render();
+    //                             }
+    //                         }
+    //                     }
+
+    //                     if (attrs.maxValue) {
+    //                         newValue = Number(newValue);
+    //                         const maxValue_ = Number(attrs.maxValue);
+    //                         if (newValue > maxValue_) {
+    //                             newValue = maxValue_;
+    //                             ngModel.$setViewValue(removeZeros(newValue));
+
+    //                             ngModel.$render();
+    //                         }
+    //                     }
+
+    //                     if (spiltArray.length === 0) return;
+    //                     if (spiltArray.length === 1 && (spiltArray[0] === '-' || spiltArray[0] === '.')) return;
+    //                     if (spiltArray.length === 2 && newValue === '-.') return;
+
+    //                     /*Check it is number or not.*/
+    //                     if (isNaN(newValue)) {
+    //                         ngModel.$setViewValue(oldValue || '');
+    //                     } else {
+    //                         ngModel.$setViewValue(formatWithCommas(newValue));
+    //                     }
+
+    //                     ngModel.$render();
+    //                 }
+    //             });
+    //             // Xử lý loại bỏ số 0 không cần thiết khi rời khỏi ô nhập
+    //             element.on("blur", function () {
+    //                 let newValue = removeTrailingZeros(removeCommas(ngModel.$viewValue));
+    //                 if (newValue !== ngModel.$viewValue) {
+    //                     ngModel.$setViewValue(formatWithCommas(newValue));
+    //                     ngModel.$render();
+    //                 }
+    //             });
+    //         }
+    //     };
+    // })
     .directive("onlyNumber", function ($timeout) {
         return {
             restrict: 'EA',
             require: 'ngModel',
             link: function (scope, element, attrs, ngModel) {
-                scope.$watch(attrs.ngModel, function (newValue, oldValue) {
-                    if (newValue) {
-                        let spiltArray = String(newValue).split("");
+                function formatWithCommas(value) {
+                    if (!value || isNaN(value)) return value;
+                    let parts = String(value).split(".");
+                    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Thêm dấu phẩy vào phần nguyên
+                    return parts.join(".");
+                }
 
-                        if (attrs.allowNegative === "false") {
-                            if (spiltArray[0] === '-') {
-                                newValue = newValue.replace("-", "");
-                                ngModel.$setViewValue(removeZeros(newValue));
-                                ngModel.$render();
-                            }
+                function removeCommas(value) {
+                    return String(value).replace(/,/g, "");
+                }
+
+                function validateAndFormat(value) {
+                    let rawValue = removeCommas(value); // Loại bỏ dấu phẩy để xử lý
+                    if (!rawValue || isNaN(rawValue)) return "";
+
+                    // Nếu không cho phép số âm
+                    if (attrs.allowNegative === "false" && rawValue.startsWith("-")) {
+                        rawValue = rawValue.replace("-", "");
+                    }
+
+                    // Nếu không cho phép số thập phân
+                    if (attrs.allowDecimal === "false") {
+                        rawValue = parseInt(rawValue);
+                    }
+
+                    // Giới hạn số thập phân
+                    if (attrs.allowDecimal !== "false" && attrs.decimalUpto) {
+                        let parts = String(rawValue).split(".");
+                        if (parts[1]) {
+                            parts[1] = parts[1].slice(0, attrs.decimalUpto);
+                            rawValue = parts.join(".");
                         }
+                    }
 
-                        if (attrs.allowDecimal === "false") {
-                            newValue = parseInt(newValue);
-                            ngModel.$setViewValue(removeZeros(newValue));
-                            ngModel.$render();
-                        }
+                    // Loại bỏ số 0 không cần thiết ở phần thập phân
+                    // if (String(rawValue).includes(".")) {
+                    //     rawValue = rawValue.replace(/(\.\d*?[1-9])0+$/, "$1"); // Bỏ số 0 thừa ở cuối
+                    //     rawValue = rawValue.replace(/\.0+$/, ""); // Nếu chỉ còn lại `.0` thì loại bỏ cả dấu `.`
+                    // }
 
-                        if (attrs.allowDecimal !== "false") {
-                            if (attrs.decimalUpto) {
-                                let n = String(newValue).split(".");
-                                if (n[1]) {
-                                    let n2 = n[1].slice(0, attrs.decimalUpto);
-                                    newValue = [n[0], n2].join(".");
-                                    ngModel.$setViewValue(removeZeros(newValue));
-                                    ngModel.$render();
-                                }
-                            }
-                        }
+                    // Giới hạn giá trị tối đa
+                    if (attrs.maxValue && parseFloat(rawValue) > parseFloat(attrs.maxValue)) {
+                        rawValue = attrs.maxValue;
+                    }
 
-                        if (spiltArray.length === 0) return;
-                        if (spiltArray.length === 1 && (spiltArray[0] === '-' || spiltArray[0] === '.')) return;
-                        if (spiltArray.length === 2 && newValue === '-.') return;
+                    return formatWithCommas(rawValue);
+                }
 
-                        /*Check it is number or not.*/
-                        if (isNaN(newValue)) {
-                            ngModel.$setViewValue(oldValue || '');
-                            ngModel.$render();
-                        }
+                ngModel.$parsers.push(function (inputValue) {
+                    if (!inputValue) return null;
+
+                    let formattedValue = validateAndFormat(inputValue);
+                    if (formattedValue !== inputValue) {
+                        ngModel.$setViewValue(formattedValue); // Cập nhật giá trị định dạng
+                        ngModel.$render();
+                    }
+
+                    return removeCommas(formattedValue); // Trả về giá trị không có dấu phẩy cho model
+                });
+
+                element.on("blur", function () {
+                    let formattedValue = validateAndFormat(ngModel.$viewValue);
+                    if (formattedValue !== ngModel.$viewValue) {
+                        ngModel.$setViewValue(formattedValue);
+                        ngModel.$render();
+                    }
+                });
+
+                // Xử lý giá trị ban đầu
+                $timeout(function () {
+                    let formattedValue = validateAndFormat(ngModel.$modelValue);
+                    if (formattedValue !== ngModel.$modelValue) {
+                        ngModel.$setViewValue(formattedValue);
+                        ngModel.$render();
                     }
                 });
             }

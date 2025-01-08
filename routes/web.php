@@ -401,6 +401,7 @@ Route::group(['prefix' => 'admin'], function () {
 
                 Route::get('/revenueReport', 'Common\ReportController@revenueReport')->name('Report.revenueReport');
                 Route::get('/revenueReportSearchData', 'Common\ReportController@revenueReportSearchData')->name('Report.revenueReportSearchData');
+                Route::post('/revenueReportSettlementUser', 'Common\ReportController@revenueReportSettlementUser')->name('Report.revenueReportSettlementUser');
                 Route::get('/revenueReportPrint', 'Common\ReportController@revenueReportPrint')->name('Report.revenueReportPrint');
             });
 

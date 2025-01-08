@@ -89,6 +89,10 @@
                             else html += '<option value="' + el.id + '">' + el.name + '</option>';
                         });
                         html += `</select></div></div>`;
+                    } else if (col.search_type == 'date') {
+                        html += `<div class="col-md-3 mb-3">
+                            <input type="text" class="form-control date" data-column="${col.data}" placeholder="${col.placeholder}">
+                        </div>`;
                     }
                 }
             })

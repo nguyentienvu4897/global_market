@@ -12,11 +12,12 @@ Route::group(['namespace' => 'Front'], function () {
             Route::get('/update-invite-code','ClientRegisterController@updateInviteCode')->name('front.update-invite-code');
             Route::get('/quan-ly-don-hang','ClientRegisterController@userOrder')->name('front.user-order');
             Route::get('/quan-ly-don-hang/search-data','ClientRegisterController@userOrderSearchData')->name('front.user-order-search-data');
-            Route::get('/quan-ly-don-hang/cancel-order','ClientRegisterController@cancelOrder')->name('front.cancel-order');
+            Route::get('/quan-ly-don-hang/cancel-order/{id}','ClientRegisterController@cancelOrder')->name('front.cancel-order');
             Route::get('/quan-ly-don-hang/{id}/xem-chi-tiet','ClientRegisterController@showOrderDetail')->name('front.show-order-detail');
             Route::get('/quan-ly-cap-bac','ClientRegisterController@userLevel')->name('front.user-level');
             Route::get('/bao-cao-hoa-hong','ClientRegisterController@userRevenue')->name('front.user-revenue');
             Route::get('/bao-cao-hoa-hong/search-data','ClientRegisterController@userRevenueSearchData')->name('front.user-revenue-search-data');
+            Route::post('/bao-cao-hoa-hong/withdraw-money','ClientRegisterController@withdrawMoney')->name('front.withdraw-money');
             Route::post('/{id}/update', 'ClientRegisterController@updateAccount')->name('front.client-update');
             Route::post('/{id}/change-password', 'ClientRegisterController@changePassword')->name('front.client-change-password');
         });

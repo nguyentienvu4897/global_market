@@ -133,7 +133,7 @@
                                                                 <td style="font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,&quot;Roboto&quot;,&quot;Oxygen&quot;,&quot;Ubuntu&quot;,&quot;Cantarell&quot;,&quot;Fira Sans&quot;,&quot;Droid Sans&quot;,&quot;Helvetica Neue&quot;,sans-serif">
                                                                     <img
                                                                         src="{{$item->product->image ? $_SERVER['HTTP_HOST'].$item->product->image->path : asset('site/image/no-image.png')}}"
-                                                                        align="left" width="60" height="60"
+                                                                        width="60" height="60"
                                                                         style="margin-right:15px;border-radius:8px;border:1px solid #e5e5e5"
                                                                         class="CToWUd">
 
@@ -144,8 +144,7 @@
                                                                     <span style="font-size:14px;color:#999"></span><br>
                                                                 </td>
                                                                 <td style="font-family:-apple-system,BlinkMacSystemFont,&quot;Segoe UI&quot;,&quot;Roboto&quot;,&quot;Oxygen&quot;,&quot;Ubuntu&quot;,&quot;Cantarell&quot;,&quot;Fira Sans&quot;,&quot;Droid Sans&quot;,&quot;Helvetica Neue&quot;,sans-serif;white-space:nowrap">
-                                                                    <p style="color:#555;line-height:150%;font-size:16px;font-weight:600;margin:0 0 0 15px"
-                                                                       align="right">
+                                                                    <p style="color:#555;line-height:150%;font-size:16px;font-weight:600;margin:0 0 0 15px">
                                                                         {{number_format($item->price * $item->qty)}} đ
                                                                     </p>
                                                                 </td>

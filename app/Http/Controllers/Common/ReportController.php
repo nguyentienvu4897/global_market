@@ -67,6 +67,51 @@ class ReportController extends Controller
 		);
     }
 
+    public function revenueReportSettlementUser(Request $request)
+    {
+        $rule = [
+			'settlementAmount' => 'required|numeric|min:100000|max:'.$request->amount_wait_payment,
+		];
+
+		$validate = Validator::make(
+			$request->all(),
+			$rule,
+            [
+                'settlementAmount.required' => 'Số tiền cần quyết toán không được để trống',
+                'settlementAmount.numeric' => 'Số tiền cần quyết toán không được để trống',
+                'settlementAmount.min' => 'Số tiền cần quyết toán không được nhỏ hơn 100.000',
+            ]
+		);
+
+		if ($validate->fails()) {
+			return errorResponse("Thao tác thất bại", $validate->errors());
+		}
+
+        $settlementAmount = $request->settlementAmount;
+
+        $data = OrderRevenueDetail::where('user_id', $request->user_id)->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)->get();
+        foreach ($data as $item) {
+            if(($item->revenue_amount - $item->settlement_amount) <= $settlementAmount) {
+                $settlementAmount -= ($item->revenue_amount - $item->settlement_amount);
+                $item->status = OrderRevenueDetail::STATUS_QUYET_TOAN;
+                $item->settlement_amount = $item->revenue_amount;
+                $item->remaining_amount = 0;
+                $item->settlement_date = Carbon::now();
+                $item->save();
+            } else {
+                $item->status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+                $item->remaining_amount = $item->revenue_amount - $item->settlement_amount - $settlementAmount;
+                $item->settlement_amount = $item->settlement_amount + $settlementAmount;
+                $item->settlement_date = Carbon::now();
+                $item->save();
+                $settlementAmount = 0;
+            }
+        }
+        return successResponse(
+            "Quyết toán thành công!",
+        );
+    }
+
 	public function promoReportPrintData($request)
 	{
 		$result = [];

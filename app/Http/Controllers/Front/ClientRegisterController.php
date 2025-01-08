@@ -14,8 +14,10 @@ use App\Http\Traits\ResponseTrait;
 use App\Model\Admin\OrderRevenueDetail;
 use JWTAuth;
 use App\Helpers\FileHelper;
+use App\Mail\WithdrawMoney;
 use App\Model\Admin\Order;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class ClientRegisterController extends Controller
 {
@@ -242,13 +244,19 @@ class ClientRegisterController extends Controller
 
     public function showOrderDetail($id) {
         $order = Order::query()->with(['details.product'])->find($id);
-        return view('site.admin.user_order_detail', compact('order'));
+        return $this->responseSuccess('Đã lấy thông tin đơn hàng', $order);
     }
 
-    public function cancelOrder($id) {
+    public function cancelOrder(Request $request, $id) {
         $order = Order::findOrFail($id);
-        $order->status = 0;
+        $order->status = Order::HUY;
+        $order->comment = $request->reason;
         $order->save();
+        $order_revenue_details = OrderRevenueDetail::where('order_id', $order->id)->get();
+        foreach ($order_revenue_details as $detail) {
+            $detail->status = OrderRevenueDetail::STATUS_CANCEL;
+            $detail->save();
+        }
         return $this->responseSuccess('Đã hủy đơn hàng');
     }
 
@@ -259,15 +267,17 @@ class ClientRegisterController extends Controller
                 return number_format($object->total_price);
             })
             ->editColumn('code_client', function ($object) {
-                return '<a href = "javascript:void(0)" title = "Xem chi tiết" class="show-order-client">' . $object->code . '</a>';
+                return '<a href = "javascript:void(0)" title = "Xem chi tiết" class="show-order-detail" data-href="'.route('front.show-order-detail', $object->id).'">' . $object->code . '</a>';
             })
             ->editColumn('created_at', function ($object) {
                 return formatDate($object->created_at);
             })
             ->addColumn('action_client', function ($object) {
                 $result = '<div class="btn-group btn-action">';
-                $result = $result . ' <a href="'.route('front.show-order-detail', $object->id).'" title="xem chi tiết" class="btn btn-info"><i class="fa fa-eye"></i></a>';
-                $result = $result . ' <a href="javascript:void(0)" title="Hủy đơn hàng" class="btn btn-danger update-status"><i class="fa fa-trash"></i></a>';
+                $result = $result . ' <a href="javascript:void(0)" data-href="'.route('front.show-order-detail', $object->id).'" title="xem chi tiết" class="btn btn-info show-order-detail"><i class="fa fa-eye"></i></a>';
+                if ($object->canCancel()) {
+                    $result = $result . ' <a href="javascript:void(0)" title="Hủy đơn hàng" class="btn btn-danger cancel-order" data-href="'.route('front.cancel-order', $object->id).'"><i class="fa fa-trash"></i></a>';
+                }
                 $result = $result . '</div>';
                 return $result;
             })
@@ -277,23 +287,38 @@ class ClientRegisterController extends Controller
     }
 
     public function userRevenue() {
-        return view('site.admin.user_revenue');
+        $user = Auth::guard('client')->user();
+        $revenue_amount = OrderRevenueDetail::where('user_id', $user->id)->whereNotIn('status', [OrderRevenueDetail::STATUS_CANCEL])->sum('revenue_amount');
+        $quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where('status', OrderRevenueDetail::STATUS_QUYET_TOAN)
+        ->orWhere(function($query) {
+            $query->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)
+            ->where('settlement_amount', '>', 0);
+        })
+        ->sum('settlement_amount');
+        $waiting_quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)->sum('revenue_amount') - $quyet_toan_amount;
+        return view('site.admin.user_revenue', compact('user', 'revenue_amount', 'quyet_toan_amount', 'waiting_quyet_toan_amount'));
     }
 
     public function userRevenueSearchData(Request $request) {
-        $objects = OrderRevenueDetail::query()->where('user_id', Auth::guard('client')->user()->id)->get();
+        $objects = OrderRevenueDetail::searchByFilter($request);
         return Datatables::of($objects)
             ->addColumn('revenue_amount', function ($object) {
                 return number_format($object->revenue_amount);
+            })
+            ->addColumn('settlement_amount', function ($object) {
+                return number_format($object->settlement_amount);
+            })
+            ->addColumn('remaining_amount', function ($object) {
+                return number_format($object->revenue_amount - $object->settlement_amount);
             })
             ->addColumn('order_employee', function ($object) {
                 return '<b>' . $object->order->customer_name . '</b><br>' . $object->order->customer_email;
             })
             ->editColumn('created_at', function ($object) {
-                return formatDate($object->created_at);
+                return date('d/m/Y H:i', strtotime($object->created_at));
             })
             ->editColumn('settlement_date', function ($object) {
-                return (empty($object->settlement_date)) ? '-' : formatDate($object->settlement_date);
+                return (empty($object->settlement_date)) ? '-' : date('d/m/Y H:i', strtotime($object->settlement_date));
             })
             ->editColumn('status', function ($object) {
                 return getStatus($object->status, OrderRevenueDetail::STATUSES);
@@ -301,6 +326,39 @@ class ClientRegisterController extends Controller
             ->addIndexColumn()
             ->rawColumns(['revenue_amount', 'created_at', 'status', 'settlement_date', 'order_employee'])
             ->make(true);
+    }
+
+    public function withdrawMoney(Request $request) {
+        $rule = [
+			'withdrawAmount' => 'required|numeric|min:100000|max:'.$request->waitingQuyetToanAmount,
+		];
+
+		$validate = Validator::make(
+			$request->all(),
+			$rule,
+            [
+                'withdrawAmount.required' => 'Số tiền cần rút không được để trống',
+                'withdrawAmount.numeric' => 'Số tiền cần rút không được để trống',
+                'withdrawAmount.min' => 'Số tiền cần rút không được nhỏ hơn 100.000',
+            ]
+		);
+
+		if ($validate->fails()) {
+			return $this->responseErrors("Thao tác thất bại", $validate->errors());
+		}
+
+        $currentUser = Auth::guard('client')->user();
+        // gửi mail thông báo rút tiền cho admin
+        $users = User::query()->where('type', 1)->where('status', 1)->get();
+        // Mail::to('nguyentienvu4897@gmail.com')->send(new NewOrder($order, $config, 'admin'));
+
+
+        if($users->count()) {
+            foreach ($users as $user) {
+                Mail::to($user->email)->send(new WithdrawMoney($currentUser, $request->all()));
+            }
+        }
+        return $this->responseSuccess('Đã gửi thông tin rút tiền, vui lòng chờ xác nhận');
     }
 
     public function userLevel() {
