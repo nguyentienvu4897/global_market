@@ -15,7 +15,7 @@
     Báo cáo tưởng hoa hồng
 @endsection
 
-@section('content')
+{{-- @section('content')
 <div ng-controller="RevenueReport" ng-cloak>
     <div class="row">
         <div class="col-md-12">
@@ -59,11 +59,6 @@
                             <i ng-if="loading.search" class="fa fa-spinner fa-spin"></i>
                             Lọc
                         </button>
-						{{-- <a href="<% printURL() %>" target="_blank" class="btn btn-info text-light" ng-disabled="loading.search">
-                            <i ng-if="!loading.search" class="fa fa-print"></i>
-                            <i ng-if="loading.search" class="fa fa-spinner fa-spin"></i>
-                            In
-                        </a> --}}
                     </div>
                 </div>
             </div>
@@ -183,7 +178,7 @@
 
 @section('script')
 <script src="{{ asset('libs/pagination/ui-bootstrap.min.js') }}"></script>
-{{-- <script>
+<script>
     angular.module("App").requires.push('ui.bootstrap');
     app.controller('RevenueReport', function ($scope) {
         $scope.form = {};
@@ -327,14 +322,6 @@
                 }
             })
         }
-
-		// function getFilterParams() {
-		// 	return $.param($scope.form);
-		// }
-
-		// $scope.printURL = function() {
-        //     return `{{ route('Report.promoReportPrint') }}?${getFilterParams()}`;
-        // }
     })
-</script> --}}
-@endsection
+</script>
+@endsection --}}
