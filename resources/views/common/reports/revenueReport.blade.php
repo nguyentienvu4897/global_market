@@ -12,7 +12,7 @@
 @endsection
 
 @section('title')
-    Báo cáo tưởng hoa hồng
+    Báo cáo thưởng hoa hồng
 @endsection
 
 @section('content')
