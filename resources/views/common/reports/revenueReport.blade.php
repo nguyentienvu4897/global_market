@@ -86,37 +86,6 @@
 								<th>Hành động</th>
 							</tr>
 						</thead>
-						<tbody>
-							<tr ng-if="loading.search">
-								<td colspan="9"><i class="fa fa-spin fa-spinner"></i> Đang tải dữ liệu</td>
-							</tr>
-							<tr ng-if="!loading.search && details && !details.length">
-								<td colspan="9">Chưa có dữ liệu</td>
-							</tr>
-                            <tr ng-if="!loading.search && details && details.length">
-								<td class="text-center" colspan="4"><b>Tổng cộng</b></td>
-								<td class="text-right"><b><% (summary.total_amount_pending ? (summary.total_amount_pending | number) : '-') %></b></td>
-								<td class="text-right"><b><% (summary.total_amount_wait_payment ? (summary.total_amount_wait_payment | number) : '-') %></b></td>
-								<td class="text-right"><b><% (summary.total_amount_paid ? (summary.total_amount_paid | number) : '-') %></b></td>
-								<td class="text-right"><b><% (summary.total_amount ? (summary.total_amount | number) : '-') %></b></td>
-								<td></td>
-							</tr>
-							<tr ng-if="!loading.search && details && details.length" ng-repeat="d in details">
-								<td class="text-center"><% $index + 1 + (current.page - 1) * per_page %></td>
-                                <td><% d.name %></td>
-								<td><% d.phone_number %></td>
-								<td><% d.email %></td>
-								<td class="text-right"><% (d.total_amount_pending ? (d.total_amount_pending | number) : '-') %></td>
-								<td class="text-right"><% (d.total_amount_wait_payment ? (d.total_amount_wait_payment | number) : '-') %></td>
-								<td class="text-right"><% (d.total_amount_paid ? (d.total_amount_paid | number) : '-') %></td>
-								<td class="text-right"><% (d.total_amount ? (d.total_amount | number) : '-') %></td>
-								<td class="text-center">
-									<a href="javascript:void(0)" class="btn btn-success" title="Quyết toán" ng-click="settlementUser(d)" ng-if="d.total_amount_wait_payment > 0">
-                                        Quyết toán
-									</a>
-								</td>
-							</tr>
-						</tbody>
 					</table>
 					<div class="text-right mt-2">
 						<ul uib-pagination ng-change="pageChanged()" total-items="total_items" ng-model="current.page" max-size="10"
