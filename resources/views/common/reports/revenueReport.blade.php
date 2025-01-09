@@ -183,7 +183,7 @@
 
 @section('script')
 <script src="{{ asset('libs/pagination/ui-bootstrap.min.js') }}"></script>
-<script>
+{{-- <script>
     angular.module("App").requires.push('ui.bootstrap');
     app.controller('RevenueReport', function ($scope) {
         $scope.form = {};
@@ -256,6 +256,43 @@
             remainingAmount: 0,
         };
 
+        $scope.settlementUser = function(user) {
+            $scope.currentUser = user;
+            $scope.waitingQuyetToanAmount = $scope.currentUser.total_amount_wait_payment;
+            $scope.settlement.remainingAmount = $scope.waitingQuyetToanAmount;
+
+            // Cập nhật lại view của input thông qua directive only-number
+            const inputElementAmount = document.getElementById("amount"); // ID của input
+            const ngModelCtrlAmount = angular.element(inputElementAmount).controller("ngModel");
+            ngModelCtrlAmount.$setViewValue($scope.waitingQuyetToanAmount);
+            ngModelCtrlAmount.$render();
+
+            // Cập nhật lại view của input thông qua directive only-number
+            const inputElementRemainingAmount = document.getElementById("remaining-amount"); // ID của input
+            const ngModelCtrlRemainingAmount = angular.element(inputElementRemainingAmount).controller("ngModel");
+            ngModelCtrlRemainingAmount.$setViewValue($scope.settlement.remainingAmount);
+            ngModelCtrlRemainingAmount.$render();
+
+            $('#modal-settlement-user').modal('show');
+        }
+
+        $scope.calculateRemainingAmount = function() {
+            if (Number($scope.settlement.settlementAmount) > Number($scope.waitingQuyetToanAmount)) {
+                $scope.settlement.settlementAmount = $scope.waitingQuyetToanAmount; // Giới hạn giá trị
+
+                // Cập nhật lại view của input thông qua directive only-number
+                const inputElement = document.getElementById("settlement-amount"); // ID của input
+                const ngModelCtrl = angular.element(inputElement).controller("ngModel");
+                ngModelCtrl.$setViewValue($scope.settlement.settlementAmount);
+                ngModelCtrl.$render();
+            }
+            $scope.settlement.remainingAmount = $scope.waitingQuyetToanAmount - $scope.settlement.settlementAmount;
+            // Cập nhật lại view của input thông qua directive only-number
+            const inputElementRemaining = document.getElementById("remaining-amount"); // ID của input
+            const ngModelCtrlRemaining = angular.element(inputElementRemaining).controller("ngModel");
+            ngModelCtrlRemaining.$setViewValue($scope.settlement.remainingAmount);
+            ngModelCtrlRemaining.$render();
+        }
 
         $scope.errors = {};
         $scope.submitSettlementUser = function() {
@@ -299,5 +336,5 @@
         //     return `{{ route('Report.promoReportPrint') }}?${getFilterParams()}`;
         // }
     })
-</script>
+</script> --}}
 @endsection
