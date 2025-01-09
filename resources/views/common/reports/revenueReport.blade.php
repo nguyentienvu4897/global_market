@@ -86,7 +86,7 @@
 								<th>Hành động</th>
 							</tr>
 						</thead>
-						{{-- <tbody>
+						<tbody>
 							<tr ng-if="loading.search">
 								<td colspan="9"><i class="fa fa-spin fa-spinner"></i> Đang tải dữ liệu</td>
 							</tr>
@@ -116,7 +116,7 @@
 									</a>
 								</td>
 							</tr>
-						</tbody> --}}
+						</tbody>
 					</table>
 					<div class="text-right mt-2">
 						<ul uib-pagination ng-change="pageChanged()" total-items="total_items" ng-model="current.page" max-size="10"
