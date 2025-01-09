@@ -1,4 +1,4 @@
-{{-- @extends('layouts.main')
+@extends('layouts.main')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('libs/pagination/pagination.css') }}">
@@ -16,6 +16,9 @@
 @endsection
 
 @section('content')
+@php
+    dd(1);
+@endphp
 <div ng-controller="RevenueReport" ng-cloak>
     <div class="row">
         <div class="col-md-12">
@@ -324,4 +327,4 @@
         }
     })
 </script>
-@endsection --}}
+@endsection
