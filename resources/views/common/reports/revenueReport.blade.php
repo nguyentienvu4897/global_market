@@ -1,4 +1,4 @@
-@extends('layouts.main')
+{{-- @extends('layouts.main')
 
 @section('css')
 <link rel="stylesheet" href="{{ asset('libs/pagination/pagination.css') }}">
@@ -15,7 +15,7 @@
     Báo cáo tưởng hoa hồng
 @endsection
 
-{{-- @section('content')
+@section('content')
 <div ng-controller="RevenueReport" ng-cloak>
     <div class="row">
         <div class="col-md-12">
