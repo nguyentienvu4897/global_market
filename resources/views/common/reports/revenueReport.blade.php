@@ -86,6 +86,37 @@
 								<th>Hành động</th>
 							</tr>
 						</thead>
+						<tbody>
+							<tr ng-if="loading.search">
+								<td colspan="9"><i class="fa fa-spin fa-spinner"></i> Đang tải dữ liệu</td>
+							</tr>
+							<tr ng-if="!loading.search && details && !details.length">
+								<td colspan="9">Chưa có dữ liệu</td>
+							</tr>
+                            <tr ng-if="!loading.search && details && details.length">
+								<td class="text-center" colspan="4"><b>Tổng cộng</b></td>
+								<td class="text-right"><b><% (summary.total_amount_pending ? (summary.total_amount_pending | number) : '-') %></b></td>
+								<td class="text-right"><b><% (summary.total_amount_wait_payment ? (summary.total_amount_wait_payment | number) : '-') %></b></td>
+								<td class="text-right"><b><% (summary.total_amount_paid ? (summary.total_amount_paid | number) : '-') %></b></td>
+								<td class="text-right"><b><% (summary.total_amount ? (summary.total_amount | number) : '-') %></b></td>
+								<td></td>
+							</tr>
+							<tr ng-if="!loading.search && details && details.length" ng-repeat="d in details">
+								<td class="text-center"><% $index + 1 + (current.page - 1) * per_page %></td>
+                                <td><% d.name %></td>
+								<td><% d.phone_number %></td>
+								<td><% d.email %></td>
+								<td class="text-right"><% (d.total_amount_pending ? (d.total_amount_pending | number) : '-') %></td>
+								<td class="text-right"><% (d.total_amount_wait_payment ? (d.total_amount_wait_payment | number) : '-') %></td>
+								<td class="text-right"><% (d.total_amount_paid ? (d.total_amount_paid | number) : '-') %></td>
+								<td class="text-right"><% (d.total_amount ? (d.total_amount | number) : '-') %></td>
+								<td class="text-center">
+									<a href="javascript:void(0)" class="btn btn-success" title="Quyết toán" ng-click="settlementUser(d)" ng-if="d.total_amount_wait_payment > 0">
+                                        Quyết toán
+									</a>
+								</td>
+							</tr>
+						</tbody>
 					</table>
 					<div class="text-right mt-2">
 						<ul uib-pagination ng-change="pageChanged()" total-items="total_items" ng-model="current.page" max-size="10"
@@ -225,43 +256,6 @@
             remainingAmount: 0,
         };
 
-        $scope.settlementUser = function(user) {
-            $scope.currentUser = user;
-            $scope.waitingQuyetToanAmount = $scope.currentUser.total_amount_wait_payment;
-            $scope.settlement.remainingAmount = $scope.waitingQuyetToanAmount;
-
-            // Cập nhật lại view của input thông qua directive only-number
-            const inputElementAmount = document.getElementById("amount"); // ID của input
-            const ngModelCtrlAmount = angular.element(inputElementAmount).controller("ngModel");
-            ngModelCtrlAmount.$setViewValue($scope.waitingQuyetToanAmount);
-            ngModelCtrlAmount.$render();
-
-            // Cập nhật lại view của input thông qua directive only-number
-            const inputElementRemainingAmount = document.getElementById("remaining-amount"); // ID của input
-            const ngModelCtrlRemainingAmount = angular.element(inputElementRemainingAmount).controller("ngModel");
-            ngModelCtrlRemainingAmount.$setViewValue($scope.settlement.remainingAmount);
-            ngModelCtrlRemainingAmount.$render();
-
-            $('#modal-settlement-user').modal('show');
-        }
-
-        $scope.calculateRemainingAmount = function() {
-            if (Number($scope.settlement.settlementAmount) > Number($scope.waitingQuyetToanAmount)) {
-                $scope.settlement.settlementAmount = $scope.waitingQuyetToanAmount; // Giới hạn giá trị
-
-                // Cập nhật lại view của input thông qua directive only-number
-                const inputElement = document.getElementById("settlement-amount"); // ID của input
-                const ngModelCtrl = angular.element(inputElement).controller("ngModel");
-                ngModelCtrl.$setViewValue($scope.settlement.settlementAmount);
-                ngModelCtrl.$render();
-            }
-            $scope.settlement.remainingAmount = $scope.waitingQuyetToanAmount - $scope.settlement.settlementAmount;
-            // Cập nhật lại view của input thông qua directive only-number
-            const inputElementRemaining = document.getElementById("remaining-amount"); // ID của input
-            const ngModelCtrlRemaining = angular.element(inputElementRemaining).controller("ngModel");
-            ngModelCtrlRemaining.$setViewValue($scope.settlement.remainingAmount);
-            ngModelCtrlRemaining.$render();
-        }
 
         $scope.errors = {};
         $scope.submitSettlementUser = function() {
