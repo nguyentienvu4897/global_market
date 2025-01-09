@@ -31,6 +31,21 @@
             background-color: #fafafa;
             color: #000;
         }
+        .page_customer_account .group-invite-link{
+            width: 70%;
+        }
+        .page_customer_account .group-invite-link .invite-code{
+            width: 75% !important;
+        }
+
+        @media (max-width: 768px) {
+            .page_customer_account .group-invite-link{
+                width: 100%;
+            }
+            .page_customer_account .group-invite-link .invite-code{
+                width: 65% !important;
+            }
+        }
         .page_customer_account .group-invite-code .btn-update-invite-code{
             padding: 8px 10px;
             border: 1px solid #ccc;
@@ -145,10 +160,10 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-lg-9 col-right-ac">
-                        <h1 class="title-head margin-top-0 d-flex" style="align-items: center; justify-content: space-between;">
-                            <span style="font-size: 19px; font-weight: 500;" ng-if="!showChangePassword">Thông tin tài khoản</span>
-                            <span style="font-size: 19px; font-weight: 500;" ng-if="showChangePassword">Thay đổi mật khẩu</span>
-                            <div class="ml-auto group-invite-code">
+                        <h1 class="title-head margin-top-0 d-flex" style="align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                            <div style="font-size: 19px; font-weight: 500; flex: 1 1 50%;" ng-if="!showChangePassword">Thông tin tài khoản</div>
+                            <div style="font-size: 19px; font-weight: 500; flex: 1 1 50%;" ng-if="showChangePassword">Thay đổi mật khẩu</div>
+                            <div class="ml-auto group-invite-code" style="flex: 1 1 -1%;">
                                 <label style="font-weight: 600; font-size: 16px; margin-bottom: 0 !important; margin-right: 10px;">Mã giới thiệu: </label>
                                 <input class="invite-code" type="text" ng-model="currentUser.invite_code" placeholder="Mã giới thiệu" disabled>
                                 <a class="btn-copy-invite-code" href="javascript:void(0)" ng-click="copyReferralCode($event)" title="Copy mã giới thiệu" style="border-right: 1px solid #ccc;">
@@ -156,6 +171,13 @@
                                 </a>
                                 <a class="btn-update-invite-code" href="javascript:void(0)" ng-click="updateReferralCode($event)" title="Tạo lại mã giới thiệu" ng-if="!currentUser.invite_code">
                                     <i class="fas fa-sync-alt"></i>
+                                </a>
+                            </div>
+                            <div class="group-invite-code group-invite-link" style="margin-top: 10px; flex: 0 1 -1%;">
+                                <label style="font-weight: 600; font-size: 16px; margin-bottom: 0 !important; margin-right: 10px; width:21%" ng-if="currentUser.invite_code">Link giới thiệu: </label>
+                                <input class="invite-code" type="text" ng-model="link_invite_code" placeholder="Link giới thiệu" disabled ng-if="currentUser.invite_code">
+                                <a class="btn-copy-invite-code" href="javascript:void(0)" ng-click="copyReferralLink($event)" title="Copy link giới thiệu" style="border-right: 1px solid #ccc;" ng-if="currentUser.invite_code">
+                                    <i class="fa fa-copy"></i>
                                 </a>
                             </div>
                         </h1>
@@ -320,6 +342,19 @@
                     toastr.error('Mã giới thiệu không tồn tại');
                 }
             }
+            $scope.copyReferralLink = function($event){
+                $event.preventDefault();
+                if($scope.link_invite_code){
+                    navigator.clipboard.writeText($scope.link_invite_code);
+                    toastr.success('Đã sao chép link giới thiệu');
+                }else{
+                    toastr.error('Link giới thiệu không tồn tại');
+                }
+            }
+            if ($scope.currentUser.invite_code) {
+                $scope.link_invite_code = '{{route("front.login-client")}}?invite_code=' + $scope.currentUser.invite_code;
+            }
+
             $scope.updateReferralCode = function($event){
                 $event.preventDefault();
                 $.ajax({
@@ -334,6 +369,9 @@
                     success: function(response) {
                         if (response.success) {
                             $scope.currentUser.invite_code = response.data.invite_code;
+                            if ($scope.currentUser.invite_code) {
+                                $scope.link_invite_code = '{{route("front.login-client")}}?invite_code=' + $scope.currentUser.invite_code;
+                            }
                             toastr.success('Đã tạo lại mã giới thiệu');
                             $scope.$applyAsync();
                         }else{

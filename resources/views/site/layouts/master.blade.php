@@ -316,8 +316,9 @@
             id: "{{ Auth::guard('client')->user()->id }}",
             fullname: "{{ Auth::guard('client')->user()->name }}"
         };
-        console.log(DEFAULT_CLIENT_USER);
-        @endIf
+        @else
+        const DEFAULT_CLIENT_USER = null;
+        @endif
     </script>
 </head>
 

@@ -166,7 +166,7 @@
                                                         <fieldset class="form-group" style="margin-bottom: 12px">
                                                             <input type="text"
                                                                 class="form-control form-control-lg" style="margin-bottom: 0;" value=""
-                                                                name="invite_code" id="invite_code" placeholder="Nhập mã giới thiệu (nếu có)">
+                                                                name="invite_code" id="invite_code" placeholder="Nhập mã giới thiệu (nếu có)" ng-model="invite_code">
                                                             <span class="invalid-feedback d-block error" style="text-align: left;" role="alert"
                                                                 ng-if="errors && errors['invite_code']">
                                                                 <strong><% errors['invite_code'][0] %></strong>
@@ -222,6 +222,17 @@
             $scope.formLogin = false;
             $scope.formRegister = true;
             $scope.title = 'Đăng ký tài khoản';
+        }
+
+        if (DEFAULT_CLIENT_USER) {
+            localStorage.setItem('showMenuAdminClient', true);
+            window.location.href = '{{route('front.client-account')}}';
+        } else {
+            let invite_code = '{{request()->invite_code}}';
+            if (invite_code) {
+                $scope.showFormRegister();
+                $scope.invite_code = invite_code;
+            }
         }
 
         $scope.errors = {};
