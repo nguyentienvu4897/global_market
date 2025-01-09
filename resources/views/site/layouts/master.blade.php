@@ -385,7 +385,7 @@
                 <div class="cart_btn-close tocontinued" onclick="location.href='{{ route('cart.index') }}'">
                     Xem giỏ hàng
                 </div>
-                <a href="/checkout" class="checkout" title="Thanh toán ngay" onclick="location.href='{{ route('cart.index') }}'">
+                <a href="javascript:void(0)" class="checkout" title="Thanh toán ngay" onclick="location.href='{{ route('cart.index') }}'">
                     Thanh toán ngay
                 </a>
             </div>

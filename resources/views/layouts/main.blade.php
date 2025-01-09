@@ -177,6 +177,91 @@
         };
         const USERS = @json(\App\Model\Common\User::getMembers());
         @endIf
+
+        app.directive("onlyNumber", function ($timeout) {
+            return {
+                restrict: 'EA',
+                require: 'ngModel',
+                link: function (scope, element, attrs, ngModel) {
+                    function formatWithCommas(value) {
+                        if (!value || isNaN(value)) return value;
+                        let parts = String(value).split(".");
+                        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ","); // Thêm dấu phẩy vào phần nguyên
+                        return parts.join(".");
+                    }
+
+                    function removeCommas(value) {
+                        return String(value).replace(/,/g, "");
+                    }
+
+                    function validateAndFormat(value) {
+                        let rawValue = removeCommas(value); // Loại bỏ dấu phẩy để xử lý
+                        if (!rawValue || isNaN(rawValue)) return "";
+
+                        // Nếu không cho phép số âm
+                        if (attrs.allowNegative === "false" && rawValue.startsWith("-")) {
+                            rawValue = rawValue.replace("-", "");
+                        }
+
+                        // Nếu không cho phép số thập phân
+                        if (attrs.allowDecimal === "false") {
+                            rawValue = parseInt(rawValue);
+                        }
+
+                        // Giới hạn số thập phân
+                        if (attrs.allowDecimal !== "false" && attrs.decimalUpto) {
+                            let parts = String(rawValue).split(".");
+                            if (parts[1]) {
+                                parts[1] = parts[1].slice(0, attrs.decimalUpto);
+                                rawValue = parts.join(".");
+                            }
+                        }
+
+                        // Loại bỏ số 0 không cần thiết ở phần thập phân
+                        // if (String(rawValue).includes(".")) {
+                        //     rawValue = rawValue.replace(/(\.\d*?[1-9])0+$/, "$1"); // Bỏ số 0 thừa ở cuối
+                        //     rawValue = rawValue.replace(/\.0+$/, ""); // Nếu chỉ còn lại `.0` thì loại bỏ cả dấu `.`
+                        // }
+
+                        // Giới hạn giá trị tối đa
+                        if (attrs.maxValue && parseFloat(rawValue) > parseFloat(attrs.maxValue)) {
+                            rawValue = attrs.maxValue;
+                        }
+
+                        return formatWithCommas(rawValue);
+                    }
+
+                    ngModel.$parsers.push(function (inputValue) {
+                        if (!inputValue) return null;
+
+                        let formattedValue = validateAndFormat(inputValue);
+                        if (formattedValue !== inputValue) {
+                            ngModel.$setViewValue(formattedValue); // Cập nhật giá trị định dạng
+                            ngModel.$render();
+                        }
+
+                        return removeCommas(formattedValue); // Trả về giá trị không có dấu phẩy cho model
+                    });
+
+                    element.on("blur", function () {
+                        let formattedValue = validateAndFormat(ngModel.$viewValue);
+                        if (formattedValue !== ngModel.$viewValue) {
+                            ngModel.$setViewValue(formattedValue);
+                            ngModel.$render();
+                        }
+                    });
+
+                    // Xử lý giá trị ban đầu
+                    $timeout(function () {
+                        let formattedValue = validateAndFormat(ngModel.$modelValue);
+                        if (formattedValue !== ngModel.$modelValue) {
+                            ngModel.$setViewValue(formattedValue);
+                            ngModel.$render();
+                        }
+                    });
+                }
+            };
+        })
     </script>
     <script src="{{ asset('js/constant.js') }}?version={{ env('APP_VERSION', '1') }}"></script>
     <script src="{{ asset('js/custom.js') }}?version={{ env('APP_VERSION', '1') }}"></script>

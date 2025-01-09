@@ -66,10 +66,10 @@ class ClientRegisterController extends Controller
     public function registerClientSubmit(Request $request) {
         $rule = [
 			'name' => 'required',
-			'email' => 'required|email|unique:users',
-			'account_name' => 'required|unique:users',
+			'email' => 'required|email|unique:users,email',
+			'account_name' => 'required|unique:users,account_name',
 			'password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
-            'phone_number' => 'nullable|regex:/^(0)[0-9]{9,11}$/',
+            'phone_number' => 'nullable|regex:/^(0)[0-9]{9,11}$/|unique:users,phone_number',
             'invite_code' => 'nullable|exists:users,invite_code',
 		];
 
@@ -82,6 +82,7 @@ class ClientRegisterController extends Controller
                 'password.regex' => 'Mật khẩu không đúng định dạng',
                 'email.unique' => 'Email đã được sử dụng',
                 'account_name.unique' => 'Tên đăng nhập đã được sử dụng',
+                'phone_number.unique' => 'Số điện thoại đã được sử dụng',
             ]
 		);
 
@@ -136,7 +137,7 @@ class ClientRegisterController extends Controller
 			'email' => 'required|email|unique:users,email,'.$id,
             'account_name' => 'required||unique:users,account_name,'.$id,
 			'status' => 'required|in:0,1',
-            'phone_number' => 'required|regex:/^(0)[0-9]{9,11}$/',
+            'phone_number' => 'required|regex:/^(0)[0-9]{9,11}$/|unique:users,phone_number,'.$id,
             'bank_name' => 'required',
             'bank_account_number' => 'required',
             'bank_account_name' => 'required',
@@ -149,6 +150,7 @@ class ClientRegisterController extends Controller
 			[
                 'email.unique' => 'Email đã được sử dụng',
                 'account_name.unique' => 'Tên đăng nhập đã được sử dụng',
+                'phone_number.unique' => 'Số điện thoại đã được sử dụng',
             ]
 		);
 
