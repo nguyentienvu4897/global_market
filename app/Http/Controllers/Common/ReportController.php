@@ -108,7 +108,7 @@ class ReportController extends Controller
             }
         }
         return successResponse(
-            "Quyết toán thành công!",
+            "Quyết toán thành công!"
         );
     }
 

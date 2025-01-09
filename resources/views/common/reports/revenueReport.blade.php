@@ -16,9 +16,7 @@
 @endsection
 
 @section('content')
-@php
-    dd(1);
-@endphp
+
 <div ng-controller="RevenueReport" ng-cloak>
     <div class="row">
         <div class="col-md-12">
