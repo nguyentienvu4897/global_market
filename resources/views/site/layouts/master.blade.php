@@ -91,6 +91,10 @@
             $scope.changeMenuClient = function($event, url){
                 $event.preventDefault();
                 $scope.showMenuAdminClient = !$scope.showMenuAdminClient;
+                if(url == '{{route('front.user-order')}}' || url == '{{route('front.user-revenue')}}' || url == '{{route('front.user-level')}}') {
+                    $scope.showMenuAdminClient = true;
+                }
+
                 if($scope.showMenuAdminClient){
                     localStorage.setItem('showMenuAdminClient', $scope.showMenuAdminClient);
                     window.location.href = url;
