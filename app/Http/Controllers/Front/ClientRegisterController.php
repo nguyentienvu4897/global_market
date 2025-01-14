@@ -14,6 +14,7 @@ use App\Http\Traits\ResponseTrait;
 use App\Model\Admin\OrderRevenueDetail;
 use JWTAuth;
 use App\Helpers\FileHelper;
+use App\Mail\RecoverPassword;
 use App\Mail\WithdrawMoney;
 use App\Model\Admin\Order;
 use Illuminate\Support\Facades\Hash;
@@ -49,9 +50,20 @@ class ClientRegisterController extends Controller
 
         $remember = true;
 
-        if (Auth::guard('client')->attempt(['account_name' => $request->account_name, 'password' => $request->password, 'status' => 1, 'type' => 10], $remember)) {
+        // Xác định trường nào sẽ dùng để đăng nhập (email hoặc account_name)
+        $field = filter_var($request->account_name, FILTER_VALIDATE_EMAIL) ? 'email' : 'account_name';
+
+        // Thay đổi mảng điều kiện xác thực
+        $loginConditions = [
+            $field    => $request->account_name,
+            'password' => $request->password,
+            'status'   => 1,
+            'type'     => 10
+        ];
+
+        if (Auth::guard('client')->attempt($loginConditions, $remember)) {
             // Đăng nhập thành công
-            $token = JWTAuth::attempt(['account_name' => $request->account_name, 'password' => $request->password, 'status' => 1, 'type' => 10]);
+            $token = JWTAuth::attempt($loginConditions);
 
             $data = array(
                 "token" => $token
@@ -228,6 +240,34 @@ class ClientRegisterController extends Controller
         }
     }
 
+    public function recoverPassword(Request $request) {
+        $rule = [
+			'recover_email' => 'required|email|exists:users,email',
+		];
+
+		$validate = Validator::make(
+			$request->all(),
+			$rule,
+			[
+                'recover_email.exists' => 'Email không tồn tại',
+            ]
+		);
+
+		if ($validate->fails()) {
+			return $this->responseErrors("Thao tác thất bại", $validate->errors());
+		}
+
+        // gửi mail thông báo lấy lại mật khẩu cho user
+        $user = User::query()->where('type', 10)->where('status', 1)->where('email', $request->recover_email)->first();
+        $new_password = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 8)), 0, 8);
+        $user->password = bcrypt($new_password);
+        $user->save();
+
+        Mail::to($user->email)->send(new RecoverPassword($user, $new_password));
+        // Mail::to('nguyentienvu4897@gmail.com')->send(new RecoverPassword($user, $new_password));
+
+        return $this->responseSuccess('Đã gửi thông tin lấy lại mật khẩu, vui lòng kiểm tra email');
+    }
 
     public function updateInviteCode(Request $request) {
         $user = User::findOrFail($request->user_id);

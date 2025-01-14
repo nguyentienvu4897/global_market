@@ -35,10 +35,10 @@
                         class="col-lg-4 col-md-6 col-sm-12 col-xl-4 offset-0 offset-xl-4 offset-lg-4 offset-md-3 offset-xl-3 col-12">
                         <div class="row" ng-show="formLogin">
                             <div class="page-login pagecustome clearfix">
-                                <div class="wpx">
+                                <div class="wpx" style="margin-bottom: 0">
                                     <h1 class="title_heads a-center"><span>Đăng nhập</span></h1>
                                     <div id="login" class="section">
-                                        <form id="customer_login" accept-charset="UTF-8">
+                                        <form id="customer_login">
                                             <div class="form-signup clearfix">
                                                 <fieldset class="form-group">
                                                     <input type="text"
@@ -55,8 +55,8 @@
                                                 </div>
                                                 <div class="btn_boz_khac">
                                                     <div class="btn_khac">
-                                                        {{-- <span class="quenmk">Quên mật khẩu?</span> --}}
-                                                        <a href="javascript:void(0)" ng-click="showFormRegister()" class="btn-link-style btn-register"
+                                                        <span class="quenmk">Quên mật khẩu?</span>
+                                                        <a href="javascript:void(0)" ng-click="showFormRegister()" class="btn-link-style btn-register" style="font-size: 16px; line-height: 24px;"
                                                             title="Đăng ký tại đây">Đăng ký tại đây</a>
                                                     </div>
                                                 </div>
@@ -65,24 +65,24 @@
                                     </div>
                                     <div class="h_recover" style="display:none;">
                                         <div id="recover-password" class="form-signup page-login">
-                                            <form method="post" action="/account/recover" id="recover_customer_password"
-                                                accept-charset="UTF-8">
-                                                <input name="FormType" type="hidden"
-                                                    value="recover_customer_password" /><input name="utf8" type="hidden"
-                                                    value="true" />
-                                                <div class="form-signup" style="color: red;">
+                                            <form id="recover_customer_password">
+                                                <div class="form-signup" style="color: red; font-size: 16px; line-height: 24px;">
+                                                    <span>Để lấy lại mật khẩu, vui lòng nhập email của bạn. Mật khẩu sẽ được gửi đến email của bạn.</span>
                                                 </div>
                                                 <div class="form-signup clearfix">
-                                                    <fieldset class="form-group">
-                                                        <input type="email"
+                                                    <fieldset class="form-group" style="margin-bottom: 12px;">
+                                                        <input type="email" style="margin-bottom: 0;"
                                                             pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,63}$"
-                                                            class="form-control form-control-lg" value=""
-                                                            name="Email" id="recover-email" placeholder="Email" Required>
+                                                            class="form-control form-control-lg" value="" ng-model="recover_email" id="recover-email" placeholder="Email" Required>
+                                                        <span class="invalid-feedback d-block error" style="text-align: left;" role="alert"
+                                                            ng-if="errors && errors['recover_email']">
+                                                            <strong><% errors['recover_email'][0] %></strong>
+                                                        </span>
                                                     </fieldset>
                                                 </div>
                                                 <div class="action_bottom">
                                                     <input class="btn btn-style btn_50" style="margin-top: 0px;"
-                                                        type="submit" value="Lấy lại mật khẩu" />
+                                                        type="submit" value="Lấy lại mật khẩu" ng-click="recoverPassword()" />
                                                 </div>
                                             </form>
                                         </div>
@@ -92,7 +92,7 @@
                         </div>
                         <div class="row" ng-show="formRegister">
                             <div class="page-login pagecustome clearfix">
-                                <div class="wpx">
+                                <div class="wpx" style="margin-bottom: 0">
                                     <h1 class="title_heads a-center"><span>Đăng ký</span></h1>
                                     <span class="block a-center dkm margin-top-10">Đã có tài khoản, đăng nhập <a
                                             href="javascript:void(0)" ng-click="showFormLogin()" class="btn-link-style btn-register">tại
@@ -200,27 +200,22 @@
 @endsection
 @push('script')
 <script type="text/javascript">
-    function showRecoverPasswordForm() {
-        document.getElementById('recover-password').style.display = 'block';
-        document.getElementById('login').style.display = 'none';
-    }
 
-    function hideRecoverPasswordForm() {
-        document.getElementById('recover-password').style.display = 'none';
-        document.getElementById('login').style.display = 'block';
-    }
     app.controller('LoginClientController', function($scope){
         $scope.formLogin = true;
         $scope.formRegister = false;
+        $scope.formRecoverPassword = false;
         $scope.title = 'Đăng nhập tài khoản';
         $scope.showFormLogin = function(){
             $scope.formLogin = true;
             $scope.formRegister = false;
+            $scope.formRecoverPassword = false;
             $scope.title = 'Đăng nhập tài khoản';
         }
         $scope.showFormRegister = function(){
             $scope.formLogin = false;
             $scope.formRegister = true;
+            $scope.formRecoverPassword = false;
             $scope.title = 'Đăng ký tài khoản';
         }
 
@@ -296,6 +291,44 @@
                 }
             })
         }
+
+        $scope.recoverPassword = function(){
+            $.ajax({
+                url: '{{route('front.recover-password-submit')}}',
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    recover_email: $scope.recover_email
+                },
+                success: function(response){
+                    if(response.success){
+                        toastr.success(response.message);
+                        $('.h_recover').hide();
+                    }else{
+                        $scope.errors = response.errors;
+                        toastr.error(response.message);
+                    }
+                },
+                error: function(response){
+                    console.log(response);
+                },
+                complete: function(){
+                    $scope.$applyAsync();
+                }
+            })
+        }
+
+        // function showRecoverPasswordForm() {
+        //     document.getElementById('recover-password').style.display = 'block';
+        //     document.getElementById('login').style.display = 'none';
+        // }
+
+        // function hideRecoverPasswordForm() {
+        //     document.getElementById('recover-password').style.display = 'none';
+        //     document.getElementById('login').style.display = 'block';
+        // }
     })
 </script>
 @endpush

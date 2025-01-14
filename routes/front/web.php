@@ -7,6 +7,8 @@ Route::group(['namespace' => 'Front'], function () {
         Route::post('/login-client','ClientRegisterController@loginClientSubmit')->name('front.login-client-submit');
         Route::post('/register-client','ClientRegisterController@registerClientSubmit')->name('front.register-client-submit');
         Route::get('/logout-client','ClientRegisterController@logoutClient')->name('front.logout-client');
+        Route::post('/recover-password', 'ClientRegisterController@recoverPassword')->name('front.recover-password-submit');
+
         Route::middleware('auth:client')->group(function () {
             Route::get('/account', 'ClientRegisterController@account')->name('front.client-account');
             Route::get('/update-invite-code','ClientRegisterController@updateInviteCode')->name('front.update-invite-code');

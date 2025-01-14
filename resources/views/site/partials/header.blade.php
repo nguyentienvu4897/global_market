@@ -71,15 +71,15 @@
                         </div>
                         <span>Sản phẩm <br>yêu thích</span>
                     </a> --}}
-                    <a href="{{route('front.connect-us')}}" class="header-acc" title="Đăng ký CTV/Đại lý">
+                    <a href="{{route('front.user-revenue')}}" class="header-acc" title="Hoa hồng của bạn" ng-click="changeMenuClient($event, '{{route('front.user-revenue')}}')">
                         <div class="img_acc">
                             <img width="22" height="22"
                                 src="/site/images/icon_res.png?1729657650563"
-                                alt="Đăng ký CTV/Đại lý" />
+                                alt="Hoa hồng của bạn" />
                         </div>
-                        <span>Đăng ký <br>CTV/Đại lý</span>
+                        <span>Hoa hồng <br>của bạn</span>
                     </a>
-                    <a href="{{ route('front.client-account') }}" title="Tài khoản của bạn" class="header-acc" ng-click="changeMenuClient($event)">
+                    <a href="{{ route('front.client-account') }}" title="Tài khoản của bạn" class="header-acc" ng-click="changeMenuClient($event, '{{route('front.client-account')}}')">
                         <div class="img_acc">
                             <img width="22" height="22"
                                 src="/site/images/icon_user.png?1729657650563"
@@ -89,8 +89,8 @@
                     </a>
                     <div class="header-action_cart">
                         <a href="{{ route('cart.index') }}" class="cart-header" title="Giỏ hàng">
-                            <img width="22" height="22"
-                                src="/site/images/icon_shopping.png?1729657650563"
+                            <img width="32" height="32"
+                                src="/site/images/cart.png?1729657650563"
                                 alt="Giỏ hàng" />
                             <span class="count_item count_item_pr" ng-if="cart.count > 0"><% cart.count %></span>
                         </a>
@@ -276,6 +276,9 @@
                             @endforeach
                             <li class="nav-item {{ Route::currentRouteName() == 'front.contact-us' ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('front.contact-us') }}" title="Liên hệ">Liên hệ</a>
+                            </li>
+                            <li class="nav-item {{ Route::currentRouteName() == 'front.connect-us' ? 'active' : '' }}">
+                                <a class="nav-link" href="{{route('front.connect-us')}}" title="Đăng ký CTV/Đại lý">Đăng ký CTV/Đại lý</a>
                             </li>
                         </ul>
                     </nav>

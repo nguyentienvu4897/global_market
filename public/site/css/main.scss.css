@@ -2929,7 +2929,7 @@ ul.tabs li.current {
     line-height: 1;
     border-radius: 5px;
     color: #fff;
-    background-color: #0974ba;
+    background-color: #efefef;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -2970,7 +2970,7 @@ ul.tabs li.current {
 }
 
 .top-header .box-icon-right .cart-header img {
-    max-width: 22px
+    max-width: 40px;
 }
 
 .top-header .box-icon-right .cart-header:hover,.top-header .box-icon-right .cart-header:focus {

@@ -88,12 +88,12 @@
                 localStorage.removeItem('showMenuAdminClient');
             }
 
-            $scope.changeMenuClient = function($event){
+            $scope.changeMenuClient = function($event, url){
                 $event.preventDefault();
                 $scope.showMenuAdminClient = !$scope.showMenuAdminClient;
                 if($scope.showMenuAdminClient){
                     localStorage.setItem('showMenuAdminClient', $scope.showMenuAdminClient);
-                    window.location.href = '{{ route('front.client-account') }}';
+                    window.location.href = url;
                 }else{
                     localStorage.removeItem('showMenuAdminClient');
                     window.location.href = '{{ route('front.home-page') }}';
