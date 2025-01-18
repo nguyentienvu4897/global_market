@@ -6,6 +6,8 @@ use App\Model\Admin\Banner;
 use App\Model\Admin\Category;
 use App\Model\Admin\PostCategory;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+use App\Model\Admin\OrderRevenueDetail;
 
 class MenuHomePageComposer
 {
@@ -24,8 +26,25 @@ class MenuHomePageComposer
         ->orderBy('sort_order')
         ->get();
 
+        $user = Auth::guard('client')->user();
+        if ($user) {
+            $quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where('status', OrderRevenueDetail::STATUS_QUYET_TOAN)
+            ->orWhere(function($query) {
+                $query->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)
+                ->where('settlement_amount', '>', 0);
+            })
+            ->sum('settlement_amount');
+            $waiting_quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)
+            ->orWhere(function($query) {
+                $query->where('status', OrderRevenueDetail::STATUS_QUYET_TOAN)
+                ->where('settlement_amount', '>', 0);
+            })->sum('revenue_amount') - $quyet_toan_amount;
+        } else {
+            $waiting_quyet_toan_amount = 0;
+        }
+
         $postCategories = PostCategory::query()->where(['parent_id' => 0, 'show_home_page' => 1])->latest()->get();
 
-        $view->with(['productCategories' => $productCategories, 'postCategories' => $postCategories]);
+        $view->with(['productCategories' => $productCategories, 'postCategories' => $postCategories, 'waiting_quyet_toan_amount' => $waiting_quyet_toan_amount]);
     }
 }

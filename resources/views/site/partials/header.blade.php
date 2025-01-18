@@ -16,7 +16,7 @@
                 </button>
                 <ul class="list-search-key">
                     @foreach($tag_search as $key => $tag)
-                    @if ($key == 3)
+                    @if ($key == 2)
                     <li><a href="{{ route('front.search').'?tag='.$tag->name }}" title="{{ $tag->name }}">{{ $tag->name }} </a>
                     </li>
                     @else
@@ -77,7 +77,7 @@
                                 src="/site/images/icon_res.png?1729657650563"
                                 alt="Hoa hồng của bạn" />
                         </div>
-                        <span>Hoa hồng <br>của bạn</span>
+                        <span>Hoa hồng <br><span class="balance-amount">{{ formatCurrency($waiting_quyet_toan_amount) }}₫</span></span>
                     </a>
                     <a href="{{ route('front.client-account') }}" title="Tài khoản của bạn" class="header-acc" ng-click="changeMenuClient($event, '{{route('front.client-account')}}')">
                         <div class="img_acc">
@@ -88,12 +88,15 @@
                         <span>Tài khoản <br>{{ Auth::guard('client')->check() ? Auth::guard('client')->user()->name : 'của bạn' }}</span>
                     </a>
                     <div class="header-action_cart">
-                        <a href="{{ route('cart.index') }}" class="cart-header" title="Giỏ hàng">
-                            <img width="32" height="32"
-                                src="/site/images/cart.png?1729657650563"
-                                alt="Giỏ hàng" />
-                            <span class="count_item count_item_pr" ng-if="cart.count > 0"><% cart.count %></span>
-                        </a>
+                        <div class="header-acc" style="margin-right: 0;">
+                            <a href="{{ route('cart.index') }}" class="cart-header" title="Giỏ hàng">
+                                <img width="32" height="32"
+                                    src="/site/images/cart.png?1729657650563"
+                                    alt="Giỏ hàng" />
+                                <span class="count_item count_item_pr" ng-if="cart.count > 0"><% cart.count %></span>
+                            </a>
+                            <span>Giỏ hàng <br>của bạn</span>
+                        </div>
                         <div class="top-cart-content">
                             <div class="CartHeaderContainer">
                                 <form class="cart ajaxcart cartheader" ng-if="cart.count > 0">

@@ -2933,7 +2933,8 @@ ul.tabs li.current {
     display: flex;
     align-items: center;
     justify-content: center;
-    position: relative
+    position: relative;
+    margin-right: 10px;
 }
 
 @media (max-width: 1025px) {
@@ -2946,7 +2947,8 @@ ul.tabs li.current {
 @media (max-width: 992px) {
     .top-header .box-icon-right .cart-header {
         width:36px;
-        height: 36px
+        height: 36px;
+        margin-right: 0;
     }
 }
 
@@ -5374,3 +5376,9 @@ header .menu_mega:hover .title_menu {
     margin-left: 0; /* Loại bỏ khoảng cách mặc định */
 }
 
+.top-header .header-acc span .balance-amount {
+    font-weight: 700;
+    color: #0974ba;
+    /* color: #f69326; */
+    font-size: 16px;
+}
