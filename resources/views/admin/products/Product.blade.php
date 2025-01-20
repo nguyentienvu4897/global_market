@@ -44,6 +44,46 @@
             this._revenue_price = value;
         }
 
+        get revenue_percent_5() {
+            return this._revenue_percent_5;
+        }
+
+        set revenue_percent_5(value) {
+            this._revenue_percent_5= value || 0;
+        }
+
+        get revenue_percent_4() {
+            return this._revenue_percent_4;
+        }
+
+        set revenue_percent_4(value) {
+            this._revenue_percent_4= value || 0;
+        }
+
+        get revenue_percent_3() {
+            return this._revenue_percent_3;
+        }
+
+        set revenue_percent_3(value) {
+            this._revenue_percent_3= value || 0;
+        }
+
+        get revenue_percent_2() {
+            return this._revenue_percent_2;
+        }
+
+        set revenue_percent_2(value) {
+            this._revenue_percent_2= value || 0;
+        }
+
+        get revenue_percent_1() {
+            return this._revenue_percent_1;
+        }
+
+        set revenue_percent_1(value) {
+            this._revenue_percent_1= value || 0;
+        }
+
         get image() {
             return this._image;
         }
@@ -165,7 +205,12 @@
                 is_pin: this.is_pin,
                 attributes: this.attribute_values.map(val => val.submit_data),
                 videos: this.videos.map(val => val.submit_data),
-                revenue_price: this._revenue_price
+                revenue_price: this._revenue_price,
+                revenue_percent_5: this.revenue_percent_5,
+                revenue_percent_4: this.revenue_percent_4,
+                revenue_percent_3: this.revenue_percent_3,
+                revenue_percent_2: this.revenue_percent_2,
+                revenue_percent_1: this.revenue_percent_1,
             }
 
             data = jsonToFormData(data);

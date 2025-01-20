@@ -312,7 +312,7 @@ class ClientRegisterController extends Controller
                 return '<a href = "javascript:void(0)" title = "Xem chi tiết" class="show-order-detail" data-href="'.route('front.show-order-detail', $object->id).'">' . $object->code . '</a>';
             })
             ->editColumn('created_at', function ($object) {
-                return formatDate($object->created_at);
+                return date('d/m/Y H:i', strtotime($object->created_at));
             })
             ->addColumn('action_client', function ($object) {
                 $result = '<div class="btn-group btn-action">';

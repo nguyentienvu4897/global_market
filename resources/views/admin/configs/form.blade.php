@@ -79,7 +79,7 @@
 						<strong><% errors.location[0] %></strong>
 					</span>
 				</div>
-				<div class="form-group">
+				{{-- <div class="form-group">
 					<label class="form-label">Cấu hình phần trăm hoa hồng hệ thống</label>
                     <div class="row">
                         <div class="col-md-2">
@@ -113,7 +113,7 @@
                             </div>
                         </div>
                     </div>
-				</div>
+				</div> --}}
 				{{-- <div class="form-group">
 					<label class="form-label">Tùy chọn khác</label>
 					<div class="custom-control custom-checkbox">

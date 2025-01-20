@@ -184,7 +184,7 @@ class CartController extends Controller
             $revenue_amount_level_3 = 0;
             $revenue_amount_level_4 = 0;
             $revenue_amount_level_5 = 0;
-            $config = \App\Model\Admin\Config::where('id',1)->select('revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5')->first();
+            // $config = \App\Model\Admin\Config::where('id',1)->select('revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5')->first();
             foreach ($request->items as $item) {
                 $product = Product::query()->where('slug', $item['attributes']['slug'])->first();
                 $detail = new OrderDetail();
@@ -194,11 +194,11 @@ class CartController extends Controller
                 $detail->price = $item['price'];
                 $detail->attributes = isset($item['attributes']['attributes']) ? json_encode($item['attributes']['attributes']) : null;
                 $detail->save();
-                $revenue_amount_level_1 += $product->revenue_price * $config->revenue_percent_1 / 100;
-                $revenue_amount_level_2 += $product->revenue_price * $config->revenue_percent_2 / 100;
-                $revenue_amount_level_3 += $product->revenue_price * $config->revenue_percent_3 / 100;
-                $revenue_amount_level_4 += $product->revenue_price * $config->revenue_percent_4 / 100;
-                $revenue_amount_level_5 += $product->revenue_price * $config->revenue_percent_5 / 100;
+                $revenue_amount_level_1 += $product->revenue_price * $product->revenue_percent_1 / 100;
+                $revenue_amount_level_2 += $product->revenue_price * $product->revenue_percent_2 / 100;
+                $revenue_amount_level_3 += $product->revenue_price * $product->revenue_percent_3 / 100;
+                $revenue_amount_level_4 += $product->revenue_price * $product->revenue_percent_4 / 100;
+                $revenue_amount_level_5 += $product->revenue_price * $product->revenue_percent_5 / 100;
 
                 \Cart::remove($item['id']);
             }
@@ -229,7 +229,7 @@ class CartController extends Controller
                 $order_revenue_detail->user_email = $current_user->email;
                 $order_revenue_detail->user_level = 5;
                 $order_revenue_detail->status = 0;
-                $order_revenue_detail->revenue_percent = $config->revenue_percent_5;
+                // $order_revenue_detail->revenue_percent = $config->revenue_percent_5;
                 $order_revenue_detail->revenue_amount = $revenue_amount_level_5;
                 $order_revenue_detail->save();
             }
@@ -242,7 +242,7 @@ class CartController extends Controller
                 $order_revenue_detail->user_email = $current_user->parent->email;
                 $order_revenue_detail->user_level = 4;
                 $order_revenue_detail->status = 0;
-                $order_revenue_detail->revenue_percent = $config->revenue_percent_4;
+                // $order_revenue_detail->revenue_percent = $config->revenue_percent_4;
                 $order_revenue_detail->revenue_amount = $revenue_amount_level_4;
                 $order_revenue_detail->save();
             }
@@ -255,7 +255,7 @@ class CartController extends Controller
                 $order_revenue_detail->user_email = $current_user->parent->parent->email;
                 $order_revenue_detail->user_level = 3;
                 $order_revenue_detail->status = 0;
-                $order_revenue_detail->revenue_percent = $config->revenue_percent_3;
+                // $order_revenue_detail->revenue_percent = $config->revenue_percent_3;
                 $order_revenue_detail->revenue_amount = $revenue_amount_level_3;
                 $order_revenue_detail->save();
             }
@@ -268,7 +268,7 @@ class CartController extends Controller
                 $order_revenue_detail->user_email = $current_user->parent->parent->parent->email;
                 $order_revenue_detail->user_level = 2;
                 $order_revenue_detail->status = 0;
-                $order_revenue_detail->revenue_percent = $config->revenue_percent_2;
+                // $order_revenue_detail->revenue_percent = $config->revenue_percent_2;
                 $order_revenue_detail->revenue_amount = $revenue_amount_level_2;
                 $order_revenue_detail->save();
             }
@@ -281,7 +281,7 @@ class CartController extends Controller
                 $order_revenue_detail->user_email = $current_user->parent->parent->parent->parent->email;
                 $order_revenue_detail->user_level = 1;
                 $order_revenue_detail->status = 0;
-                $order_revenue_detail->revenue_percent = $config->revenue_percent_1;
+                // $order_revenue_detail->revenue_percent = $config->revenue_percent_1;
                 $order_revenue_detail->revenue_amount = $revenue_amount_level_1;
                 $order_revenue_detail->save();
             }

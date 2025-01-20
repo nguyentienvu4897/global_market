@@ -112,6 +112,11 @@ class ProductController extends Controller
 			$object->body = $request->body;
 			$object->base_price = $request->base_price;
 			$object->revenue_price = $request->revenue_price;
+            $object->revenue_percent_5 = $request->revenue_percent_5;
+            $object->revenue_percent_4 = $request->revenue_percent_4;
+            $object->revenue_percent_3 = $request->revenue_percent_3;
+            $object->revenue_percent_2 = $request->revenue_percent_2;
+            $object->revenue_percent_1 = $request->revenue_percent_1;
 			$object->price = $request->price;
 			$object->status = $request->status;
 			$object->manufacturer_id = $request->manufacturer_id;
@@ -183,6 +188,11 @@ class ProductController extends Controller
 			$object->base_price = $request->base_price;
 			$object->price = $request->price;
 			$object->revenue_price = $request->revenue_price;
+            $object->revenue_percent_5 = $request->revenue_percent_5;
+            $object->revenue_percent_4 = $request->revenue_percent_4;
+            $object->revenue_percent_3 = $request->revenue_percent_3;
+            $object->revenue_percent_2 = $request->revenue_percent_2;
+            $object->revenue_percent_1 = $request->revenue_percent_1;
 			$object->status = $request->status;
 			$object->manufacturer_id = $request->manufacturer_id;
 			$object->origin_id = $request->origin_id;

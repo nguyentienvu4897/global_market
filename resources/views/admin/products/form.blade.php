@@ -82,7 +82,66 @@
                 </strong>
             </span>
         </div>
-
+        <div class="form-group">
+            <label class="form-label">Cấu hình phần trăm hoa hồng sản phẩm</label>
+            <div class="row">
+                <div class="col-md-2">
+                    <div class="form-group custom-group">
+                        <label class="form-label">Người mua hàng (%)</label>
+                        <input class="form-control" ng-model="form.revenue_percent_5" type="text">
+                        <span class="invalid-feedback d-block" role="alert">
+                            <strong>
+                                <% errors.revenue_percent_5[0] %>
+                            </strong>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group custom-group">
+                        <label class="form-label">Cấp 4 (%)</label>
+                        <input class="form-control" ng-model="form.revenue_percent_4" type="text">
+                        <span class="invalid-feedback d-block" role="alert">
+                            <strong>
+                                <% errors.revenue_percent_4[0] %>
+                            </strong>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group custom-group">
+                        <label class="form-label">Cấp 3 (%)</label>
+                        <input class="form-control" ng-model="form.revenue_percent_3" type="text">
+                        <span class="invalid-feedback d-block" role="alert">
+                            <strong>
+                                <% errors.revenue_percent_3[0] %>
+                            </strong>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group custom-group">
+                        <label class="form-label">Cấp 2 (%)</label>
+                        <input class="form-control" ng-model="form.revenue_percent_2" type="text">
+                        <span class="invalid-feedback d-block" role="alert">
+                            <strong>
+                                <% errors.revenue_percent_2[0] %>
+                            </strong>
+                        </span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group custom-group">
+                        <label class="form-label">Cấp 1 (%)</label>
+                        <input class="form-control" ng-model="form.revenue_percent_1" type="text">
+                        <span class="invalid-feedback d-block" role="alert">
+                            <strong>
+                                <% errors.revenue_percent_1[0] %>
+                            </strong>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
     <div class="col-sm-4">
@@ -113,6 +172,7 @@
                 </strong>
             </span>
         </div>
+
         <div class="col-md-12">
             <div class="form-group">
                 <label>Phân loại sản phẩm <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="Dành cho các sản phẩm có nhiều loại (phân loại, màu sắc, kích thước ...)"></i></label>

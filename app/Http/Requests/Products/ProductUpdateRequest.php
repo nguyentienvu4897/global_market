@@ -38,6 +38,12 @@ class ProductUpdateRequest extends BaseRequest
             'galleries.*.image' => 'required_without:galleries.*.id|file|mimes:png,jpg,jpeg',
             'post_ids' => 'nullable|array|max:5',
             'videos' => 'nullable|array',
+            'revenue_price' => 'nullable|integer|max:' . $this->input('price'),
+            'revenue_percent_5' => 'nullable|numeric|min:0|max:100',
+            'revenue_percent_4' => 'nullable|numeric|min:0|max:100',
+            'revenue_percent_3' => 'nullable|numeric|min:0|max:100',
+            'revenue_percent_2' => 'nullable|numeric|min:0|max:100',
+            'revenue_percent_1' => 'nullable|numeric|min:0|max:100',
         ];
 
         $url_custom = $this->get('url_custom');
