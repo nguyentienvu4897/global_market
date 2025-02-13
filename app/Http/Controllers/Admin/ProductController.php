@@ -25,6 +25,7 @@ use App\Http\Controllers\Controller;
 use \Carbon\Carbon;
 use DB;
 use App\Helpers\FileHelper;
+use App\Model\Admin\Config;
 use App\Model\Common\User;
 use App\Model\Common\ActivityLog;
 use Auth;
@@ -95,8 +96,9 @@ class ProductController extends Controller
 	public function create()
 	{
         $tags = Tag::query()->where('type', Tag::TYPE_PRODUCT)->latest()->get();
+        $config = Config::query()->first(['revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5']);
 
-		return view($this->view.'.create', compact('tags'));
+		return view($this->view.'.create', compact('tags', 'config'));
 	}
 
 	public function store(ProductStoreRequest $request)
@@ -105,6 +107,7 @@ class ProductController extends Controller
 		DB::beginTransaction();
 		try {
 			$object = new ThisModel();
+            $object->type = $request->type;
 			$object->name = $request->name;
 			$object->cate_id = $request->cate_id;
 			$object->intro = $request->intro;
@@ -124,6 +127,11 @@ class ProductController extends Controller
             $object->url_custom = $request->url_custom;
             $object->state = $request->state ?? Product::CON_HANG;
             $object->is_pin = $request->is_pin ?? Product::NOT_PIN;
+            $object->origin = $request->origin;
+            $object->origin_link = $request->origin_link;
+            $object->aff_link = $request->aff_link;
+            $object->short_link = $request->short_link;
+            $object->person_in_charge = $request->person_in_charge;
 
 			$object->save();
 
@@ -161,6 +169,7 @@ class ProductController extends Controller
 	{
 		$object = ThisModel::getDataForEdit($id);
         $tags = Tag::query()->where('type', Tag::TYPE_PRODUCT)->latest()->get();
+        $config = Config::query()->first(['revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5']);
         $object->tag_ids = $object->tags->pluck('id')->toArray();
 
         return view($this->view.'.edit', compact('object','tags'));
@@ -180,6 +189,7 @@ class ProductController extends Controller
 				return Response::json($json);
 			}
 
+            $object->type = $request->type;
 			$object->name = $request->name;
 			$object->cate_id = $request->cate_id;
 			$object->intro = $request->intro;
@@ -199,6 +209,11 @@ class ProductController extends Controller
             $object->url_custom = $request->url_custom;
             $object->state = $request->state ?? Product::CON_HANG;
             $object->is_pin = $request->is_pin ?? Product::NOT_PIN;
+            $object->origin = $request->origin;
+            $object->origin_link = $request->origin_link;
+            $object->aff_link = $request->aff_link;
+            $object->short_link = $request->short_link;
+            $object->person_in_charge = $request->person_in_charge;
 
 			$object->save();
 
@@ -212,7 +227,7 @@ class ProductController extends Controller
 			$object->syncGalleries($request->galleries);
             $object->syncDocuments($request->attachments, 'products/attachments/');
 
-            $object->updateTags($request->tag_ids);
+            if($request->tag_ids) $object->updateTags($request->tag_ids);
             if($request->input('attributes')) {
                 $object->syncAttributes($request->input('attributes'));
             }

@@ -1,18 +1,18 @@
 <form class="variants product-action">
-    <a class="image_thumb scale_hover" href="{{ route('front.show-product-detail', $product->slug) }}"
+    <a class="image_thumb scale_hover" href="{{ $product->type ? ($product->short_link ?? $product->aff_link) : route('front.show-product-detail', $product->slug) }}"
         title="{{ $product->name }}">
         <img width="480" height="480" class="lazyload image1"
             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
             data-src="{{ $product->image->path }}" alt="{{ $product->name }}">
     </a>
     <div class="group_action">
-        <a title="Xem nhanh" href="javascript:void(0)" data-handle="{{ $product->id }}" style="font-size: 15px;"
+        <a title="Xem nhanh" href='javascript:void(0)' data-handle="{{ $product->id }}" style="font-size: 15px;"
             class="btn-anima hidden-xs xem_nhanh btn-circle btn-views btn_view btn right-to quick-view"
             ng-click="showQuickView({{ $product->id }})">
             <img width="24" height="24" src="/site/images/view.svg?1729657650563" alt="Xem nhanh" /> Xem
             nhanh
         </a>
-        <a href="javascript:void(0)" class="btn-anima hidden-xs btn-buy btn-cart btn-left btn btn-views left-to" style="font-size: 15px;"
+        <a href="{{ $product->type ? ($product->short_link ?? $product->aff_link) : 'javascript:void(0)' }}" class="btn-anima hidden-xs btn-buy btn-cart btn-left btn btn-views left-to" style="font-size: 15px;"
             title="Mua ngay" ng-click="addToCart({{ $product->id }})">
             <img width="24" height="24" src="/site/images/cart_new.svg?1729657650563" alt="Mua ngay" /> Mua
             ngay
@@ -38,7 +38,7 @@
             </div><span class="onireviewapp-loopitem-title">({{$product->product_rates->count()}} đánh giá)</span>
         </div>
     </div>
-    <h3 class="product-name"><a href="{{ route('front.show-product-detail', $product->slug) }}"
+    <h3 class="product-name"><a href="{{ $product->type ? ($product->short_link ?? $product->aff_link) : route('front.show-product-detail', $product->slug) }}"
             title="{{ $product->name }}">{{ $product->name }}</a></h3>
     @if ($product->base_price > 0)
     <div class="price-box">

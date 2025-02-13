@@ -36,8 +36,23 @@
 </style>
 <div class="row">
     <div class="col-sm-8">
+        <div class="form-group mb-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <input class="cursor-pointer" type="radio" ng-model="form.type" value="0" id="type_0"> <label for="type_0" class="cursor-pointer">Sản phẩm thông thường</label>
+                </div>
+                <div class="col-md-6">
+                    <input class="cursor-pointer" type="radio" ng-model="form.type" value="1" id="type_1"> <label for="type_1" class="cursor-pointer">Sản phẩm affiliate</label>
+                </div>
+            </div>
+            <span class="invalid-feedback d-block" role="alert">
+                <strong>
+                    <% errors.type[0] %>
+                </strong>
+            </span>
+        </div>
         <div class="form-group custom-group mb-4">
-            <label class="form-label required-label">Danh mục sản phẩm</label>
+            <label class="form-label" ng-class="{'required-label': form.type == 0}">Danh mục sản phẩm</label>
             <ui-select class="" remove-selected="true" ng-model="form.cate_id" theme="select2" ng-change="changeCategory(form.cate_id)">
                 <ui-select-match placeholder="Chọn danh mục">
                     <% $select.selected.name %>
@@ -88,7 +103,7 @@
                 <div class="col-md-2">
                     <div class="form-group custom-group">
                         <label class="form-label">Người mua hàng (%)</label>
-                        <input class="form-control" ng-model="form.revenue_percent_5" type="text">
+                        <input class="form-control" ng-model="form.revenue_percent_5" type="text" ng-change="form.updateRevenuePrice()">
                         <span class="invalid-feedback d-block" role="alert">
                             <strong>
                                 <% errors.revenue_percent_5[0] %>
@@ -142,9 +157,53 @@
                 </div>
             </div>
         </div>
-
+        <div class="form-group custom-group mb-4">
+            <label class="form-label" ng-class="{'required-label': form.type == 1}">Link gốc sản phẩm</label>
+            <input class="form-control " type="text" ng-model="form.origin_link">
+            <span class="invalid-feedback d-block" role="alert">
+                <strong>
+                    <% errors.origin_link[0] %>
+                </strong>
+            </span>
+        </div>
+        <div class="form-group custom-group mb-4">
+            <label class="form-label" ng-class="{'required-label': form.type == 1}">Link affiliate</label>
+            <input class="form-control " type="text" ng-model="form.aff_link">
+            <span class="invalid-feedback d-block" role="alert">
+                <strong>
+                    <% errors.aff_link[0] %>
+                </strong>
+            </span>
+        </div>
+        <div class="form-group custom-group mb-4">
+            <label class="form-label" ng-class="{'required-label': form.type == 1}">Link rút gọn</label>
+            <input class="form-control " type="text" ng-model="form.short_link">
+            <span class="invalid-feedback d-block" role="alert">
+                <strong>
+                    <% errors.short_link[0] %>
+                </strong>
+            </span>
+        </div>
     </div>
     <div class="col-sm-4">
+        <div class="form-group custom-group mb-4">
+            <label class="form-label" ng-class="{'required-label': form.type == 0}">Người phụ trách (email)</label>
+            <input class="form-control " type="text" ng-model="form.person_in_charge">
+            <span class="invalid-feedback d-block" role="alert">
+                <strong>
+                    <% errors.person_in_charge[0] %>
+                </strong>
+            </span>
+        </div>
+        <div class="form-group custom-group mb-4">
+            <label class="form-label">Nguồn gốc</label>
+            <input class="form-control " type="text" ng-model="form.origin">
+            <span class="invalid-feedback d-block" role="alert">
+                <strong>
+                    <% errors.origin[0] %>
+                </strong>
+            </span>
+        </div>
         <div class="form-group custom-group mb-4">
             <label class="form-label">Giá trước giảm</label>
             <input class="form-control " type="text" ng-model="form.base_price">
@@ -156,7 +215,7 @@
         </div>
         <div class="form-group custom-group mb-4">
             <label class="form-label">Giá bán</label>
-            <input class="form-control " type="text" ng-model="form.price">
+            <input class="form-control " type="text" ng-model="form.price" ng-change="form.updateRevenuePrice()">
             <span class="invalid-feedback d-block" role="alert">
                 <strong>
                     <% errors.price[0] %>
@@ -164,8 +223,8 @@
             </span>
         </div>
         <div class="form-group custom-group mb-4">
-            <label class="form-label">Đơn giá hoa hồng / sản phẩm</label>
-            <input class="form-control " type="text" ng-model="form.revenue_price">
+            <label class="form-label">Hoa hồng (người mua hàng có thể nhận) / sản phẩm</label>
+            <input class="form-control " type="text" ng-model="form.revenue_price" disabled>
             <span class="invalid-feedback d-block" role="alert">
                 <strong>
                     <% errors.revenue_price[0] %>

@@ -9,6 +9,7 @@
         before(form) {
             this.image = {};
             this.status = 0;
+            if (!this.type) this.type = 0;
             this.attribute_values = form.attribute_values || [];
             this.videos = form.videos || [];
         }
@@ -176,6 +177,10 @@
             return (this.attachments || '').split(', ').map(val => val.trim()).filter(val => !!val);
         }
 
+        updateRevenuePrice() {
+            this._revenue_price = this._price * (this.revenue_percent_5 / 100);
+        }
+
         // get tag_ids() {
         //     return this._tag_ids;
         // }
@@ -194,6 +199,7 @@
                 intro: this.intro,
                 body: this.body,
                 status: this.status,
+                type: this.type,
                 manufacturer_id: this.manufacturer_id,
                 origin_id: this.origin_id,
                 title_seo: this.title_seo,
@@ -211,6 +217,11 @@
                 revenue_percent_3: this.revenue_percent_3,
                 revenue_percent_2: this.revenue_percent_2,
                 revenue_percent_1: this.revenue_percent_1,
+                origin: this.origin,
+                origin_link: this.origin_link,
+                aff_link: this.aff_link,
+                short_link: this.short_link,
+                person_in_charge: this.person_in_charge,
             }
 
             data = jsonToFormData(data);

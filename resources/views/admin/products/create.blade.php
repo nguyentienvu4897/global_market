@@ -32,7 +32,7 @@
             $scope.form = new Product({}, {scope: $scope});
 
             @include('admin.products.formJs')
-                $scope.submit = function () {
+            $scope.submit = function () {
                 $scope.loading.submit = true;
                 let data = $scope.form.submit_data;
                 $scope.addition_attachments.forEach((val, index) => {

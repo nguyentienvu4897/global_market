@@ -23,8 +23,9 @@ class ProductStoreRequest extends BaseRequest
     public function rules()
     {
         $rules = [
+            'type' => 'required|in:0,1',
             'name' => 'required|unique:products,name',
-            'cate_id' => 'required|exists:categories,id',
+            // 'cate_id' => 'required_if:type,0|exists:categories,id',
             'manufacturer_id' => 'nullable|exists:manufacturers,id',
             'origin_id' => 'nullable|exists:origins,id',
             'intro' => 'nullable',
@@ -44,7 +45,22 @@ class ProductStoreRequest extends BaseRequest
             'galleries.*.image' => 'nullable|file|mimes:png,jpg,jpeg|max:10000',
             'post_ids' => 'nullable|array|max:5',
             'videos' => 'nullable|array',
+            // 'person_in_charge' => 'required_if:type,0|email|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
+            // 'aff_link' => 'required_if:type,1|url',
+            // 'short_link' => 'required_if:type,1|url',
+            // 'origin_link' => 'required_if:type,1|url',
         ];
+
+        if($this->input('type') == 0) {
+            $rules['cate_id'] = 'required|exists:categories,id';
+            $rules['person_in_charge'] = 'required|email|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/';
+        }
+
+        if($this->input('type') == 1) {
+            $rules['aff_link'] = 'required|url';
+            $rules['short_link'] = 'required|url';
+            $rules['origin_link'] = 'required|url';
+        }
 
         $url_custom = $this->get('url_custom');
         if($url_custom) {
@@ -63,4 +79,12 @@ class ProductStoreRequest extends BaseRequest
         return $rules;
     }
 
+    public function messages()
+    {
+        return [
+            'aff_link.url' => 'Link affiliate không hợp lệ',
+            'short_link.url' => 'Link rút gọn không hợp lệ',
+            'origin_link.url' => 'Link gốc không hợp lệ',
+        ];
+    }
 }

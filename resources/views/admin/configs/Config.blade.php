@@ -110,11 +110,11 @@
                 phone_switchboard: this.phone_switchboard,
                 introduction: this.introduction,
                 tax_code: this.tax_code,
-                // revenue_percent_5: this.revenue_percent_5,
-                // revenue_percent_4: this.revenue_percent_4,
-                // revenue_percent_3: this.revenue_percent_3,
-                // revenue_percent_2: this.revenue_percent_2,
-                // revenue_percent_1: this.revenue_percent_1,
+                revenue_percent_5: this.revenue_percent_5,
+                revenue_percent_4: this.revenue_percent_4,
+                revenue_percent_3: this.revenue_percent_3,
+                revenue_percent_2: this.revenue_percent_2,
+                revenue_percent_1: this.revenue_percent_1,
             }
             data = jsonToFormData(data);
             let image = this.image.submit_data;

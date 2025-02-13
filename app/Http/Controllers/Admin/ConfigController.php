@@ -39,11 +39,11 @@ class ConfigController extends Controller
 				'image' => 'nullable|file|mimes:jpg,jpeg,png|max:3000',
                 'favicon' => 'nullable|file|mimes:jpg,jpeg,png|max:3000',
                 'location' => 'nullable',
-                // 'revenue_percent_5' => 'nullable|numeric|min:0|max:100',
-                // 'revenue_percent_4' => 'nullable|numeric|min:0|max:100',
-                // 'revenue_percent_3' => 'nullable|numeric|min:0|max:100',
-                // 'revenue_percent_2' => 'nullable|numeric|min:0|max:100',
-                // 'revenue_percent_1' => 'nullable|numeric|min:0|max:100',
+                'revenue_percent_5' => 'nullable|numeric|min:0|max:100',
+                'revenue_percent_4' => 'nullable|numeric|min:0|max:100',
+                'revenue_percent_3' => 'nullable|numeric|min:0|max:100',
+                'revenue_percent_2' => 'nullable|numeric|min:0|max:100',
+                'revenue_percent_1' => 'nullable|numeric|min:0|max:100',
 			]
 		);
 
@@ -80,11 +80,11 @@ class ConfigController extends Controller
 			$object->facebook_chat = $request->facebook_chat;
 			$object->zalo_chat = $request->zalo_chat;
 			$object->phone_switchboard = $request->phone_switchboard;
-            // $object->revenue_percent_5 = $request->revenue_percent_5;
-            // $object->revenue_percent_4 = $request->revenue_percent_4;
-            // $object->revenue_percent_3 = $request->revenue_percent_3;
-            // $object->revenue_percent_2 = $request->revenue_percent_2;
-            // $object->revenue_percent_1 = $request->revenue_percent_1;
+            $object->revenue_percent_5 = $request->revenue_percent_5;
+            $object->revenue_percent_4 = $request->revenue_percent_4;
+            $object->revenue_percent_3 = $request->revenue_percent_3;
+            $object->revenue_percent_2 = $request->revenue_percent_2;
+            $object->revenue_percent_1 = $request->revenue_percent_1;
 
 			$object->save();
 

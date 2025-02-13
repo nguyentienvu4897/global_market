@@ -194,11 +194,11 @@ class CartController extends Controller
                 $detail->price = $item['price'];
                 $detail->attributes = isset($item['attributes']['attributes']) ? json_encode($item['attributes']['attributes']) : null;
                 $detail->save();
-                $revenue_amount_level_1 += $product->revenue_price * $product->revenue_percent_1 / 100;
-                $revenue_amount_level_2 += $product->revenue_price * $product->revenue_percent_2 / 100;
-                $revenue_amount_level_3 += $product->revenue_price * $product->revenue_percent_3 / 100;
-                $revenue_amount_level_4 += $product->revenue_price * $product->revenue_percent_4 / 100;
-                $revenue_amount_level_5 += $product->revenue_price * $product->revenue_percent_5 / 100;
+                $revenue_amount_level_1 += $product->price * $product->revenue_percent_1 / 100;
+                $revenue_amount_level_2 += $product->price * $product->revenue_percent_2 / 100;
+                $revenue_amount_level_3 += $product->price * $product->revenue_percent_3 / 100;
+                $revenue_amount_level_4 += $product->price * $product->revenue_percent_4 / 100;
+                $revenue_amount_level_5 += $product->price * $product->revenue_percent_5 / 100;
 
                 \Cart::remove($item['id']);
             }

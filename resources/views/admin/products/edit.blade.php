@@ -31,7 +31,6 @@
             $scope.arrayInclude = arrayInclude;
 
             $scope.form = new Product(@json($object), {scope: $scope});
-            console.log($scope.form.documents);
             $scope.submit = function () {
                 $scope.loading.submit = true;
                 let data = $scope.form.submit_data;
