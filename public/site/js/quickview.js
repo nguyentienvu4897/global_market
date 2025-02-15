@@ -1,4 +1,4 @@
-initQuickView();
+// initQuickView();
 var product = {};
 var currentLinkQuickView = '';
 var option1 = '';
@@ -36,215 +36,212 @@ function setButtonNavQuickview() {
 		}
 	});
 }
-function initQuickView(){
+        // function initQuickView(){
+        //     $(document).on("click", "#thumblist_quickview li", function() {
+        //         changeImageQuickView($(this).find("img:first-child"), ".product-featured-image-quickview");
+        //         $('#thumblist_quickview li').removeClass('active');
+        //         $(this).addClass('active');
+        //     });
+        //     $(document).on('click', '.quick-view', function(e) {
+        //         if($(window).width() > 1025){
+        //             e.preventDefault();
+        //             $('.soluong1').show();
+        //             var producthandle = $(this).data("handle");
+        //             currentLinkQuickView = $(this);
+        //             Bizweb.getProduct(producthandle,function(product) {
+        //                 var qvhtml = $("#quickview-modal").html();
+        //                 $(".quick-view-product").html(qvhtml);
+        //                 var quickview= $(".quick-view-product");
 
-	$(document).on("click", "#thumblist_quickview li", function() {
-		changeImageQuickView($(this).find("img:first-child"), ".product-featured-image-quickview");
-		$('#thumblist_quickview li').removeClass('active');
-		$(this).addClass('active');
-	});
-	$(document).on('click', '.quick-view', function(e) {
-		if($(window).width() > 1025){
-			e.preventDefault();
-			$('.soluong1').show();
-			var producthandle = $(this).data("handle");
-			currentLinkQuickView = $(this);
-			Bizweb.getProduct(producthandle,function(product) {
-				var qvhtml = $("#quickview-modal").html();
-				$(".quick-view-product").html(qvhtml);
-				var quickview= $(".quick-view-product");
-
-				if(product.summary != null && product.summary !=""){
-					var productdes = product.summary;
-				}
-				else{
-					quickview.find(".rte").html('Thông tin sản phẩm đang cập nhật');
-				}
-				var featured_image = Bizweb.resizeImage(product.featured_image, "large");
-				if(featured_image == null){
-					featured_image = 'https://bizweb.dktcdn.net/thumb/grande/assets/themes_support/noimage.gif';
-				}
-				// Reset current link quickview and button navigate in Quickview
-				setButtonNavQuickview();
-				if(featured_image != null){
-					quickview.find(".view_full_size img").attr("src",featured_image);
-				}
-
-
-				if(product.price < 1 && product.variants.length < 2){
-					quickview.find(".price").html('Liên hệ');
-					quickview.find("del").html('');
-					quickview.find("#quick-view-product form").hide();
-
-					quickview.find(".prices").html('<span class="price product-price">Liên hệ</span>');
-
-					quickview.find(".add_to_cart_detail span").html('Liên hệ');
-
-				}
-				else{
-					quickview.find("#quick-view-product form").show();
-
-					quickview.find(".price").html(Bizweb.formatMoney(product.price, "{{amount_no_decimals_with_comma_separator}}₫" ));
-
-																	 }
-																	 quickview.find(".product-item").attr("id", "product-" + product.id);
-												  quickview.find(".qv-link").attr("href",product.url);
-					quickview.find(".variants").attr("id", "product-actions-" + product.id);
-					quickview.find(".variants select").attr("id", "product-select-" + product.id);
-
-					quickview.find(".qwp-name").html('<a class="text2line" href="'+ product.url +'" title="'+product.name+'">'+product.name +'</a>');
-					quickview.find(".reviews_qv .text_revi").html('<a href="'+ product.url +'" title="Đánh giá '+product.name+'"><i class="fa fa-edit"></i>&nbsp;Đánh giá</a>');
-
-					if(product.vendor){
-						quickview.find(".vend-qv .vendor_").append(product.vendor);
-					}else{
-						quickview.find(".vend-qv .vendor_").append("<span>Đang cập nhật</span>");
-					}
-					if(product.variants[0].sku){
-						quickview.find(".vend-qv .sku_").append(product.variants[0].sku);
-					}else{
-						quickview.find(".vend-qv .sku_").append("<span>Đang cập nhật</span>");
-					}
-					if(product.available){
-						if (product.variants[0].inventory_management == 'bizweb') {
-							quickview.find(".vend-qv .soluong").html('Còn hàng');
-						}else{
-							quickview.find(".vend-qv .soluong").html('Còn hàng');
-						}
-						$('.soluong1').show();
-					}else {
-						quickview.find(".vend-qv .soluong").html('Hết hàng');
-						$('.soluong1').hide();
-					}
+        //                 if(product.summary != null && product.summary !=""){
+        //                     var productdes = product.summary;
+        //                 }
+        //                 else{
+        //                     quickview.find(".rte").html('Thông tin sản phẩm đang cập nhật');
+        //                 }
+        //                 var featured_image = Bizweb.resizeImage(product.featured_image, "large");
+        //                 if(featured_image == null){
+        //                     featured_image = 'https://bizweb.dktcdn.net/thumb/grande/assets/themes_support/noimage.gif';
+        //                 }
+        //                 // Reset current link quickview and button navigate in Quickview
+        //                 setButtonNavQuickview();
+        //                 if(featured_image != null){
+        //                     quickview.find(".view_full_size img").attr("src",featured_image);
+        //                 }
 
 
+        //                 if(product.price < 1 && product.variants.length < 2){
+        //                     quickview.find(".price").html('Liên hệ');
+        //                     quickview.find("del").html('');
+        //                     quickview.find("#quick-view-product form").hide();
 
-					quickview.find(".product-description .rte").html(productdes);
-					quickview.find(".view-more").attr('href',product.url);
+        //                     quickview.find(".prices").html('<span class="price product-price">Liên hệ</span>');
 
-					if (product.compare_at_price_max > product.price) {
+        //                     quickview.find(".add_to_cart_detail span").html('Liên hệ');
 
-						quickview.find(".old-price").html(Bizweb.formatMoney(product.compare_at_price_max, "{{amount_no_decimals_with_comma_separator}}₫" )).show();
+        //                 }
+        //                 else{
+        //                     quickview.find("#quick-view-product form").show();
 
-																			 quickview.find(".price").addClass("sale-price")
-														  }
-														  else {
-														  quickview.find(".old-price").html("");
-						quickview.find(".price").removeClass("sale-price")
-					}
-					if (!product.available) {
+        //                     quickview.find(".price").html(Bizweb.formatMoney(product.price, "{{amount_no_decimals_with_comma_separator}}₫" ));
 
-						$(".quick-view-product form").show();
-						$(".quick-view-product .quantity_wanted_p").show();
-						quickViewVariantsSwatch(product, quickview);
+        //                                                                     }
+        //                                                                     quickview.find(".product-item").attr("id", "product-" + product.id);
+        //                                                 quickview.find(".qv-link").attr("href",product.url);
+        //                     quickview.find(".variants").attr("id", "product-actions-" + product.id);
+        //                     quickview.find(".variants select").attr("id", "product-select-" + product.id);
 
-						if(product.price < 1){
-							$('#quick-view-product form').hide();
-						}else{
-							$('#quick-view-product form').show();
-						}
-						$(".soluong_qv").hide();
-						$('.soluong1').hide();
-						quickview.find(".add_to_cart_detail").text("Hết hàng").addClass("disabled").attr("disabled", "disabled");
-						if(product.variants.length > 1){
+        //                     quickview.find(".qwp-name").html('<a class="text2line" href="'+ product.url +'" title="'+product.name+'">'+product.name +'</a>');
+        //                     quickview.find(".reviews_qv .text_revi").html('<a href="'+ product.url +'" title="Đánh giá '+product.name+'"><i class="fa fa-edit"></i>&nbsp;Đánh giá</a>');
 
-							quickview.find("select, .dec, .inc, .variants label").show();
+        //                     if(product.vendor){
+        //                         quickview.find(".vend-qv .vendor_").append(product.vendor);
+        //                     }else{
+        //                         quickview.find(".vend-qv .vendor_").append("<span>Đang cập nhật</span>");
+        //                     }
+        //                     if(product.variants[0].sku){
+        //                         quickview.find(".vend-qv .sku_").append(product.variants[0].sku);
+        //                     }else{
+        //                         quickview.find(".vend-qv .sku_").append("<span>Đang cập nhật</span>");
+        //                     }
+        //                     if(product.available){
+        //                         if (product.variants[0].inventory_management == 'bizweb') {
+        //                             quickview.find(".vend-qv .soluong").html('Còn hàng');
+        //                         }else{
+        //                             quickview.find(".vend-qv .soluong").html('Còn hàng');
+        //                         }
+        //                         $('.soluong1').show();
+        //                     }else {
+        //                         quickview.find(".vend-qv .soluong").html('Hết hàng');
+        //                         $('.soluong1').hide();
+        //                     }
 
 
 
-						}else{
-							quickview.find("select, .dec, .inc, .variants label").hide();
-						}
+        //                     quickview.find(".product-description .rte").html(productdes);
+        //                     quickview.find(".view-more").attr('href',product.url);
 
-					}
-					else {
-						quickViewVariantsSwatch(product, quickview);
-						$(".quick-view-product .quantity_wanted_p").show();
-						$('.soluong1').show();
-						if(product.variants.length > 1){
-							$('#quick-view-product form').show();
-						}else{
-							if(product.price < 1){
-								$('#quick-view-product form').hide();
-							}else{
-								$('#quick-view-product form').show();
-							}
-						}
-					}
+        //                     if (product.compare_at_price_max > product.price) {
 
-					quickview.find('.more_info_block .page-product-heading li:first, .more_info_block .tab-content section:first').addClass('active');
+        //                         quickview.find(".old-price").html(Bizweb.formatMoney(product.compare_at_price_max, "{{amount_no_decimals_with_comma_separator}}₫" )).show();
 
-					//$("#quick-view-product").modal();
+        //                                                                             quickview.find(".price").addClass("sale-price")
+        //                                                         }
+        //                                                         else {
+        //                                                         quickview.find(".old-price").html("");
+        //                         quickview.find(".price").removeClass("sale-price")
+        //                     }
+        //                     if (!product.available) {
 
-					$(".view_scroll_spacer").removeClass("d-none");
+        //                         $(".quick-view-product form").show();
+        //                         $(".quick-view-product .quantity_wanted_p").show();
+        //                         quickViewVariantsSwatch(product, quickview);
 
+        //                         if(product.price < 1){
+        //                             $('#quick-view-product form').hide();
+        //                         }else{
+        //                             $('#quick-view-product form').show();
+        //                         }
+        //                         $(".soluong_qv").hide();
+        //                         $('.soluong1').hide();
+        //                         quickview.find(".add_to_cart_detail").text("Hết hàng").addClass("disabled").attr("disabled", "disabled");
+        //                         if(product.variants.length > 1){
 
-					loadQuickViewSlider(product, quickview);
-
-					// Action
-					setTimeout(function(){
-						var thumbLargeimg = $('.view_full_size .img-product #product-featured-image-quickview').attr('src');
-						var thumMedium = $('#thumbs_list_quickview .owl-item li').find('img').attr('src');
-						if (thumbLargeimg == thumMedium) {
-							$( "#thumbs_list_quickview .owl-item li" ).first().addClass( "active" );
-						}
-					},2000);
-
-					//initQuickviewAddToCart();
-
-					$(".quick-view").fadeIn(500);
-					if ($(".quick-view .total-price").length > 0) {
-						$(".quick-view input[name=quantity]").on("change", updatePricingQuickView)
-					}
-					updatePricingQuickView();
-					// Setup listeners to add/subtract from the input
-					$(".js-qty__adjust").on("click", function() {
-						var el = $(this),
-							id = el.data("id"),
-							qtySelector = el.siblings(".js-qty__num"),
-							qty = parseInt(qtySelector.val().replace(/\D/g, ''));
-
-						var qty = validateQty(qty);
-
-						// Add or subtract from the current quantity
-						if (el.hasClass("js-qty__adjust--plus")) {
-							qty = qty + 1;
-						} else {
-							qty = qty - 1;
-							if (qty <= 1) qty = 1;
-						}
-
-						// Update the input's number
-						qtySelector.val(qty);
-						updatePricingQuickView();
-					});
-					$(".js-qty__num").on("change", function() {
-						updatePricingQuickView();
-					});
-				});
+        //                             quickview.find("select, .dec, .inc, .variants label").show();
 
 
 
-				var numInput = document.querySelector('.quantity_wanted_p input');
-				numInput.addEventListener('input', function(){
-					// Let's match only digits.
-					var num = this.value.match(/^\d+$/);
-					if (num === null) {
-						// If we have no match, value will be empty.
-						this.value = "";
-					}
-					if (num ==0) {
-						// If we have no match, value will be empty.
-						this.value = 1;
-					}
-				}, false)
+        //                         }else{
+        //                             quickview.find("select, .dec, .inc, .variants label").hide();
+        //                         }
 
-				return false;
-			}
-							  });
+        //                     }
+        //                     else {
+        //                         quickViewVariantsSwatch(product, quickview);
+        //                         $(".quick-view-product .quantity_wanted_p").show();
+        //                         $('.soluong1').show();
+        //                         if(product.variants.length > 1){
+        //                             $('#quick-view-product form').show();
+        //                         }else{
+        //                             if(product.price < 1){
+        //                                 $('#quick-view-product form').hide();
+        //                             }else{
+        //                                 $('#quick-view-product form').show();
+        //                             }
+        //                         }
+        //                     }
+
+        //                     quickview.find('.more_info_block .page-product-heading li:first, .more_info_block .tab-content section:first').addClass('active');
+
+        //                     //$("#quick-view-product").modal();
+
+        //                     $(".view_scroll_spacer").removeClass("d-none");
 
 
-		}
+        //                     loadQuickViewSlider(product, quickview);
+
+        //                     // Action
+        //                     setTimeout(function(){
+        //                         var thumbLargeimg = $('.view_full_size .img-product #product-featured-image-quickview').attr('src');
+        //                         var thumMedium = $('#thumbs_list_quickview .owl-item li').find('img').attr('src');
+        //                         if (thumbLargeimg == thumMedium) {
+        //                             $( "#thumbs_list_quickview .owl-item li" ).first().addClass( "active" );
+        //                         }
+        //                     },2000);
+
+        //                     //initQuickviewAddToCart();
+
+        //                     $(".quick-view").fadeIn(500);
+        //                     if ($(".quick-view .total-price").length > 0) {
+        //                         $(".quick-view input[name=quantity]").on("change", updatePricingQuickView)
+        //                     }
+        //                     updatePricingQuickView();
+        //                     // Setup listeners to add/subtract from the input
+        //                     $(".js-qty__adjust").on("click", function() {
+        //                         var el = $(this),
+        //                             id = el.data("id"),
+        //                             qtySelector = el.siblings(".js-qty__num"),
+        //                             qty = parseInt(qtySelector.val().replace(/\D/g, ''));
+
+        //                         var qty = validateQty(qty);
+
+        //                         // Add or subtract from the current quantity
+        //                         if (el.hasClass("js-qty__adjust--plus")) {
+        //                             qty = qty + 1;
+        //                         } else {
+        //                             qty = qty - 1;
+        //                             if (qty <= 1) qty = 1;
+        //                         }
+
+        //                         // Update the input's number
+        //                         qtySelector.val(qty);
+        //                         updatePricingQuickView();
+        //                     });
+        //                     $(".js-qty__num").on("change", function() {
+        //                         updatePricingQuickView();
+        //                     });
+        //                 });
+
+
+
+        //                 var numInput = document.querySelector('.quantity_wanted_p input');
+        //                 numInput.addEventListener('input', function(){
+        //                     // Let's match only digits.
+        //                     var num = this.value.match(/^\d+$/);
+        //                     if (num === null) {
+        //                         // If we have no match, value will be empty.
+        //                         this.value = "";
+        //                     }
+        //                     if (num ==0) {
+        //                         // If we have no match, value will be empty.
+        //                         this.value = 1;
+        //                     }
+        //                 }, false)
+
+        //                 return false;
+        //             }
+        //                             });
+		// }
 
 		function loadQuickViewSlider(n, r) {
 			productImage();

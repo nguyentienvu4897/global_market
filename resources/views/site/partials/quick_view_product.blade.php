@@ -63,6 +63,7 @@
                 </span>
                 <div class="form_product_content">
                 <div class="count_btn_style quantity_wanted_p">
+                    @if (!$product->type)
                     <div class=" soluong1 clearfix">
                         <div class="input_number_product">
                             <a class="btn_num num_1 button button_qty" onclick="var result = document.getElementById('quantity-detail'); var qtyqv = result.value; if( !isNaN( qtyqv ) &amp;&amp; qtyqv > 1 ) result.value--;return false;">-</a>
@@ -70,10 +71,17 @@
                             <a class="btn_num num_2 button button_qty" onclick="var result = document.getElementById('quantity-detail'); var qtyqv = result.value; if( !isNaN( qtyqv )) result.value++;return false;">+</a>
                         </div>
                     </div>
+                    @endif
                     <div class="button_actions clearfix">
+                        @if (!$product->type)
                         <button type="button" class="btn_cool btn btn_base fix_add_to_cart ajax_addtocart btn_add_cart btn-cart" ng-click="addToCart({{ $product->id }}, quantity_quickview)">
                         <span class="btn-content text_1">Thêm vào giỏ hàng</span>
                         </button>
+                        @else
+                        <button type="button" class="btn_cool btn btn_base fix_add_to_cart ajax_addtocart btn_add_cart btn-cart" onclick="window.open('{{ $product->type ? ($product->short_link ?? $product->aff_link) : route('front.show-product-detail', $product->slug) }}', '_blank')">
+                        <span class="btn-content text_1">Mua hàng</span>
+                        </button>
+                        @endif
                     </div>
                 </div>
                 </div>
