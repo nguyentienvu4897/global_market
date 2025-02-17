@@ -33,7 +33,7 @@ class ProductStoreRequest extends BaseRequest
             'body' => 'nullable',
             'base_price' => 'nullable|integer|min:' . $this->input('price'),
             'price' => 'nullable|integer',
-            'revenue_price' => 'nullable|integer|max:' . $this->input('price'),
+            'revenue_price' => 'nullable|numeric|max:' . $this->input('price'),
             'revenue_percent_5' => 'nullable|numeric|min:0|max:100',
             'revenue_percent_4' => 'nullable|numeric|min:0|max:100',
             'revenue_percent_3' => 'nullable|numeric|min:0|max:100',
