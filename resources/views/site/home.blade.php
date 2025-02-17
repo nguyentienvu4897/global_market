@@ -81,6 +81,7 @@
         </section> --}}
     </div>
 
+    @if ($categorySpecialFlashsale)
     <section class="section_flash_sale container">
         <div class="box-deal"
             style="background-image:url({{getBanner($categorySpecialFlashsale)}});">
@@ -154,6 +155,7 @@
             }
         });
     </script>
+    @endif
 
     {{-- <section class="section_sportswear">
         <div class="container">

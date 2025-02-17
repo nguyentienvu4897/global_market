@@ -304,7 +304,7 @@
                             src="/site/images/icon_lien_he.png?1729657650563"
                             alt="Hotline" />
                         <div class="txt_hotline">
-                            <a href="tel:{{$config->hotline}}" title="{{$config->hotline}}">
+                            <a href="tel:{{str_replace(' ', '', $config->hotline)}}" title="{{$config->hotline}}">
                                 {{$config->hotline}}
                             </a>
                             <span>Giao hàng siêu tốc</span>

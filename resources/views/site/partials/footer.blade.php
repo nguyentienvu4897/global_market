@@ -55,7 +55,7 @@
                         </div>
                         <div class="content-contact clearfix">
                             <span class="list_footer">
-                                <b>Điện thoại: </b><a title="{{ $config->hotline }}" href="tel:{{ $config->hotline }}">{{ $config->hotline }}</a>
+                                <b>Điện thoại: </b><a title="{{ $config->hotline }}" href="tel:{{ str_replace(' ', '', $config->hotline) }}">{{ $config->hotline }}</a>
                             </span>
                         </div>
                         <div class="content-contact clearfix">
