@@ -31,7 +31,7 @@ class ProductUpdateRequest extends BaseRequest
             'short_des' => 'nullable',
             'intro' => 'nullable',
             'body' => 'nullable',
-            'base_price' => 'nullable|integer|min:' . $this->input('price'),
+            'base_price' => 'nullable|integer',
             'price' => 'nullable|integer',
             'status' =>'required|in:0,1',
             'image' => 'nullable|file|mimes:jpg,jpeg,png|max:3000',
@@ -62,6 +62,10 @@ class ProductUpdateRequest extends BaseRequest
             $rules['origin_link'] = 'required|url';
         }
 
+        if($this->input('base_price') > 0) {
+            $rules['base_price'] = 'nullable|integer|min:' . $this->input('price');
+        }
+
         $url_custom = $this->get('url_custom');
         if($url_custom) {
             $rules['url_custom']  = 'unique:products,url_custom,'.$this->route('id').",id";
@@ -84,6 +88,7 @@ class ProductUpdateRequest extends BaseRequest
             'aff_link.url' => 'Link affiliate không hợp lệ',
             'short_link.url' => 'Link rút gọn không hợp lệ',
             'origin_link.url' => 'Link gốc không hợp lệ',
+            'base_price.min' => 'Giá trước giảm không được nhỏ hơn giá bán',
         ];
     }
 }
