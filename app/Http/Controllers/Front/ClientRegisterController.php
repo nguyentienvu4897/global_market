@@ -331,16 +331,19 @@ class ClientRegisterController extends Controller
     public function userRevenue() {
         $user = Auth::guard('client')->user();
         $revenue_amount = OrderRevenueDetail::where('user_id', $user->id)->whereNotIn('status', [OrderRevenueDetail::STATUS_CANCEL])->sum('revenue_amount');
-        $quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where('status', OrderRevenueDetail::STATUS_QUYET_TOAN)
-        ->orWhere(function($query) {
-            $query->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)
-            ->where('settlement_amount', '>', 0);
-        })
-        ->sum('settlement_amount');
-        $waiting_quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)
-        ->orWhere(function($query) {
-            $query->where('status', OrderRevenueDetail::STATUS_QUYET_TOAN)
-            ->where('settlement_amount', '>', 0);
+        $quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where(function($q) {
+            $q->where('status', OrderRevenueDetail::STATUS_QUYET_TOAN)
+            ->orWhere(function($query) {
+                $query->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)
+                ->where('settlement_amount', '>', 0);
+            });
+        })->sum('settlement_amount');
+        $waiting_quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where(function($q) {
+            $q->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)
+            ->orWhere(function($query) {
+                $query->where('status', OrderRevenueDetail::STATUS_QUYET_TOAN)
+                ->where('settlement_amount', '>', 0);
+            });
         })->sum('revenue_amount') - $quyet_toan_amount;
         return view('site.admin.user_revenue', compact('user', 'revenue_amount', 'quyet_toan_amount', 'waiting_quyet_toan_amount'));
     }
