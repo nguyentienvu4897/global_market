@@ -419,23 +419,27 @@ class ClientRegisterController extends Controller
         $rule = [
             'order_code' => 'required|exists:orders,code',
         ];
-        $order = Order::query()->where('type', Order::TYPE_AFFILIATE)->where('code', $request->order_code)->first();
-        if(!$order) {
-            $rule['order_code'] = 'required|exists:orders,code|boolean';
-        }
 
         $messages = [
             'order_code.required' => 'Mã đơn hàng không được để trống',
             'order_code.exists' => 'Chưa tìm thấy đơn hàng. Vui lòng kiểm tra lại mã đơn hoặc thử lại sau',
             'order_code.boolean' => 'Mã đơn hàng không hợp lệ',
         ];
+        $order = Order::query()->where('type', Order::TYPE_AFFILIATE)->where('code', $request->order_code)->first();
+        if(!isset($order)) {
+            $rule['order_code'] = 'required|exists:orders,code|boolean';
+        }
+        if(isset($order) && (isset($order->customer_email) || $order->customer_email != '')) {
+            $rule['order_code'] = 'required|exists:orders,code|boolean';
+            $messages['order_code.boolean'] = 'Đơn hàng đã được đối soát';
+        }
 
         $validate = Validator::make($request->all(), $rule, $messages);
         if ($validate->fails()) {
             return $this->responseErrors("Thao tác thất bại", $validate->errors());
         }
 
-        $order = Order::query()->where('type', Order::TYPE_AFFILIATE)->where('code', $request->order_code)->first();
+        $order = Order::query()->where('type', Order::TYPE_AFFILIATE)->whereNull('customer_email')->where('code', $request->order_code)->first();
         $current_user = User::query()->with([
             'parent' => function($q) {
                 $q->with([
