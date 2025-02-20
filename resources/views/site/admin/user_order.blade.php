@@ -122,6 +122,7 @@
                 },
                 columns: [
                     {data: 'DT_RowIndex', orderable: false, title: "STT", className: "text-center"},
+                    {data: 'type', title: 'Loại đơn hàng', className: "text-center"},
                     {data: 'code_client', title: 'Mã'},
                     {data: 'total_price', title: 'Tổng tiền'},
                     {

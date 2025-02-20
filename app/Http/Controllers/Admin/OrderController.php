@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\ExcelExports\OrderExcel;
+use App\ExcelImports\OrderImport;
 use App\Model\Admin\Order;
 use Illuminate\Http\Request;
 use App\Model\Admin\Order as ThisModel;
@@ -21,6 +22,7 @@ use App\Model\Admin\OrderRevenueDetail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use App\Model\Common\Customer;
+use Maatwebsite\Excel\Facades\Excel;
 
 class OrderController extends Controller
 {
@@ -43,11 +45,14 @@ class OrderController extends Controller
             ->editColumn('code', function ($object) {
                 return '<a href = "'.route('orders.show', $object->id).'" title = "Xem chi tiết">' . $object->code . '</a>';
             })
+            ->editColumn('type', function ($object) {
+                return $object->type == 0 ? 'Đơn hàng thường' : 'Đơn hàng affiliate';
+            })
             ->editColumn('code_client', function ($object) {
                 return '<a href = "javascript:void(0)" title = "Xem chi tiết" class="show-order-client">' . $object->code . '</a>';
             })
             ->editColumn('created_at', function ($object) {
-                return formatDate($object->created_at);
+                return $object->type == 0 ? formatDate($object->created_at) : formatDate($object->aff_order_at);
             })
             ->addColumn('action', function ($object) {
                 $result = '<div class="btn-group btn-action">
@@ -55,8 +60,10 @@ class OrderController extends Controller
                 <i class = "fa fa-cog"></i>
                 </button>
                 <div class="dropdown-menu">';
-                $result = $result . ' <a href="" title="đổi trạng thái" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Đổi trạng thái</a>';
-                $result = $result . ' <a href="'.route('orders.show', $object->id).'" title="xem chi tiết" class="dropdown-item"><i class="fa fa-angle-right"></i>Xem chi tiết</a>';
+                if ($object->type == 0) {
+                    $result = $result . ' <a href="" title="đổi trạng thái" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Đổi trạng thái</a>';
+                    $result = $result . ' <a href="'.route('orders.show', $object->id).'" title="xem chi tiết" class="dropdown-item"><i class="fa fa-angle-right"></i>Xem chi tiết</a>';
+                }
                 $result = $result . '</div></div>';
                 return $result;
             })
@@ -66,8 +73,10 @@ class OrderController extends Controller
                 <i class = "fa fa-cog"></i>
                 </button>
                 <div class="dropdown-menu">';
-                $result = $result . ' <a href="" title="Hủy đơn hàng" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Hủy đơn hàng</a>';
-                $result = $result . ' <a href="'.route('orders.show', $object->id).'" title="xem chi tiết" class="dropdown-item"><i class="fa fa-angle-right"></i>Xem chi tiết</a>';
+                if ($object->type == 0) {
+                    $result = $result . ' <a href="" title="Hủy đơn hàng" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Hủy đơn hàng</a>';
+                    $result = $result . ' <a href="'.route('orders.show', $object->id).'" title="xem chi tiết" class="dropdown-item"><i class="fa fa-angle-right"></i>Xem chi tiết</a>';
+                }
                 $result = $result . '</div></div>';
                 return $result;
             })
@@ -107,7 +116,7 @@ class OrderController extends Controller
     }
 
     public function exportList(Request $request) {
-        $data = Order::searchByFilter($request);
+        $data = Order::searchByFilter($request)->where('type', 0)->values();
         $result['CHI_TIET'] = Order::getTableList($data);
         $result['COLSPAN'] = 8;
         $result['FROM_DATE'] = $request->startDate ? Carbon::parse($request->startDate)->format('d/m/Y') : '';
@@ -117,4 +126,49 @@ class OrderController extends Controller
             ->forData($result)
             ->download('danh_sach_don_hang.xlsx');
     }
+
+    // Import Excel
+	public function importExcel(Request $request) {
+		$validate = Validator::make(
+			$request->all(),
+			[
+                'file' => 'required|file|mimes:xlsx,xls,csv,txt',
+			],
+			[
+				'file.required' => 'Không được để trống',
+				'file.file' => 'Không hợp lệ',
+				'file.mimes' => 'Không hợp lệ',
+			]
+		);
+
+		$json = new stdClass();
+
+        if ($validate->fails()) {
+            $json->success = false;
+            $json->errors = $validate->errors();
+            $json->message = "Import thất bại!";
+            return Response::json($json);
+        }
+        DB::beginTransaction();
+        try {
+			$import = new OrderImport;
+			Excel::import($import, $request->file('file'));
+
+            DB::commit();
+
+            $json->success = true;
+            $json->details = [
+                'import' => $import->getImportCount(),
+                'skip' => $import->getSkipCount(),
+                'invalid_rows' => $import->getInvalidRow(),
+            ];
+            $json->message = "Import thành công!";
+            return Response::json($json);
+        } catch (Exception $e) {
+            DB::rollBack();
+            $json->success = false;
+            $json->message = "Đã có lỗi xảy ra!";
+            return Response::json($json);
+        }
+	}
 }

@@ -308,17 +308,22 @@ class ClientRegisterController extends Controller
             ->addColumn('total_price', function ($object) {
                 return number_format($object->total_price);
             })
+            ->editColumn('type', function ($object) {
+                return $object->type == 0 ? 'Đơn hàng thường' : 'Đơn hàng affiliate';
+            })
             ->editColumn('code_client', function ($object) {
                 return '<a href = "javascript:void(0)" title = "Xem chi tiết" class="show-order-detail" data-href="'.route('front.show-order-detail', $object->id).'">' . $object->code . '</a>';
             })
             ->editColumn('created_at', function ($object) {
-                return date('d/m/Y H:i', strtotime($object->created_at));
+                return $object->type == 0 ? formatDate($object->created_at) : formatDate($object->aff_order_at);
             })
             ->addColumn('action_client', function ($object) {
                 $result = '<div class="btn-group btn-action">';
-                $result = $result . ' <a href="javascript:void(0)" data-href="'.route('front.show-order-detail', $object->id).'" title="xem chi tiết" class="btn btn-info show-order-detail"><i class="fa fa-eye"></i></a>';
-                if ($object->canCancel()) {
-                    $result = $result . ' <a href="javascript:void(0)" title="Hủy đơn hàng" class="btn btn-danger cancel-order" data-href="'.route('front.cancel-order', $object->id).'"><i class="fa fa-trash"></i></a>';
+                if ($object->type == 0) {
+                    $result = $result . ' <a href="javascript:void(0)" data-href="'.route('front.show-order-detail', $object->id).'" title="xem chi tiết" class="btn btn-info show-order-detail"><i class="fa fa-eye"></i></a>';
+                    if ($object->canCancel()) {
+                        $result = $result . ' <a href="javascript:void(0)" title="Hủy đơn hàng" class="btn btn-danger cancel-order" data-href="'.route('front.cancel-order', $object->id).'"><i class="fa fa-trash"></i></a>';
+                    }
                 }
                 $result = $result . '</div>';
                 return $result;
@@ -408,6 +413,135 @@ class ClientRegisterController extends Controller
             }
         }
         return $this->responseSuccess('Đã gửi thông tin rút tiền, vui lòng chờ xác nhận');
+    }
+
+    public function checkOrder(Request $request) {
+        $rule = [
+            'order_code' => 'required|exists:orders,code',
+        ];
+        $order = Order::query()->where('type', Order::TYPE_AFFILIATE)->where('code', $request->order_code)->first();
+        if(!$order) {
+            $rule['order_code'] = 'required|exists:orders,code|boolean';
+        }
+
+        $messages = [
+            'order_code.required' => 'Mã đơn hàng không được để trống',
+            'order_code.exists' => 'Chưa tìm thấy đơn hàng. Vui lòng kiểm tra lại mã đơn hoặc thử lại sau',
+            'order_code.boolean' => 'Mã đơn hàng không hợp lệ',
+        ];
+
+        $validate = Validator::make($request->all(), $rule, $messages);
+        if ($validate->fails()) {
+            return $this->responseErrors("Thao tác thất bại", $validate->errors());
+        }
+
+        $order = Order::query()->where('type', Order::TYPE_AFFILIATE)->where('code', $request->order_code)->first();
+        $current_user = User::query()->with([
+            'parent' => function($q) {
+                $q->with([
+                    'parent' => function($q) {
+                        $q->with([
+                            'parent' => function($q) {
+                                $q->with([
+                                    'parent' => function($q) {
+                                        $q->where('status', 1)->where('type', 10);
+                                    }
+                                ])->where('status', 1)->where('type', 10);
+                            }
+                        ])->where('status', 1)->where('type', 10);
+                    }
+                ])->where('status', 1)->where('type', 10);
+            }
+        ])->where('id', auth()->guard('client')->user()->id)->where('status', 1)->where('type', 10)->first();
+        $config = \App\Model\Admin\Config::where('id',1)->select('revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5')->first();
+
+        if($order) {
+            $revenue_amount_level_1 = $order->total_after_discount * $config->revenue_percent_1 / 100;
+            $revenue_amount_level_2 = $order->total_after_discount * $config->revenue_percent_2 / 100;
+            $revenue_amount_level_3 = $order->total_after_discount * $config->revenue_percent_3 / 100;
+            $revenue_amount_level_4 = $order->total_after_discount * $config->revenue_percent_4 / 100;
+            $revenue_amount_level_5 = $order->total_after_discount * $config->revenue_percent_5 / 100;
+
+            $status = 0;
+            if($order->status == Order::MOI) {
+                $status = OrderRevenueDetail::STATUS_PENDING;
+            } else if($order->status == Order::DUYET) {
+                $status = OrderRevenueDetail::STATUS_PAID;
+            } else if($order->status == Order::THANH_CONG) {
+                $status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+            } else if($order->status == Order::HUY) {
+                $status = OrderRevenueDetail::STATUS_CANCEL;
+            }
+            if($current_user) {
+                $order_revenue_detail = new OrderRevenueDetail();
+                $order_revenue_detail->order_id = $order->id;
+                $order_revenue_detail->order_code = $order->code;
+                $order_revenue_detail->user_id = $current_user->id;
+                $order_revenue_detail->user_email = $current_user->email;
+                $order_revenue_detail->user_level = 5;
+                $order_revenue_detail->status = $status;
+                $order_revenue_detail->revenue_amount = $revenue_amount_level_5;
+                $order_revenue_detail->save();
+            }
+
+            if(isset($current_user->parent)) {
+                $order_revenue_detail = new OrderRevenueDetail();
+                $order_revenue_detail->order_id = $order->id;
+                $order_revenue_detail->order_code = $order->code;
+                $order_revenue_detail->user_id = $current_user->parent->id;
+                $order_revenue_detail->user_email = $current_user->parent->email;
+                $order_revenue_detail->user_level = 4;
+                $order_revenue_detail->status = $status;
+                $order_revenue_detail->revenue_amount = $revenue_amount_level_4;
+                $order_revenue_detail->save();
+            }
+
+            if(isset($current_user->parent) && isset($current_user->parent->parent)) {
+                $order_revenue_detail = new OrderRevenueDetail();
+                $order_revenue_detail->order_id = $order->id;
+                $order_revenue_detail->order_code = $order->code;
+                $order_revenue_detail->user_id = $current_user->parent->parent->id;
+                $order_revenue_detail->user_email = $current_user->parent->parent->email;
+                $order_revenue_detail->user_level = 3;
+                $order_revenue_detail->status = $status;
+                $order_revenue_detail->revenue_amount = $revenue_amount_level_3;
+                $order_revenue_detail->save();
+            }
+
+            if(isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent)) {
+                $order_revenue_detail = new OrderRevenueDetail();
+                $order_revenue_detail->order_id = $order->id;
+                $order_revenue_detail->order_code = $order->code;
+                $order_revenue_detail->user_id = $current_user->parent->parent->parent->id;
+                $order_revenue_detail->user_email = $current_user->parent->parent->parent->email;
+                $order_revenue_detail->user_level = 2;
+                $order_revenue_detail->status = $status;
+                $order_revenue_detail->revenue_amount = $revenue_amount_level_2;
+                $order_revenue_detail->save();
+            }
+
+            if(isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent) && isset($current_user->parent->parent->parent->parent)) {
+                $order_revenue_detail = new OrderRevenueDetail();
+                $order_revenue_detail->order_id = $order->id;
+                $order_revenue_detail->order_code = $order->code;
+                $order_revenue_detail->user_id = $current_user->parent->parent->parent->parent->id;
+                $order_revenue_detail->user_email = $current_user->parent->parent->parent->parent->email;
+                $order_revenue_detail->user_level = 1;
+                $order_revenue_detail->status = $status;
+                $order_revenue_detail->revenue_amount = $revenue_amount_level_1;
+                $order_revenue_detail->save();
+            }
+
+            $order->customer_name = $current_user->name;
+            $order->customer_email = $current_user->email;
+            $order->customer_phone = $current_user->phone_number;
+            $order->save();
+
+            $order->revenue_amount = $revenue_amount_level_5;
+            $order->status_text = getStatus($order->status, Order::STATUSES);
+            return $this->responseSuccess('Đã tìm thấy đơn hàng', $order);
+        }
+        return $this->responseErrors("Thao tác thất bại", "Đơn hàng không tồn tại");
     }
 
     public function userLevel() {

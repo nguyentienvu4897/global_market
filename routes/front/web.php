@@ -20,6 +20,7 @@ Route::group(['namespace' => 'Front'], function () {
             Route::get('/bao-cao-hoa-hong','ClientRegisterController@userRevenue')->name('front.user-revenue');
             Route::get('/bao-cao-hoa-hong/search-data','ClientRegisterController@userRevenueSearchData')->name('front.user-revenue-search-data');
             Route::post('/bao-cao-hoa-hong/withdraw-money','ClientRegisterController@withdrawMoney')->name('front.withdraw-money');
+            Route::post('/bao-cao-hoa-hong/check-order','ClientRegisterController@checkOrder')->name('front.check-order');
             Route::post('/{id}/update', 'ClientRegisterController@updateAccount')->name('front.client-update');
             Route::post('/{id}/change-password', 'ClientRegisterController@changePassword')->name('front.client-change-password');
         });

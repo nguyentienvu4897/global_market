@@ -69,7 +69,7 @@ Quản lý đơn hàng
             </div>
             <!-- /.modal-dialog -->
         </div>
-
+        @include('partial.modal.importExcel')
     </div>
 
 
@@ -89,6 +89,7 @@ Quản lý đơn hàng
         },
         columns: [
             {data: 'DT_RowIndex', orderable: false, title: "STT", className: "text-center"},
+            {data: 'type', title: 'Loại đơn hàng', className: "text-center"},
             {data: 'code', title: 'Mã'},
             {data: 'customer_name', title: 'Tên khách hàng'},
             {data: 'customer_phone', title: 'SĐT khách hàng'},
@@ -109,9 +110,11 @@ Quản lý đơn hàng
             {data: 'customer_name', search_type: "text", placeholder: "Tên khách hàng"},
             {data: 'customer_phone', search_type: "text", placeholder: "SĐT khách hàng"},
             {data: 'status', search_type: "select", placeholder: "Trạng thái", column_data: @json(\App\Model\Admin\Order::STATUSES)},
+            {data: 'type', search_type: "select", placeholder: "Loại đơn hàng", column_data: @json(\App\Model\Admin\Order::TYPES)},
         ],
         search_by_time: true,
         export_link: "{!! route('orders.exportList') !!}",
+        import_link_with_params: true,
     }).datatable;
 
     createReviewCallback = (response) => {
@@ -170,7 +173,55 @@ Quản lý đơn hàng
         })
     })
 
+    app.controller('ImportExcel', function ($scope) {
+        $scope.sample = "";
+        $scope.note = "Import file excel được xuất từ phần mềm accesstrade";
+        $scope.loading = false;
+        $scope.import = function() {
+            var url = "{!! route('orders.importExcel') !!}";
+            var data = new FormData(document.getElementById('import-excel-form'));
+            $scope.loading = true;
+            $scope.errors = null;
+            $scope.import_details = null;
+            $.ajax({
+                type: 'POST',
+                url: url,
+                processData: false,
+                contentType: false,
+                headers: {
+                    'X-CSRF-TOKEN': CSRF_TOKEN
+                },
+                data: data,
+                success: function(response) {
+                    if (response.success) {
+                        toastr.success(response.message);
+                        $scope.import_details = response.details;
+                        datatable.ajax.reload();
+                        $scope.loading = false;
+                        // $('#import-excel').modal('hide');
+                    } else {
+                        toastr.warning(response.message);
+                        $scope.errors = response.errors;
+                        $scope.loading = false;
+                    }
+                },
+                error: function(error) {
+                    toastr.error('Đã có lỗi xảy ra');
+                },
+                complete: function() {
+                    $scope.loading = false;
+                    $scope.$applyAsync();
+                }
+            });
+        }
 
+        $('#import-excel').on('hidden.bs.modal', function (e) {
+            document.getElementById('import-excel-form').reset();
+            $scope.errors = null;
+            $scope.import_details = null;
+            $scope.$applyAsync();
+        })
+    });
 </script>
 @include('partial.confirm')
 @endsection

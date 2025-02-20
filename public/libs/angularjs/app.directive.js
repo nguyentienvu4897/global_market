@@ -5,6 +5,11 @@ app
             return new Date(items);
         };
     })
+    .filter('date_time', function() {
+        return function(date) {
+            return moment(date).format('DD/MM/YYYY HH:mm');
+        }
+    })
     .filter('my_number', function () {
         return function (x) {
             if (!x) return 0;

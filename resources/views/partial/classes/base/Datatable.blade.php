@@ -98,7 +98,7 @@
             })
 
             if (options.search_by_time || has_column_search || options.create_link || options.act) {
-                html += `<div class="col-md-3 mb-3">`;
+                html += `<div class="col-md-4 mb-3">`;
                 if (options.search_by_time || has_column_search) {
                     html += `<button class="btn btn-primary search-button mr-1"><i class="fa fa-search"></i></button>
                     <button class="btn btn-success refresh-button mr-1"><i class="fas fa-sync"></i></button>`;
@@ -115,7 +115,10 @@
                     html += `<a class="btn btn-primary print-button mr-1" href="${options.print_link}"> <i class ="fa fa-print"></i> In</a>`;
                 }
                 if (options.export_link) {
-                    html += `<a class="btn btn-primary export-button mr-1" id="${options.subject !== undefined ? options.subject : ''}" href="${options.export_link}"><i class="fa fa-file-excel-o"></i> Xuất excel</a>`;
+                    html += `<a class="btn btn-primary export-button mr-1" id="${options.subject !== undefined ? options.subject : ''}" href="${options.export_link}"><i class="fa fa-file"></i> Xuất excel</a>`;
+                }
+                if (options.import_link_with_params) {
+                    html += `<a href="#import-excel" data-toggle="modal" class="btn btn-info"><i class="fa fa-upload"></i> Import excel</a>`;
                 }
                 if (options.create_modal_2) {
                     html += `<a class="btn btn-info create-modal" href="javascript:void(0)">
@@ -126,7 +129,7 @@
                     html += `
                     <button class="btn btn-info dropdown-toggle btn-remove-product" type="button"
                     data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Thao tác
-                     <div class="dropdown-menu"><a href="" title="" class="dropdown-item act-remove-product" onclick="removeProductArr();">Xóa</a></div>
+                    <div class="dropdown-menu"><a href="" title="" class="dropdown-item act-remove-product" onclick="removeProductArr();">Xóa</a></div>
                     </button>`;
                 }
                 html += `</div>`;

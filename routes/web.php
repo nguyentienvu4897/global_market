@@ -303,6 +303,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/{id}/show', 'Admin\OrderController@show')->name('orders.show');
             Route::post('/update-status','Admin\OrderController@updateStatus')->name('orders.update.status');
             Route::get('/exportList','Admin\OrderController@exportList')->name('orders.exportList');
+            Route::post('/importExcel', 'Admin\OrderController@importExcel')->name('orders.importExcel');
         });
 
         // banner trang chủ

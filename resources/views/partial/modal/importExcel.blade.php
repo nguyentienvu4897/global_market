@@ -17,10 +17,18 @@
 				</div>
 
 				<div class="modal-body">
+                    <div class="row" ng-if="note">
+                        <div class="col-md-12" style="display: flex; gap: 0px; font-size: 14px; font-style: italic; margin-bottom: 20px;">
+                            <div style="width: 100px;"><span style="color: red;">*</span> Lưu ý: </div>
+                            <div class="font-style: italic;">
+                                <% note %>
+                            </div>
+                        </div>
+                    </div>
 					<div class="form-group">
 						<label class="form-label">Chọn file</label>
 						<span class="text-danger">(*)</span>
-						<a href="<% sample %>" download>(File mẫu)</a>
+						<a ng-if="sample" href="<% sample %>" download>(File mẫu)</a>
 						<input class="form-control" type="file" name="file" id="excel-file">
 						<div ng-if="import_details" class="mt-1">
 							<div><b><u>Chi tiết:</u></b></div>

@@ -18,7 +18,7 @@ class OrderRevenueDetail extends Model
     public const STATUSES = [
         [
             'id' => self::STATUS_PAID,
-            'name' => 'Đã xử lý',
+            'name' => 'Đang xử lý',
             'type' => 'success'
         ],
         [

@@ -13,33 +13,50 @@ class Order extends Model
 
     protected $appends = ['total_price'];
 
+    // Trạng thái đơn hàng
     public const MOI = 10;
     public const DUYET = 20;
     public const THANH_CONG = 30;
     public const HUY = 40;
 
+    // Loại đơn hàng
+    public const TYPE_AFFILIATE = 1;
+    public const TYPE_NORMAL = 0;
+
+    // Phương thức thanh toán
     public const PAYMENT_METHODS = [1=> 'Thanh toán khi nhận hàng - COD', 0 => 'Chuyển khoản ngân hàng'];
 
     public const STATUSES = [
         [
             'id' => self::MOI,
-            'name' => 'Chờ duyệt',
+            'name' => 'Chờ xử lý',
             'type' => 'warning'
         ],
         [
             'id' => self::DUYET,
-            'name' => 'Đã duyệt',
+            'name' => 'Tạm duyệt',
             'type' => 'success'
         ],
-         [
+        [
             'id' => self::THANH_CONG,
             'name' => 'Thành công',
             'type' => 'success'
         ],
-         [
+        [
             'id' => self::HUY,
             'name' => 'Hủy',
             'type' => 'danger'
+        ],
+    ];
+
+    public const TYPES = [
+        [
+            'id' => 0,
+            'name' => 'Đơn hàng thường',
+        ],
+        [
+            'id' => 1,
+            'name' => 'Đơn hàng affiliate',
         ],
     ];
 
@@ -85,6 +102,10 @@ class Order extends Model
 
         if (!empty($request->status)) {
             $result = $result->where('status', $request->status);
+        }
+
+        if (!empty($request->type) || (isset($request->type) && $request->type == 0)) {
+            $result = $result->where('type', $request->type);
         }
 
         if (!empty($request->customer_name)) {
