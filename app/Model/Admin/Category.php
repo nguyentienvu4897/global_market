@@ -128,22 +128,22 @@ class Category extends BaseModel
         $result = array_map(function ($value) {
             if ($value['level'] == 1) {
                 $parent_origin = self::where('id', $value['parent_id'])->first();
-                $value['name'] = ' |-- ' . $value['name'] . ' (' . $parent_origin->name . ')';
+                $value['name'] = ' |-- ' . $value['name'] . ' ' . ($parent_origin ? '(' . $parent_origin->name . ')' : '');
             }
             if ($value['level'] == 2) {
                 $parent = self::where('id', $value['parent_id'])->first();
                 $parent_origin = self::where('id', $parent ? $parent->parent_id : null)->first();
-                $value['name'] = ' |-- |-- ' . $value['name'] . ' (' . $parent_origin->name . ')';
+                $value['name'] = ' |-- |-- ' . $value['name'] . ' ' . ($parent_origin ? '(' . $parent_origin->name . ')' : '');
             }
             if ($value['level'] == 3) {
                 $parent = self::where('id', $value['parent_id'])->first();
                 $parent_origin = self::where('id', $parent && $parent->parent ? $parent->parent->parent_id : null)->first();
-                $value['name'] = ' |-- |-- |-- ' . $value['name'] . ' (' . $parent_origin->name . ')';
+                $value['name'] = ' |-- |-- |-- ' . $value['name'] . ' ' . ($parent_origin ? '(' . $parent_origin->name . ')' : '');
             }
             if ($value['level'] == 4) {
                 $parent = self::where('id', $value['parent_id'])->first();
                 $parent_origin = self::where('id', $parent && $parent->parent && $parent->parent->parent ? $parent->parent->parent->parent_id : null)->first();
-                $value['name'] = ' |-- |-- |-- | --' . $value['name'] . ' (' . $parent_origin->name . ')';
+                $value['name'] = ' |-- |-- |-- | --' . $value['name'] . ' ' . ($parent_origin ? '(' . $parent_origin->name . ')' : '');
             }
             return $value;
         }, $all);
