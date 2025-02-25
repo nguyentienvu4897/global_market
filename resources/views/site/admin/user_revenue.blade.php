@@ -129,6 +129,60 @@
         #modal-check-order .modal-body .info-item span .badge {
             color: #fff;
         }
+        #modal-otp .otp-group {
+            margin: 20px 0;
+            text-align: center;
+        }
+        #modal-otp .otp-group .otp-inputs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        #modal-otp .otp-group .otp-inputs input {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 20px;
+            border: 1px solid #636363;
+            border-radius: 5px;
+            padding: 0 !important;
+        }
+
+        #modal-otp .countdown-text {
+            text-align: center;
+            position: relative;
+            padding-top: 26px;
+            margin-bottom: 60px;
+        }
+        #modal-otp .countdown-text span{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 18px;
+            font-weight: 600;
+            background-color: #6baedb4a;
+            border: 1px solid #0974ba;
+            padding: 6px;
+            border-radius: 5px;
+            width: 22%;
+        }
+        #modal-otp .btn-resend-otp {
+            background-color: #6baedb;
+            border: 1px solid #0974ba;
+            padding: 0 16px;
+            border-radius: 5px;
+            color: #fff;
+        }
+        #modal-otp .btn-submit-otp {
+            background-color: #28a745 !important;
+            color: #fff !important;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 5px !important;
+            float: right;
+        }
     </style>
 
 @endsection
@@ -214,7 +268,10 @@
                             </div>
                             <div class="row" style="margin-top: 20px;">
                                 <div class="col-md-12 text-right">
-                                    <button class="btn btn-success" ng-click="withdrawMoney()" ng-disabled="isLoading">Xác nhận rút tiền</button>
+                                    <button class="btn btn-success" ng-click="withdrawMoney()" ng-disabled="isLoading">
+                                        <span ng-if="!isLoading">Xác nhận rút tiền</span>
+                                        <span ng-if="isLoading"><i class="fa fa-spinner fa-spin"></i> Đang xử lý...</span>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -258,9 +315,56 @@
                             </div>
                             <div class="row" style="margin-top: 20px;">
                                 <div class="col-md-12 text-right">
-                                    <button class="btn btn-success" ng-click="submitCheckOrder()" ng-disabled="isLoading">Tra soát</button>
+                                    <button class="btn btn-success" ng-click="submitCheckOrder()" ng-disabled="isLoading">
+                                        <span ng-if="!isLoading">Tra soát</span>
+                                        <span ng-if="isLoading"><i class="fa fa-spinner fa-spin"></i> Đang xử lý...</span>
+                                    </button>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal" id="modal-otp">
+                <div class="modal-dialog modal-md">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Nhập mã OTP</h5>
+                        </div>
+                        <div class="modal-body">
+                            <div class="row">
+                                <div class="col-md-12" style="font-size: 14px; font-style: italic; margin-bottom: 20px;">
+                                    <div style="width: 100px;"><span style="color: red;">*</span> Lưu ý: </div>
+                                    <div>
+                                        <span>- Mã OTP đã được gửi đến email <span style="color: #0974ba;"><% currentUser.email %></span></span><br>
+                                        <span>- Vui lòng kiểm tra email và nhập mã OTP để xác nhận</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="otp-group text-center">
+                                <div class="otp-inputs">
+                                    <input type="text" maxlength="1"
+                                        ng-repeat="digit in otp track by $index"
+                                        ng-model="otp[$index]"
+                                        ng-keyup="moveToNext($event, $index)"
+                                        ng-class="{'is-invalid': errors && errors.otp}">
+                                </div>
+                                <div class="invalid-feedback d-block error" role="alert">
+                                    <span ng-if="errors && errors.otp">
+                                        <% errors.otp %>
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="countdown-text text-center"><span><% minutes %> : <% seconds < 10 ? '0' + seconds : seconds %></span></p>
+                            <button class="btn btn-primary btn-resend-otp" ng-click="resendOTP()" ng-disabled="!canResend">
+                                <span ng-if="!isLoadingResend">Gửi lại mã</span>
+                                <span ng-if="isLoadingResend"><i class="fa fa-spinner fa-spin"></i> Đang gửi...</span>
+                            </button>
+                            <button class="btn btn-success btn-submit-otp" ng-click="submitOTP()" ng-disabled="isLoading">
+                                <span ng-if="!isLoading">Xác nhận</span>
+                                <span ng-if="isLoading"><i class="fa fa-spinner fa-spin"></i> Đang xử lý...</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -285,7 +389,7 @@
     <script src="{{ asset('libs/angularjs/app.directive.js') }}"></script>
 
     <script>
-        app.controller('UserRevenueController', function($scope) {
+        app.controller('UserRevenueController', function($scope, $interval) {
 
             let datatable = new DATATABLE('table-list', {
                 ajax: {
@@ -347,13 +451,17 @@
 
             $scope.errors = {};
 
+            $scope.otp = ["", "", "", "", "", ""];
+            $scope.canResend = false;
+            $scope.isLoadingResend = false;
+
             $scope.withdrawMoney = function() {
                 let data = $scope.form;
                 data.revenueAmount = $scope.revenueAmount;
                 data.waitingQuyetToanAmount = $scope.waitingQuyetToanAmount;
                 $scope.isLoading = true;
                 $.ajax({
-                    url: '{{ route('front.withdraw-money') }}',
+                    url: '{{ route('front.send-otp') }}',
                     type: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -361,8 +469,26 @@
                     data: data,
                     success: function(response) {
                         if (response.success) {
-                            toastr.success(response.message);
+                            $('#modal-otp').modal('show');
                             $('#modal-withdraw-money').modal('hide');
+                            $scope.minutes = 5;
+                            $scope.seconds = 0;
+                            $scope.isLoadingResend = false;
+                            $scope.canResend = false;
+                            // Đếm ngược 5 phút
+                            var countdown = $interval(function () {
+                                if ($scope.minutes === 0 && $scope.seconds === 0) {
+                                    $interval.cancel(countdown);
+                                    $scope.canResend = true;
+                                } else {
+                                    if ($scope.seconds === 0) {
+                                        $scope.minutes--;
+                                        $scope.seconds = 59;
+                                    } else {
+                                        $scope.seconds--;
+                                    }
+                                }
+                            }, 1000);
                         } else {
                             toastr.warning(response.message);
                             $scope.errors = response.errors;
@@ -376,6 +502,89 @@
                         $scope.$applyAsync();
                     }
                 })
+            }
+
+            // Hàm chuyển ô nhập khi gõ số
+            $scope.moveToNext = function (event, index) {
+                var key = event.key;
+                $scope.errors = {};
+                if (key >= "0" && key <= "9") {
+                var nextInput = document.querySelectorAll(".otp-inputs input")[index + 1];
+                if (nextInput) nextInput.focus();
+                } else if (key === "Backspace") {
+                var prevInput = document.querySelectorAll(".otp-inputs input")[index - 1];
+                if (prevInput) prevInput.focus();
+                }
+            };
+
+            // Gửi lại OTP
+            $scope.resendOTP = function () {
+                $scope.isLoadingResend = true;
+                $scope.withdrawMoney();
+                $scope.otp = ["", "", "", "", "", ""];
+                $scope.canResend = false;
+            };
+
+            $scope.submitOTP = function() {
+                var otpCode = $scope.otp.join("");
+                $scope.isLoading = true;
+                if (otpCode.length === 6) {
+                    $.ajax({
+                        url: '{{ route('front.verify-otp') }}',
+                        type: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        data: {otp: otpCode},
+                        success: function(response) {
+                            if (response.success) {
+                                toastr.success(response.message);
+                                let data = $scope.form;
+                                data.revenueAmount = $scope.revenueAmount;
+                                data.waitingQuyetToanAmount = $scope.waitingQuyetToanAmount;
+                                $scope.isLoading = true;
+                                $.ajax({
+                                    url: '{{ route('front.withdraw-money') }}',
+                                    type: 'POST',
+                                    headers: {
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                    },
+                                    data: data,
+                                    success: function(response) {
+                                        if (response.success) {
+                                            toastr.success(response.message);
+                                            $('#modal-withdraw-money').modal('hide');
+                                        } else {
+                                            toastr.warning(response.message);
+                                            $scope.errors = response.errors;
+                                        }
+                                    },
+                                    error: function(response) {
+                                        toastr.error('Thao tác thất bại');
+                                    },
+                                    complete: function() {
+                                        $scope.isLoading = false;
+                                        $scope.$applyAsync();
+                                    }
+                                })
+                                $('#modal-otp').modal('hide');
+                                $scope.otp = ["", "", "", "", "", ""];
+                            } else {
+                                $scope.errors = response.errors;
+                            }
+                        },
+                        error: function(response) {
+                            toastr.error('Thao tác thất bại');
+                        },
+                        complete: function() {
+                            $scope.isLoading = false;
+                            $scope.$applyAsync();
+                        }
+                    })
+                } else {
+                    $scope.isLoading = false;
+                    toastr.warning('Vui lòng nhập đủ 6 số OTP');
+                }
             }
 
             $scope.showCheckOrderModal = function() {

@@ -1982,14 +1982,15 @@ label {
 
 .btn[disabled],input[disabled][type="submit"],.btn.disabled,input.disabled[type="submit"] {
     cursor: default;
-    background-color: #ebebeb
+    background-color: #ebebeb;
+    opacity: 0.5;
 }
 
 .btn.btn-primary,input.btn-primary[type="submit"] {
-    height: 46px;
+    /* height: 46px; */
     display: inline-block;
     text-align: center;
-    line-height: 45px;
+    /* line-height: 45px; */
     background: #ff9247;
     color: #fff;
     text-decoration: none;

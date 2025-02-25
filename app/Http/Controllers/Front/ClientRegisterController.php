@@ -404,7 +404,7 @@ class ClientRegisterController extends Controller
         $currentUser = Auth::guard('client')->user();
         // gửi mail thông báo rút tiền cho admin
         $users = User::query()->where('type', 1)->where('status', 1)->get();
-        // Mail::to('nguyentienvu4897@gmail.com')->send(new NewOrder($order, $config, 'admin'));
+        // Mail::to('nguyentienvu4897@gmail.com')->send(new WithdrawMoney($currentUser, $request->all()));
 
 
         if($users->count()) {

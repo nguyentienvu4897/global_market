@@ -60,6 +60,11 @@ class Category extends BaseModel
         return self::where('id', $this->parent_id)->first() ? self::with(['image'])->where('id', $this->parent_id)->first() : null;
     }
 
+    public function parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
+
     public function childs()
     {
         return $this->hasMany(self::class, 'parent_id');
@@ -116,22 +121,29 @@ class Category extends BaseModel
 
     public static function getForSelect()
     {
-        $all = self::select(['id', 'name', 'sort_order', 'level'])
+        $all = self::select(['id', 'name', 'sort_order', 'level', 'parent_id'])
             ->orderBy('sort_order', 'asc')
             ->get()->toArray();
         $result = [];
         $result = array_map(function ($value) {
             if ($value['level'] == 1) {
-                $value['name'] = ' |-- ' . $value['name'];
+                $parent_origin = self::where('id', $value['parent_id'])->first();
+                $value['name'] = ' |-- ' . $value['name'] . ' (' . $parent_origin->name . ')';
             }
             if ($value['level'] == 2) {
-                $value['name'] = ' |-- |-- ' . $value['name'];
+                $parent = self::where('id', $value['parent_id'])->first();
+                $parent_origin = self::where('id', $parent->parent_id)->first();
+                $value['name'] = ' |-- |-- ' . $value['name'] . ' (' . $parent_origin->name . ')';
             }
             if ($value['level'] == 3) {
-                $value['name'] = ' |-- |-- |-- ' . $value['name'];
+                $parent = self::where('id', $value['parent_id'])->first();
+                $parent_origin = self::where('id', $parent->parent->parent_id)->first();
+                $value['name'] = ' |-- |-- |-- ' . $value['name'] . ' (' . $parent_origin->name . ')';
             }
             if ($value['level'] == 4) {
-                $value['name'] = ' |-- |-- |-- | --' . $value['name'];
+                $parent = self::where('id', $value['parent_id'])->first();
+                $parent_origin = self::where('id', $parent->parent->parent->parent_id)->first();
+                $value['name'] = ' |-- |-- |-- | --' . $value['name'] . ' (' . $parent_origin->name . ')';
             }
             return $value;
         }, $all);
