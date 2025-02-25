@@ -132,17 +132,17 @@ class Category extends BaseModel
             }
             if ($value['level'] == 2) {
                 $parent = self::where('id', $value['parent_id'])->first();
-                $parent_origin = self::where('id', $parent->parent_id)->first();
+                $parent_origin = self::where('id', $parent ? $parent->parent_id : null)->first();
                 $value['name'] = ' |-- |-- ' . $value['name'] . ' (' . $parent_origin->name . ')';
             }
             if ($value['level'] == 3) {
                 $parent = self::where('id', $value['parent_id'])->first();
-                $parent_origin = self::where('id', $parent->parent->parent_id)->first();
+                $parent_origin = self::where('id', $parent && $parent->parent ? $parent->parent->parent_id : null)->first();
                 $value['name'] = ' |-- |-- |-- ' . $value['name'] . ' (' . $parent_origin->name . ')';
             }
             if ($value['level'] == 4) {
                 $parent = self::where('id', $value['parent_id'])->first();
-                $parent_origin = self::where('id', $parent->parent->parent->parent_id)->first();
+                $parent_origin = self::where('id', $parent && $parent->parent && $parent->parent->parent ? $parent->parent->parent->parent_id : null)->first();
                 $value['name'] = ' |-- |-- |-- | --' . $value['name'] . ' (' . $parent_origin->name . ')';
             }
             return $value;
