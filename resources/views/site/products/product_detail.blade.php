@@ -99,6 +99,15 @@
                                                         class="img-responsive mx-auto d-block swiper-lazy" />
                                                 </a>
                                                 @endforeach
+                                                <a class="swiper-slide" data-hash="0"
+                                                    href="{{ $product->image->path }}"
+                                                    title="Click để xem">
+                                                    <img height="480" width="480"
+                                                        src="{{ $product->image->path }}"
+                                                        alt="{{ $product->name }}"
+                                                        data-image="{{ $product->image->path }}"
+                                                        class="img-responsive mx-auto d-block swiper-lazy" />
+                                                </a>
                                             </div>
                                         </div>
                                         {{-- <div class="product-wish">
@@ -124,6 +133,15 @@
                                                     </div>
                                                 </div>
                                                 @endforeach
+                                                <div class="swiper-slide" data-hash="0">
+                                                    <div class="p-100">
+                                                        <img height="80" width="80"
+                                                            src="{{ $product->image->path }}"
+                                                            alt="{{ $product->name }}"
+                                                            data-image="{{ $product->image->path }}"
+                                                            class="swiper-lazy" />
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="swiper-button-next"></div>
                                             <div class="swiper-button-prev"></div>
