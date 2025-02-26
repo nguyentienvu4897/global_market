@@ -180,6 +180,7 @@
                                                 <meta itemprop="price" content="{{ formatCurrency($product->price) }}">
                                                 <meta itemprop="priceCurrency" content="VND">
                                             </span>
+                                            @if ($product->base_price > 0)
                                             <!-- Giá Khuyến mại -->
                                             <span class="old-price" itemprop="priceSpecification" itemscope=""
                                                 itemtype="http://schema.org/priceSpecification">
@@ -193,6 +194,7 @@
                                             <span class="label_product">-
                                                 {{round(($product->base_price - $product->price) / $product->base_price * 100, 0)}}%
                                             </span>
+                                            @endif
                                         </div>
                                         <div class="product-summary">
                                             <div class="title_summary">Mô tả sản phẩm</div>
@@ -497,7 +499,9 @@
                                                             title="{{ $item->name }}">{{ $item->name }}</a></h3>
                                                     <div class="price-box">
                                                         <span class="price">{{ formatCurrency($item->price) }}₫</span>
+                                                        @if ($item->base_price > 0)
                                                         <span class="compare-price">{{ formatCurrency($item->base_price) }}₫</span>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>

@@ -41,16 +41,12 @@
     </div>
     <h3 class="product-name"><a href="{{ route('front.show-product-detail', $product->slug) }}"
             title="{{ $product->name }}">{{ $product->name }}</a></h3>
-    @if ($product->base_price > 0)
     <div class="price-box">
         <span class="price">{{ formatCurrency($product->price) }}₫</span>
+        @if ($product->base_price > 0)
         <span class="compare-price">{{ formatCurrency($product->base_price) }}₫</span>
+        @endif
     </div>
-    @else
-    <div class="price-box">
-        <span class="price">{{ formatCurrency($product->price) }}₫</span>
-    </div>
-    @endif
     <div style="font-size: 16px">
         <span><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 14px">Thưởng hoa hồng</i> <span style="color: #0974ba">{{ formatCurrency($product->revenue_price) }}₫</span></span>
     </div>
