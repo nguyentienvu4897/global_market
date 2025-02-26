@@ -222,7 +222,11 @@
                                                             <span class="txt-main text_1"><i></i>Thêm vào giỏ hàng</span>
                                                         </button>
                                                         <a href="javascript:void(0)" class="btn btn-buy-now" ng-click="addToCartCheckoutFromProductDetail()">
-                                                            <span class="txt-main text_1">Mua ngay</span></a>
+                                                            <span class="txt-main text_1">Mua trực tiếp</span></a>
+                                                        @if ($product->type == 1)
+                                                            <a href="{{ $product->short_link ?? $product->aff_link }}" class="btn btn-buy-now" target="_blank" style="margin-top: 15px; margin-left: 0; width: 100%; background-color: #f69326;">
+                                                                <span class="txt-main text_1">Mua qua sàn thương mại</span></a>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </div>

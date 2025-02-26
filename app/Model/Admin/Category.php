@@ -60,10 +60,10 @@ class Category extends BaseModel
         return self::where('id', $this->parent_id)->first() ? self::with(['image'])->where('id', $this->parent_id)->first() : null;
     }
 
-    public function parent()
-    {
-        return $this->belongsTo(self::class, 'parent_id');
-    }
+    // public function parent()
+    // {
+    //     return $this->belongsTo(self::class, 'parent_id');
+    // }
 
     public function childs()
     {
@@ -204,7 +204,7 @@ class Category extends BaseModel
 
     public static function getAllCategory(){
         $categoryService = new CategoryService();
-        $categories = self::parent()->with('products')->orderBy('sort_order')->get();
+        $categories = self::with('products')->orderBy('sort_order')->get();
 
         // danh mục sản phẩm
         $categories = $categories->map(function ($cate) use ($categoryService) {

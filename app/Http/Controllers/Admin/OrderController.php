@@ -60,8 +60,8 @@ class OrderController extends Controller
                 <i class = "fa fa-cog"></i>
                 </button>
                 <div class="dropdown-menu">';
+                $result = $result . ' <a href="" title="đổi trạng thái" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Đổi trạng thái</a>';
                 if ($object->type == 0) {
-                    $result = $result . ' <a href="" title="đổi trạng thái" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Đổi trạng thái</a>';
                     $result = $result . ' <a href="'.route('orders.show', $object->id).'" title="xem chi tiết" class="dropdown-item"><i class="fa fa-angle-right"></i>Xem chi tiết</a>';
                 }
                 $result = $result . '</div></div>';
