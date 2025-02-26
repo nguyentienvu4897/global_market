@@ -455,7 +455,7 @@
                             <div class="product-tab e-tabs not-dqtab">
                                 <ul class="tabs tabs-title clearfix">
                                     <li class="tab-link active" data-tab="#tab-1">
-                                        <h3>Mô tả sản phẩm</h3>
+                                        <h3>Chi tiết sản phẩm</h3>
                                     </li>
                                     <li class="tab-link" data-tab="#tab-2" >
                                         <h3>Đánh giá sản phẩm</h3>
