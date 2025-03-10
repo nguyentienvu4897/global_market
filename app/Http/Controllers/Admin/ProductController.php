@@ -139,7 +139,7 @@ class ProductController extends Controller
 
 			$object->syncGalleries($request->galleries);
 			$object->syncDocuments($request->attachments, 'products/attachments/');
-            $object->addTags($request->tag_ids);
+            if($request->tag_ids) $object->addTags($request->tag_ids);
 
             if($request->input('attributes')) {
                 $object->syncAttributes($request->input('attributes'));

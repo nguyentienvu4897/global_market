@@ -177,12 +177,14 @@ class FrontController extends Controller
             }
 
             $canReview = false;
-            $existsOrder = OrderDetail::where('product_id', $product->id)
-            ->leftJoin('orders', 'order_details.order_id', '=', 'orders.id')
-            ->where('orders.customer_email', \Auth::guard('client')->user()->email)
-            ->where('orders.status', Order::THANH_CONG)->exists();
-            if($existsOrder) {
-                $canReview = true;
+            if(\Auth::guard('client')->check()) {
+                $existsOrder = OrderDetail::where('product_id', $product->id)
+                ->leftJoin('orders', 'order_details.order_id', '=', 'orders.id')
+                ->where('orders.customer_email', \Auth::guard('client')->user()->email)
+                ->where('orders.status', Order::THANH_CONG)->exists();
+                if($existsOrder) {
+                    $canReview = true;
+                }
             }
 
             return view('site.products.product_detail', compact('categories', 'product', 'productsRelated', 'category', 'arr_product_rate_images', 'bestSellerProducts', 'canReview'));
