@@ -22,6 +22,7 @@
         "laravel/tinker": "^2.5",
         "predis/predis": "^1.1",
         "rap2hpoutre/fast-excel": "^2.5",
+        "simplesoftwareio/simple-qrcode": "^4.2",
         "spatie/laravel-analytics": "^3.10",
         "spatie/laravel-permission": "^3.0",
         "tymon/jwt-auth": "^1.0",

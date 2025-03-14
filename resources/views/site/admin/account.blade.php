@@ -38,6 +38,18 @@
             width: 75% !important;
         }
 
+        .page_customer_account .block-account {
+            background-color: #cccccc96;
+            height: 100%;
+            padding: 25px;
+            width: 100%;
+        }
+        .page_customer_account .block-account .sticky-top{
+            position: sticky;
+            top: 25px;
+            z-index: 1000;
+        }
+
         @media (max-width: 768px) {
             .page_customer_account .group-invite-link{
                 width: 100%;
@@ -133,34 +145,44 @@
             font-size: 18px !important;
             height: auto !important;
         }
+
+        .col-left-ac .block-account ul .title-info:hover{
+            color: #ff9933 !important;
+            background-color: #fff !important;
+            border-radius: 5px !important;
+            padding: 5px 10px !important;
+            transition: all 0.3s ease-in-out !important;
+        }
     </style>
 @endsection
 @section('content')
     <div ng-controller="AdminClientController" ng-cloak>
-        <section class="signup page_customer_account">
+        <section class="signup page_customer_account" style="padding: 0; margin-bottom: 0">
             <div class="container">
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-lg-3 col-left-ac">
                         <div class="block-account">
-                            <h5 class="title-account">Trang tài khoản</h5>
-                            <p>Xin chào, <span style="color:#ff9933;">{{ Auth::guard('client')->user()->name }}</span>&nbsp;!</p>
-                            <ul>
-                                <li>
-                                    <a disabled="disabled" class="title-info" title="Thông tin tài khoản"
-                                        href="javascript:void(0);" ng-click="showChangePassword = false">Thông tin tài khoản</a>
-                                </li>
-                                <li>
-                                    <a class="title-info" href="javascript:void(0)" title="Đổi mật khẩu" ng-click="changePassword(showChangePassword = !showChangePassword)">Đổi mật
-                                        khẩu</a>
-                                </li>
-                                <li>
-                                    <a class="title-info" href="{{ route('front.logout-client') }}" title="Đăng xuất">Đăng xuất</a>
-                                </li>
-                            </ul>
+                            <div class="sticky-top">
+                                <h5 class="title-account">Trang tài khoản</h5>
+                                <p>Xin chào, <span style="color:#ff9933;">{{ Auth::guard('client')->user()->name }}</span>&nbsp;!</p>
+                                <ul>
+                                    <li>
+                                        <a disabled="disabled" class="title-info" title="Thông tin tài khoản"
+                                            href="javascript:void(0);" ng-click="showChangePassword = false">Thông tin tài khoản</a>
+                                    </li>
+                                    <li>
+                                        <a class="title-info" href="javascript:void(0)" title="Đổi mật khẩu" ng-click="changePassword(showChangePassword = !showChangePassword)">Đổi mật
+                                            khẩu</a>
+                                    </li>
+                                    <li>
+                                        <a class="title-info" href="{{ route('front.logout-client') }}" title="Đăng xuất">Đăng xuất</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-lg-9 col-right-ac">
-                        <h1 class="title-head margin-top-0 d-flex" style="align-items: center; justify-content: flex-end; flex-wrap: wrap;">
+                        <h1 class="title-head margin-top-0 d-flex" style="align-items: center; justify-content: flex-end; flex-wrap: wrap; padding-top: 25px;">
                             <div style="font-size: 19px; font-weight: 500; flex: 1 1 50%;" ng-if="!showChangePassword">Thông tin tài khoản</div>
                             <div style="font-size: 19px; font-weight: 500; flex: 1 1 50%;" ng-if="showChangePassword">Thay đổi mật khẩu</div>
                             <div class="ml-auto group-invite-code" style="flex: 1 1 -1%;">
@@ -247,6 +269,8 @@
                                             <strong><% errors.bank_name[0] %></strong>
                                         </span>
                                     </div>
+                                    <button class="btn btn-success" style="float: left; margin-bottom: 25px;" ng-click="updateUser()">Cập nhật</button>
+
                                 </div>
                                 <div class="col-md-5">
                                     <div class="card">
@@ -265,7 +289,24 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <button class="btn btn-success" style="float: right;" ng-click="updateUser()">Cập nhật</button>
+                                    <div class="card" ng-if="currentUser.invite_code">
+                                        <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                            <h6 class="mb-0" style="font-size: 18px; font-weight: 600; margin-bottom: 0 !important;">Mã QR giới thiệu</h6>
+                                            <a href="javascript:void(0)" ng-click="copyQrImage()" title="Copy mã QR">
+                                                <i class="fa fa-copy"></i>
+                                            </a>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="img-chooser" style="text-align: center;">
+                                                <label>
+                                                    <a href="{{ route('front.qr-code', ['data' => route("front.login-client") . '?invite_code=' . Auth::guard('client')->user()->invite_code]) }}" download="qrcode.png" title="Tải xuống">
+                                                        {{-- {!! QrCode::size(300)->generate(route("front.login-client") . '?invite_code=' . Auth::guard('client')->user()->invite_code) !!} --}}
+                                                        <img src="{{ route('front.qr-code', ['data' => route("front.login-client") . '?invite_code=' . Auth::guard('client')->user()->invite_code]) }}" alt="QR Code">
+                                                    </a>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -351,6 +392,42 @@
                     toastr.error('Link giới thiệu không tồn tại');
                 }
             }
+
+            $scope.copyQrImage = function() {
+                fetch("{{ route('front.qr-code') }}?data=" + encodeURIComponent($scope.link_invite_code))
+                    .then(res => res.blob())
+                    .then(blob => {
+                        const item = new ClipboardItem({ "image/png": blob });
+                        navigator.clipboard.write([item]).then(() => {
+                            toastr.success('Đã sao chép mã QR!');
+                        });
+                    })
+                    .catch(err => console.error("Lỗi sao chép ảnh:", err));
+            }
+
+            // $scope.callQrCode = function(){
+            //     if($scope.link_invite_code){
+            //         $scope.qr_code = '';
+            //         $.ajax({
+            //             url: "{{ route('front.qr-code') }}",
+            //             type: "GET",
+            //             data: {
+            //                 data: $scope.link_invite_code
+            //             },
+            //             success: function(response){
+            //                 console.log(response);
+            //                 $scope.qr_code = response;
+            //             },
+            //             error: function(response){
+            //                 toastr.error('Có lỗi xảy ra');
+            //             },
+            //             complete: function(){
+            //                 $scope.$apply();
+            //             }
+            //         });
+            //     }
+            // }
+
             if ($scope.currentUser.invite_code) {
                 $scope.link_invite_code = '{{route("front.login-client")}}?invite_code=' + $scope.currentUser.invite_code;
             }

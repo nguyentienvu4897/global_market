@@ -1,5 +1,6 @@
 <?php
-
+use SimpleSoftwareIO\QrCode\Facades\QrCode;
+use Illuminate\Http\Request;
 
 Route::group(['namespace' => 'Front'], function () {
     Route::group(['prefix' => 'client'], function () {
@@ -27,6 +28,13 @@ Route::group(['namespace' => 'Front'], function () {
             // OTP
             Route::post('/send-otp', 'OtpController@sendOtp')->name('front.send-otp');
             Route::post('/verify-otp', 'OtpController@verifyOtp')->name('front.verify-otp');
+
+            // QR Code
+            Route::get('/qr-code', function (Request $request) {
+                $qrCode = QrCode::format('png')->size(250)->generate($request->data);
+
+                return response($qrCode)->header('Content-Type', 'image/png');
+            })->name('front.qr-code');
         });
     });
 

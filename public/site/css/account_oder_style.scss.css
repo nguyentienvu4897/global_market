@@ -65,8 +65,9 @@ table {
     font-weight: 400;
     font-size: 17px;
     color: #212B25;
-    margin-bottom: 15px;
-    display: block
+    /* margin-bottom: 15px; */
+    display: block;
+    padding: 5px 0;
 }
 
 .col-left-ac .block-account ul .title-info:hover,.col-left-ac .block-account ul .title-info.active {
