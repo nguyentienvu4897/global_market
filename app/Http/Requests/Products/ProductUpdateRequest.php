@@ -45,6 +45,7 @@ class ProductUpdateRequest extends BaseRequest
             'revenue_percent_3' => 'nullable|numeric|min:0|max:100',
             'revenue_percent_2' => 'nullable|numeric|min:0|max:100',
             'revenue_percent_1' => 'nullable|numeric|min:0|max:100',
+            'button_type' => 'required|in:0,1',
             // 'person_in_charge' => 'required_if:type,0|email|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
             // 'aff_link' => 'required_if:type,1|url',
             // 'short_link' => 'required_if:type,1|url',

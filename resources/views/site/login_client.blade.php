@@ -1,11 +1,12 @@
 @extends('site.layouts.master')
 @section('title')
-    {{ $config->web_title }}
+    {{ $config->meta_title ?? $config->web_title }}
 @endsection
 @section('description')
     {{ $config->web_des }}
 @endsection
 @section('image')
+    {{ url('' . $banners[0]->image->path) }}
 @endsection
 @section('css')
     <link href="{{ asset('site/css/account_oder_style.scss.css') }}" rel="stylesheet" type="text/css" media="all" />

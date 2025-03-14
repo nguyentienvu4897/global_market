@@ -42,10 +42,11 @@ class AppServiceProvider extends ServiceProvider
         $config = \App\Model\Admin\Config::with(['image'])->where('id',1)->first();
         $tag_search = \App\Model\Admin\Tag::where('type', 10)->inRandomOrder()->limit(3)->get();
         $tag_search_all = \App\Model\Admin\Tag::where('type', 10)->get();
+        $banners = \App\Model\Admin\Banner::with(['image'])->get();
         view()->share('config', $config);
         view()->share('tag_search', $tag_search);
         view()->share('tag_search_all', $tag_search_all);
-
+        view()->share('banners', $banners);
         // \Illuminate\Database\Query\Builder::macro('toRawSql', function(){
 		// 	return array_reduce($this->getBindings(), function($sql, $binding){
 		// 		return preg_replace('/\?/', is_numeric($binding) ? $binding : "'".$binding."'" , $sql, 1);

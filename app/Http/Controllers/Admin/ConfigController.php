@@ -60,6 +60,7 @@ class ConfigController extends Controller
 		try {
 			$object = ThisModel::where('id',1)->first();
 			$object->web_title = $request->web_title;
+			$object->meta_title = $request->meta_title;
 			$object->short_name_company = $request->short_name_company;
 			$object->hotline = $request->hotline;
 			$object->web_des = $request->web_des;

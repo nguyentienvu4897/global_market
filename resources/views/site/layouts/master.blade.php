@@ -402,6 +402,24 @@
 
         </div>
     </div>
+    <div id="add-to-cart-login-modal" class="add-to-cart-login-modal" style="display:none;">
+        <div class="modal-overlay"></div>
+        <div class="add-to-cart-login-modal-content">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #0974ba; justify-content: center;">
+                    <h5 class="modal-title" style="color: #fff; text-align: center;"><i class="fa fa-info-circle"></i> Đăng nhập để thêm vào giỏ hàng</h5>
+                </div>
+                <div class="modal-body" style="padding-top: 25px; padding-bottom: 25px; text-align: center;">
+                    <div style="margin-bottom: 15px; font-weight: 700;">Quý khách chưa đăng nhập tài khoản</div>
+                    <div style="font-size: 16px;">Vui lòng đăng nhập tài khoản để nhận vô vàn ưu đãi từ <a href="{{ route('front.home-page') }}">globalmarket.vn</a></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-close">Đóng</button>
+                    <a href="{{ route('front.login-client') }}" class="btn btn-primary btn-login">Đăng nhập</a>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript">
         function changeImageQuickView(img, selector) {
             var src = $(img).attr("src");

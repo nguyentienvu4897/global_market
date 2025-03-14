@@ -295,6 +295,20 @@
             </select>
         </div>
 
+        <div class="form-group custom-group mb-4">
+            <label class="form-label required-label">Loại nút mua hàng</label>
+            <select id="my-select" class="form-control custom-select" ng-model="form.button_type">
+                <option value="">Chọn loại nút mua hàng</option>
+                <option value="0">Mua hàng trực tiếp</option>
+                <option value="1">Mua hàng qua affiliate</option>
+            </select>
+            <span class="invalid-feedback d-block" role="alert">
+                <strong>
+                    <% errors.button_type[0] %>
+                </strong>
+            </span>
+        </div>
+
 {{--        <div class="form-group custom-group mb-4">--}}
 {{--            <label class="form-label">Ghim sản phẩm</label>--}}
 {{--            <select id="my-select" class="form-control custom-select" ng-model="form.is_pin">--}}

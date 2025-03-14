@@ -45,6 +45,7 @@ class ProductStoreRequest extends BaseRequest
             'galleries.*.image' => 'nullable|file|mimes:png,jpg,jpeg|max:10000',
             'post_ids' => 'nullable|array|max:5',
             'videos' => 'nullable|array',
+            'button_type' => 'required|in:0,1',
             // 'person_in_charge' => 'required_if:type,0|email|regex:/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/',
             // 'aff_link' => 'required_if:type,1|url',
             // 'short_link' => 'required_if:type,1|url',

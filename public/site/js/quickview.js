@@ -546,3 +546,7 @@ function setButtonNavQuickview() {
 				modal.hide();
 			}
 		});
+
+		$(document).on('click', '.add-to-cart-login-modal .btn-close, .add-to-cart-login-modal .modal-overlay, .add-to-cart-login-modal .btn-login', function() {
+			$('#add-to-cart-login-modal').hide();
+		});

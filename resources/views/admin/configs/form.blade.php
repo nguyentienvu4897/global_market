@@ -130,6 +130,13 @@
 					</div>
 				</div> --}}
 				<div class="form-group custom-group">
+					<label class="form-label required-label">Meta title</label>
+					<textarea id="my-textarea" class="form-control" ng-model="form.meta_title" rows="3"></textarea>
+					<span class="invalid-feedback d-block" role="alert">
+						<strong><% errors.meta_title[0] %></strong>
+					</span>
+				</div>
+				<div class="form-group custom-group">
 					<label class="form-label required-label">Mô tả web</label>
 					<textarea id="my-textarea" class="form-control" ng-model="form.web_des" rows="3"></textarea>
 					<span class="invalid-feedback d-block" role="alert">

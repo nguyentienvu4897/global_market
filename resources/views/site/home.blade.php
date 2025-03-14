@@ -1,6 +1,6 @@
 @extends('site.layouts.master')
 @section('title')
-    {{ $config->web_title }}
+    {{ $config->meta_title ?? $config->web_title }}
 @endsection
 @section('description')
     {{ $config->web_des }}

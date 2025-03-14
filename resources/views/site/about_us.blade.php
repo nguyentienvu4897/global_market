@@ -2,6 +2,12 @@
 @section('title')
     Về chúng tôi
 @endsection
+@section('description')
+    {{ $config->web_des }}
+@endsection
+@section('image')
+    {{ url('' . $banners[0]->image->path) }}
+@endsection
 
 @section('css')
     <link href="{{ asset('site/css/style_page.scss.css') }}" rel="stylesheet" type="text/css" media="all" />

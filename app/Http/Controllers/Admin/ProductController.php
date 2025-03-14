@@ -132,7 +132,7 @@ class ProductController extends Controller
             $object->aff_link = $request->aff_link;
             $object->short_link = $request->short_link;
             $object->person_in_charge = $request->person_in_charge;
-
+            $object->button_type = $request->button_type;
 			$object->save();
 
 			FileHelper::uploadFile($request->image, 'products', $object->id, ThisModel::class, 'image',99);
@@ -214,7 +214,7 @@ class ProductController extends Controller
             $object->aff_link = $request->aff_link;
             $object->short_link = $request->short_link;
             $object->person_in_charge = $request->person_in_charge;
-
+            $object->button_type = $request->button_type;
 			$object->save();
 
 			if($request->image) {

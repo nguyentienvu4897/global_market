@@ -5,6 +5,9 @@
 @section('description')
     {{ $cate_des ?? '' }}
 @endsection
+@section('image')
+    {{ url('' . $banners[0]->image->path) }}
+@endsection
 
 @section('css')
     <link href="{{ asset('site/css/blog_article_style.scss.css') }}" rel="stylesheet" type="text/css" media="all" />

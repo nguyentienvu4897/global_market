@@ -92,6 +92,7 @@
         get submit_data() {
             let data = {
                 web_title: this.web_title,
+                meta_title: this.meta_title,
                 web_des: this.web_des,
                 short_name_company: this.short_name_company,
                 email: this.email,

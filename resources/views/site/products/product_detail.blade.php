@@ -3,7 +3,10 @@
     {{ $product->name }}
 @endsection
 @section('description')
-    {{ $product->short_des }}
+    {{ strip_tags($product->intro) }}
+@endsection
+@section('image')
+    {{ ($product->image ? $product->image->path : $product->galleries[0]->image->path) }}
 @endsection
 
 @section('css')
@@ -241,10 +244,11 @@
                                                             class="btn btn_base normal_button btn_add_cart btn-cart">
                                                             <span class="txt-main text_1"><i></i>Thêm vào giỏ hàng</span>
                                                         </button>
-                                                        <a href="javascript:void(0)" class="btn btn-buy-now" ng-click="addToCartCheckoutFromProductDetail()">
+                                                        @if ($product->button_type == 0)
+                                                            <a href="javascript:void(0)" class="btn btn-buy-now" ng-click="addToCartCheckoutFromProductDetail()">
                                                             <span class="txt-main text_1">Mua trực tiếp</span></a>
-                                                        @if ($product->type == 1)
-                                                            <a href="{{ $product->short_link ?? $product->aff_link }}" class="btn btn-buy-now" target="_blank" style="margin-top: 15px; margin-left: 0; width: 100%; background-color: #f69326;">
+                                                        @else
+                                                            <a href="{{ $product->short_link ?? $product->aff_link }}" class="btn btn-buy-now" target="_blank">
                                                                 <span class="txt-main text_1">Mua qua sàn thương mại</span></a>
                                                         @endif
                                                     </div>
@@ -752,10 +756,14 @@
                 $scope.selectedAttributes = $scope.selectedAttributes.filter(item => item.index != jQuery(this).data('index'));
             }
             $scope.$apply();
-            console.log($scope.selectedAttributes);
         });
 
         $scope.addToCartFromProductDetail = function() {
+
+            if (!DEFAULT_CLIENT_USER) {
+                $('#add-to-cart-login-modal').show();
+                return;
+            }
             let quantity = $('form input[name="quantity"]').val();
             url = "{{route('cart.add.item', ['productId' => 'productId'])}}";
             url = url.replace('productId', $scope.product.id);
@@ -796,6 +804,10 @@
         }
 
         $scope.addToCartCheckoutFromProductDetail = function() {
+            if (!DEFAULT_CLIENT_USER) {
+                $('#add-to-cart-login-modal').show();
+                return;
+            }
             let quantity = $('form input[name="quantity"]').val();
             url = "{{route('cart.add.item', ['productId' => 'productId'])}}";
             url = url.replace('productId', $scope.product.id);

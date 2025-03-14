@@ -222,6 +222,7 @@
                 aff_link: this.aff_link,
                 short_link: this.short_link,
                 person_in_charge: this.person_in_charge,
+                button_type: this.button_type,
             }
 
             data = jsonToFormData(data);

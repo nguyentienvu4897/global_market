@@ -2,7 +2,12 @@
 @section('title')
     Đăng ký CTV/Đại lý
 @endsection
-
+@section('description')
+    {{ $config->web_des }}
+@endsection
+@section('image')
+    {{ url('' . $banners[0]->image->path) }}
+@endsection
 @section('css')
     <link href="{{ asset('site/css/style_page.scss.css') }}" rel="stylesheet" type="text/css" media="all" />
     <link href="{{ asset('site/css/cvt_style.scss.css') }}" rel="stylesheet" type="text/css" media="all" />

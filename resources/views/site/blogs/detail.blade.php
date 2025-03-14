@@ -2,6 +2,12 @@
 @section('title')
     {{ $blog_title }}
 @endsection
+@section('description')
+    {{ strip_tags($blog->intro) }}
+@endsection
+@section('image')
+    {{ $blog->image->path }}
+@endsection
 
 @section('css')
     <link href="{{ asset('site/css/blog_article_style.scss.css') }}" rel="stylesheet" type="text/css" media="all" />
