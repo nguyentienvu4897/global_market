@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
         $config = \App\Model\Admin\Config::with(['image'])->where('id',1)->first();
         $tag_search = \App\Model\Admin\Tag::where('type', 10)->inRandomOrder()->limit(3)->get();
         $tag_search_all = \App\Model\Admin\Tag::where('type', 10)->get();
-        $banners = \App\Model\Admin\Banner::with(['image'])->get();
+        $banners = \App\Model\Admin\Banner::with(['image'])->order('id', 'desc')->get();
         view()->share('config', $config);
         view()->share('tag_search', $tag_search);
         view()->share('tag_search_all', $tag_search_all);
