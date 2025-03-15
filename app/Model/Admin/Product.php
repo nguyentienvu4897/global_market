@@ -48,8 +48,11 @@ class Product extends BaseModel
         ];
     }
 
-    public const STATUS_SUCCESS = 1;
-    public const STATUS_DANGER = 0;
+    public const TYPE_NORMAL = 0; // Sản phẩm thông thường
+    public const TYPE_AFFILIATE = 1; // Sản phẩm affiliate
+
+    public const STATUS_SUCCESS = 1; // Hoạt động
+    public const STATUS_DANGER = 0; // Khóa
 
     public const STATUSES = [
         [
