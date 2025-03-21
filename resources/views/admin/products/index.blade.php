@@ -104,6 +104,7 @@
                     DATATABLE.mergeSearch(d, context);
                 }
             },
+            stateSave: true,
             columnDefs: [
                 {
                     'targets': 0,

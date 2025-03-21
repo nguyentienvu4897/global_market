@@ -47,7 +47,7 @@
         .page_customer_account .block-account .sticky-top{
             position: sticky;
             top: 25px;
-            z-index: 1000;
+            z-index: 24;
         }
 
         @media (max-width: 768px) {
