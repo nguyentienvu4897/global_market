@@ -84,6 +84,7 @@ Quản lý bài viết
                 DATATABLE.mergeSearch(d, context);
             }
         },
+        stateSave: true,
         columns: [
             {data: 'DT_RowIndex', orderable: false, title: "STT"},
             {data: 'name',title: 'Tiêu đề'},
