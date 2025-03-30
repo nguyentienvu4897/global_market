@@ -68,6 +68,9 @@ Route::group(['namespace' => 'Front'], function () {
     Route::get('/tin-tuc/{slug}.html','FrontController@listBlog')->name('front.list-blog');
     Route::get('/chi-tiet-tin-tuc/{slug}.html','FrontController@detailBlog')->name('front.detail-blog');
 
+    // Chính sách
+    Route::get('/chinh-sach/{slug}.html','FrontController@policyDetail')->name('front.policy-detail');
+
     // Tìm kiếm
     Route::post('/auto-search-complete','FrontController@autoSearchComplete')->name('front.auto-search-complete');
     Route::get('/search','FrontController@search')->name('front.search');

@@ -19,6 +19,7 @@ use App\Model\Admin\Contact;
 use App\Model\Admin\Order;
 use App\Model\Admin\OrderDetail;
 use App\Model\Admin\Partner;
+use App\Model\Admin\Policy;
 use App\Model\Admin\Post;
 use App\Model\Admin\PostCategory;
 use App\Model\Admin\ProductRate;
@@ -541,5 +542,12 @@ class FrontController extends Controller
         $short_des = 'Kết quả tìm kiếm';
         $title_sub = 'Tìm thấy '.count($products).' kết quả phù hợp';
         return view('site.products.product_category', compact('products', 'title', 'short_des', 'title_sub'));
+    }
+
+    // Chính sách
+    public function policyDetail($slug) {
+        $policy = Policy::where('slug', $slug)->first();
+        $title = $policy->title;
+        return view('site.policies', compact('policy', 'title'));
     }
 }

@@ -140,21 +140,11 @@
                 <div class="col-xs-12 col-md-6 col-lg-3 footer-click">
                     <h4 class="title-menu clicked">Chính sách khách hàng</h4>
                     <ul class="list-menu toggle-mn hidden-mob">
+                        @foreach ($policies as $item)
                         <li class="li_menu">
-                            <a href="/huong-dan-doi-tra" title="Hướng dẫn đổi trả">Hướng dẫn đổi trả</a>
+                            <a href="{{ route('front.policy-detail', $item->slug) }}" title="{{ $item->title }}">{{ $item->title }}</a>
                         </li>
-                        <li class="li_menu">
-                            <a href="/chinh-sach-thanh-toan" title="Chính sách thanh toán">Chính sách thanh
-                                toán</a>
-                        </li>
-                        <li class="li_menu">
-                            <a href="/bao-mat-thong-tin-ca-nhan" title="Bảo mật thông tin cá nhân">Bảo mật thông
-                                tin cá nhân</a>
-                        </li>
-                        <li class="li_menu">
-                            <a href="/chuong-trinh-cong-tac-vien" title="Chương trình cộng tác viên">Chương
-                                trình cộng tác viên</a>
-                        </li>
+                        @endforeach
                     </ul>
                     <div class="footer-column-1">
                         <div class="payment-accept">

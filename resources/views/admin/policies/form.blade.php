@@ -1,12 +1,12 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <div class="card-header">
+            {{-- <div class="card-header">
                 <h6>Chính sách</h6>
-            </div>
+            </div> --}}
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="form-group">
                             <label class="form-label">Tiêu đề</label>
                             <input type="text" class="form-control" ng-model="form.title">
@@ -17,7 +17,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="form-group">
                             <label class="form-label">Trạng thái</label>
                             <select class="form-control" ng-model="form.status">
@@ -31,7 +31,7 @@
                         </div>
                     </div>
 
-                    <div class="col-md-6">
+                    <div class="col-md-8">
                         <div class="form-group">
                             <label class="form-label">Nội dung</label>
                             <textarea class="form-control ck-editor" ck-editor rows="5" ng-model="form.content"></textarea>

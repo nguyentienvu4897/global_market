@@ -166,6 +166,12 @@
                     </li> --}}
 
                     <li class="nav-item">
+                        <a href="{{ route('policies.index') }}" class="nav-link {{ Request::routeIs('policies.index') ? 'active' : '' }}">
+                            <i class="far fas  fa-angle-right nav-icon"></i>
+                            <p>Danh mục chính sách</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
                         <a href="{{ route('tags.index') }}" class="nav-link {{ Request::routeIs('tags.index') ? 'active' : '' }}">
                             <i class="far fas  fa-angle-right nav-icon"></i>
                             <p>Danh mục tag</p>

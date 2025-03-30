@@ -6,10 +6,22 @@ use Faker\Provider\Base;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Cviebrock\EloquentSluggable\Sluggable;
+use Cviebrock\EloquentSluggable\SluggableScopeHelpers;
 
 class Policy extends BaseModel
 {
+    use Sluggable;
+    use SluggableScopeHelpers;
+
     protected $table = 'policies';
+
+    public function sluggable(): array
+    {
+        return [
+            'slug' => ['source' => 'title']
+        ];
+    }
 
     public static function searchByFilter($request)
     {
