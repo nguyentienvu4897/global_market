@@ -41,12 +41,12 @@
                     success: function (response) {
                         if (response.success) {
                             toastr.success(response.message);
+                            window.location.href = "{{ route('policies.index') }}";
                             $scope.errors = null;
                         } else {
                             $scope.errors = response.errors;
                             toastr.warning(response.message);
                         }
-                        location.reload();
                     },
                     error: function () {
                         toastr.error('Đã có lỗi xảy ra');
@@ -63,6 +63,6 @@
 
     </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7DU37dL6MMP6g0LDFoU109Ps3YQbeH00&callback=initAutocomplete"
-            async defer></script>
+    {{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB7DU37dL6MMP6g0LDFoU109Ps3YQbeH00&callback=initAutocomplete"
+            async defer></script> --}}
 @endsection

@@ -40,7 +40,8 @@
                     success: function (response) {
                         if (response.success) {
                             toastr.success(response.message);
-                            location.reload();
+                            // location.reload();
+                            window.location.href = "{{ route('policies.index') }}";
                             $scope.errors = null;
                         } else {
                             $scope.errors = response.errors;
