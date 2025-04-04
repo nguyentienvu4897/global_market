@@ -60,7 +60,7 @@ class FrontController extends Controller
                         'product_rates' => function($q) {
                             $q->where('status', 2);
                         }
-                    ])->where('status', 1);
+                    ])->where('status', 1)->inRandomOrder();
                 }
             ])
             ->has('products')
@@ -83,7 +83,7 @@ class FrontController extends Controller
                     $query->where('status', 1)
                         ->with(['product_rates' => function ($q) {
                             $q->where('status', 2);
-                        }]);
+                        }])->inRandomOrder();
                 }
             ])
             ->first();
