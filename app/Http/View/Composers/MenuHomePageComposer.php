@@ -46,7 +46,7 @@ class MenuHomePageComposer
             $waiting_quyet_toan_amount = 0;
         }
 
-        $postCategories = PostCategory::query()->where(['parent_id' => 0, 'show_home_page' => 1])->orderBy('id', 'asc')->get();
+        $postCategories = PostCategory::query()->where(['parent_id' => 0, 'show_home_page' => 1])->get();
 
         $view->with(['productCategories' => $productCategories, 'postCategories' => $postCategories, 'waiting_quyet_toan_amount' => $waiting_quyet_toan_amount]);
     }
