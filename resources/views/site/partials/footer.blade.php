@@ -7,7 +7,7 @@
                     <img width="66" height="66" class="lazyload"
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
                         data-src="//bizweb.dktcdn.net/100/489/005/themes/912542/assets/ser_1.png?1729657650563"
-                        alt="Sudes Dino" />
+                        alt="" />
                 </div>
                 <div class="info"><span>ĐẶT HÀNG</span> <br>Dễ dàng - nhanh chóng</div>
             </div>
@@ -16,7 +16,7 @@
                     <img width="66" height="66" class="lazyload"
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
                         data-src="//bizweb.dktcdn.net/100/489/005/themes/912542/assets/ser_2.png?1729657650563"
-                        alt="Sudes Dino" />
+                        alt="" />
                 </div>
                 <div class="info"><span>THANH TOÁN</span><br>Dễ dàng - nhanh chóng</div>
             </div>
@@ -25,7 +25,7 @@
                     <img width="66" height="66" class="lazyload"
                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
                         data-src="//bizweb.dktcdn.net/100/489/005/themes/912542/assets/ser_3.png?1729657650563"
-                        alt="Sudes Dino" />
+                        alt="" />
                 </div>
                 <div class="info"><span>VẬN CHUYỂN</span><br>Dễ dàng - nhanh chóng</div>
             </div>
@@ -87,7 +87,7 @@
                     <div class="social-footer">
                         <div class="social toggle-mn">
                             <a class="fb" href="{{ $config->facebook }}" target="_blank" aria-label="Facebook"
-                                title="Theo dõi Sudes Dino trên Facebook">
+                                title="Theo dõi chúng tôi trên Facebook">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" width="25px" height="25px"
                                     viewBox="0 0 96.124 96.123" style="enable-background:new 0 0 96.124 96.123;"
@@ -99,7 +99,7 @@
                                 </svg>
                             </a>
                             <a class="tt" href="{{ $config->twitter }}" target="_blank" aria-label="Twitter"
-                                title="Theo dõi Sudes Dino trên Twitter">
+                                title="Theo dõi chúng tôi trên Twitter">
                                 <svg xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512"
                                     style="enable-background:new 0 0 512 512;" xml:space="preserve" width="25px"
@@ -111,7 +111,7 @@
                                 </svg>
                             </a>
                             <a class="yt" href="{{ $config->youtube }}" target="_blank" aria-label="Youtube"
-                                title="Theo dõi Sudes Dino trên Youtube">
+                                title="Theo dõi chúng tôi trên Youtube">
                                 <svg version="1.1" xmlns="http://www.w3.org/2000/svg"
                                     xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512"
                                     style="enable-background:new 0 0 512 512;" xml:space="preserve">
@@ -124,7 +124,7 @@
                                 </svg>
                             </a>
                             <a class="ins" href="{{ $config->instagram }}" target="_blank" aria-label="Instagram"
-                                title="Theo dõi Sudes Dino trên Instagram">
+                                title="Theo dõi chúng tôi trên Instagram">
                                 <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
                                     <path
                                         d="m75 512h362c41.355469 0 75-33.644531 75-75v-362c0-41.355469-33.644531-75-75-75h-362c-41.355469 0-75 33.644531-75 75v362c0 41.355469 33.644531 75 75 75zm-45-437c0-24.8125 20.1875-45 45-45h362c24.8125 0 45 20.1875 45 45v362c0 24.8125-20.1875 45-45 45h-362c-24.8125 0-45-20.1875-45-45zm0 0" />
