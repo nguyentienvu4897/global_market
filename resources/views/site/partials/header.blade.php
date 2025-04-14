@@ -59,8 +59,14 @@
                             src="/site/images/icon_hot.png?1729657650563"
                             alt="Icon" />
                     </div>
-                    <div class="fullpage"><span class="quotes" style="font-size: 15px;">Đặt hàng nhập khẩu chính hãng!!!</span><span
-                            class="quotes" style="font-size: 15px;">Dễ dàng mua hàng nhanh chóng, tện lợi</span><span class="quotes" style="font-size: 15px;">Chiết khấu hoa hồng sản phẩm cao</span> </div>
+                    @php
+                        $text_top_header = explode("\n", $config->text_top_header);
+                    @endphp
+                    <div class="fullpage">
+                        @foreach($text_top_header as $text)
+                        <span class="quotes" style="font-size: 15px;">{{ $text }}</span>
+                        @endforeach
+                    </div>
                 </div>
                 <div class="box-icon-right">
                     {{-- <a href="/san-pham-yeu-thich" class="header-acc" title="Sản phẩm yêu thích">
@@ -280,9 +286,9 @@
                             <li class="nav-item {{ Route::currentRouteName() == 'front.contact-us' ? 'active' : '' }}">
                                 <a class="nav-link" href="{{ route('front.contact-us') }}" title="Liên hệ">Liên hệ</a>
                             </li>
-                            <li class="nav-item {{ Route::currentRouteName() == 'front.connect-us' ? 'active' : '' }}">
-                                <a class="nav-link" href="{{route('front.connect-us')}}" title="Đăng ký CTV/Đại lý">Đăng ký CTV/Đại lý</a>
-                            </li>
+                            {{-- <li class="nav-item {{ Route::currentRouteName() == 'front.connect-us' ? 'active' : '' }}">
+                                <a class="nav-link" href="" title="Hướng dẫn">Hướng dẫn</a>
+                            </li> --}}
                         </ul>
                     </nav>
                     <div class="control-menu">
@@ -301,13 +307,13 @@
                     </div>
                     <div class="header_hotline">
                         <img width="42" height="46"
-                            src="/site/images/icon_lien_he.png?1729657650563"
+                            src="/site/images/phone-icon.png?1729657650563"
                             alt="Hotline" />
                         <div class="txt_hotline">
                             <a href="tel:{{str_replace(' ', '', $config->hotline)}}" title="{{$config->hotline}}">
                                 {{$config->hotline}}
                             </a>
-                            <span>Giao hàng siêu tốc</span>
+                            <span>Số hotline</span>
                         </div>
                     </div>
                 </div>

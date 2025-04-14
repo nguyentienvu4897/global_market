@@ -116,6 +116,7 @@
                 revenue_percent_3: this.revenue_percent_3,
                 revenue_percent_2: this.revenue_percent_2,
                 revenue_percent_1: this.revenue_percent_1,
+                text_top_header: this.text_top_header,
             }
             data = jsonToFormData(data);
             let image = this.image.submit_data;
