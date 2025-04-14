@@ -260,7 +260,7 @@ class ClientRegisterController extends Controller
         // gửi mail thông báo lấy lại mật khẩu cho user
         $user = User::query()->where('type', 10)->where('status', 1)->where('email', $request->recover_email)->first();
         if (!$user) {
-            return $this->responseErrors("Thao tác thất bại", "Email không tồn tại");
+            return $this->responseErrors("Thao tác thất bại", ['recover_email' => ['Email không tồn tại']]);
         }
         $new_password = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 8)), 0, 8);
         $user->password = bcrypt($new_password);
