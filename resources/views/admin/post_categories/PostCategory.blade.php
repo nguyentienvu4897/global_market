@@ -39,6 +39,7 @@
                 name: this.name,
                 parent_id: this._parent_id,
                 intro: this.intro,
+                show_home_page: this.show_home_page,
             }
             data = jsonToFormData(data);
             let image = this.image.submit_data;

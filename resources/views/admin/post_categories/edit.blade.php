@@ -22,7 +22,10 @@ Chỉnh sửa danh mục bài viết
     app.controller('EditCategory', function ($scope, $http) {
     $scope.form = new PostCategory(@json($object), {scope: $scope});
     // console.log($scope.form);
-
+    $scope.show_home_page = [
+            {'name': 'hiển thị', 'value': '1'},
+            {'name': 'không', 'value': '0'},
+        ];
     $scope.form.all_categories = @json($categories);
     $scope.loading = {};
     $scope.submit = function() {

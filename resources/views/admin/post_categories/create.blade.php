@@ -23,6 +23,10 @@ Thêm mới danh mục
   app.controller('CreateCategory', function ($scope, $http) {
     $scope.form = new PostCategory({}, {scope: $scope});
     $scope.loading = {};
+    $scope.show_home_page = [
+            {'name': 'hiển thị', 'value': '1'},
+            {'name': 'không', 'value': '0'},
+        ];
     $scope.submit = function() {
       $scope.loading.submit = true;
       $.ajax({
