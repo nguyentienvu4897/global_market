@@ -160,7 +160,6 @@ class UserController extends Controller
 			if ($request->password != null) $object->password = bcrypt($request->password);
 			$object->status = $request->status;
 			$object->phone_number = $request->phone_number;
-			$object->type = 1;
 			$object->save();
 
 			$object->roles()->sync([3]);
