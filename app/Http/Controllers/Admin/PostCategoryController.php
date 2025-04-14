@@ -112,7 +112,7 @@ class PostCategoryController extends Controller
 				'parent_id' => 'nullable',
 				'name' => 'required|max:255',
 				'intro' => 'nullable',
-				'image' => 'required|file|mimes:jpg,jpeg,png|max:3000'
+				'image' => 'nullable|file|mimes:jpg,jpeg,png|max:3000'
 
 			]
 		);
