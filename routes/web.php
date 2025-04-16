@@ -354,6 +354,13 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/{id}/getDataForEdit', 'Admin\PolicyController@getDataForEdit');
         });
 
+        // quản lý yêu cầu affiliate link
+        Route::group(['prefix' => 'affiliate-link-requests'], function () {
+            Route::get('/', 'Admin\AffiliateLinkRequestController@index')->name('affiliate-link-requests.index');
+            Route::get('/searchData', 'Admin\AffiliateLinkRequestController@searchData')->name('affiliate-link-requests.searchData');
+            Route::post('/update-status', 'Admin\AffiliateLinkRequestController@updateStatus')->name('affiliate-link-requests.update.status');
+        });
+
         Route::group(['prefix' => 'common'], function () {
             Route::get('/dashboard', 'Common\DashboardController@index')->name('dash');
 

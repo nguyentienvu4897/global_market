@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Log;
 use Validator;
 use Response;
 use App\Http\Controllers\Controller;
+use App\Mail\AffiliateLinkRequestMail;
+use App\Model\Admin\AffiliateLinkRequest;
 use App\Model\Admin\Banner;
 use App\Model\Admin\Contact;
 use App\Model\Admin\Order;
@@ -549,5 +551,51 @@ class FrontController extends Controller
         $policy = Policy::where('slug', $slug)->first();
         $title = $policy->title;
         return view('site.policies', compact('policy', 'title'));
+    }
+
+    // affiliate link
+    public function createAffiliateLink(Request $request) {
+        $rule = [
+            'affiliateLink' => 'required|array|min:1',
+            'affiliateLink.*.campaign_id' => 'required_if:affiliateLink.*.url_origin,null',
+            'affiliateLink.*.url_origin' => 'required_if:affiliateLink.*.campaign_id,null|url',
+        ];
+        $messages = [
+            'affiliateLink.*.campaign_id.required_if' => 'Vui lòng chọn chiến dịch',
+            'affiliateLink.*.url_origin.required_if' => 'Vui lòng nhập link sản phẩm',
+            'affiliateLink.*.url_origin.url' => 'Link không hợp lệ',
+        ];
+
+        $validate = Validator::make($request->all(), $rule, $messages);
+        if ($validate->fails()) {
+            return $this->responseErrors('Gửi yêu cầu thất bại!', $validate->errors());
+        }
+
+
+
+        $order_last = AffiliateLinkRequest::orderBy('id', 'desc')->first();
+        $order_number = $order_last ? $order_last->order_number + 1 : 1;
+        foreach ($request->affiliateLink as $item) {
+            $campaign = array_find_el(AffiliateLinkRequest::CAMPAIGNS, function($el) use ($item) {
+                return $el['id'] == $item['campaign_id'];
+            })['name'];
+            $affiliateLink = new AffiliateLinkRequest();
+            $affiliateLink->user_id = \Auth::guard('client')->user()->id;
+            $affiliateLink->order_number = $order_number;
+            $affiliateLink->url_origin = $item['url_origin'];
+            $affiliateLink->campaign_id = $item['campaign_id'];
+            $affiliateLink->campaign_name = $campaign;
+            $affiliateLink->status = AffiliateLinkRequest::STATUS_NEW;
+            $affiliateLink->save();
+        }
+
+        $users = User::query()->where('type', 1)->where('status', 1)->get();
+        foreach ($users as $user) {
+            Mail::to($user->email)->send(new AffiliateLinkRequestMail($request->affiliateLink, \Auth::guard('client')->user()));
+        }
+
+        // Mail::to('nguyentienvu4897@gmail.com')->send(new AffiliateLinkRequestMail($request->affiliateLink, \Auth::guard('client')->user()));
+
+        return $this->responseSuccess('Gửi yêu cầu thành công!');
     }
 }

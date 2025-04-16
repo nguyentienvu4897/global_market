@@ -27,14 +27,14 @@
     <section class="bread-crumb"
         style="background: linear-gradient(0deg, rgba(0,0,0,0), rgba(0,0,0,0)),  url(/site/images/bg_footer.jpg?1721988795194) center no-repeat;">
         <div class="container">
-            <div class="title-bread-crumb"> Tin tức
+            <div class="title-bread-crumb"> {{ $cate_title }}
             </div>
             <ul class="breadcrumb">
                 <li class="home">
                     <a href="{{ route('front.home-page') }}"><span>Trang chủ</span></a>
                     <span class="mr_lr">/</span>
                 </li>
-                <li><strong><span>Tin tức</span></strong></li>
+                <li><strong><span>{{ $cate_title }}</span></strong></li>
             </ul>
         </div>
     </section>

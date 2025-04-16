@@ -85,6 +85,8 @@ Route::group(['namespace' => 'Front'], function () {
     // review
     Route::post('/review/submit','FrontController@submitReview')->name('front.submit-review');
 
+    // affiliate link
+    Route::post('/create-affiliate-link','FrontController@createAffiliateLink')->name('front.create-affiliate-link');
 });
 
 

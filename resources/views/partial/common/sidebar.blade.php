@@ -231,6 +231,15 @@
                     </p>
                 </a>
             </li>
+            <li class="nav-item has-treeview">
+                <a href="{{route('affiliate-link-requests.index')}}" class="nav-link">
+                    <i class="nav-icon fa fa-link"></i>
+
+                    <p>
+                        Yêu cầu affiliate link
+                    </p>
+                </a>
+            </li>
 
             {{-- <li class="nav-item has-treeview  {{ request()->is('admin/blocks') || request()->is('admin/blocks/*') ? 'menu-open' : '' }} ">
                 <a href="#" class="nav-link">
