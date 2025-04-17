@@ -250,7 +250,96 @@
             </div>
         </div>
     </section>
-
+    <script>
+        app.controller('AffiliateLinkController', function($scope, $http) {
+            $scope.loading = false;
+            $scope.errors = {};
+            $scope.currentUser = @json(Auth::guard('client')->user());
+            $scope.campaigns = [{
+                    id: 1,
+                    name: 'Shopee'
+                },
+                {
+                    id: 2,
+                    name: 'Tiki'
+                },
+                {
+                    id: 3,
+                    name: 'Lazada'
+                },
+                {
+                    id: 4,
+                    name: 'Sendo'
+                }
+            ];
+            $scope.affiliateLink = [{
+                    campaign_id: '',
+                    url_origin: ''
+                },
+                {
+                    campaign_id: '',
+                    url_origin: ''
+                },
+                {
+                    campaign_id: '',
+                    url_origin: ''
+                },
+            ];
+            $scope.addAffiliateLink = function() {
+                $scope.affiliateLink.push({
+                    campaign_id: '',
+                    url_origin: ''
+                });
+            }
+            $scope.removeAffiliateLink = function(index) {
+                $scope.affiliateLink.splice(index, 1);
+            }
+            $scope.createAffiliateLink = function() {
+                $scope.loading = true;
+                $.ajax({
+                    url: '{{ route('front.create-affiliate-link') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    data: {
+                        affiliateLink: $scope.affiliateLink
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $scope.affiliateLink = [{
+                                    campaign_id: '',
+                                    url_origin: ''
+                                },
+                                {
+                                    campaign_id: '',
+                                    url_origin: ''
+                                },
+                                {
+                                    campaign_id: '',
+                                    url_origin: ''
+                                },
+                            ];
+                            $scope.errors = {};
+                            toastr.success(response.message);
+                        } else {
+                            $scope.errors = response.errors;
+                            toastr.error(response.message);
+                            $scope.loading = false;
+                        }
+                    },
+                    error: function(response) {
+                        console.log(response);
+                        $scope.loading = false;
+                    },
+                    complete: function() {
+                        $scope.$applyAsync();
+                        $scope.loading = false;
+                    }
+                });
+            }
+        });
+    </script>
     @if ($categorySpecialFlashsale)
         <section class="section_flash_sale container">
             <div class="box-deal" style="background-image:url({{ getBanner($categorySpecialFlashsale) }});">
@@ -473,94 +562,5 @@
     </script>
 @endsection
 @push('script')
-    <script>
-        app.controller('AffiliateLinkController', function($scope, $http) {
-            $scope.loading = false;
-            $scope.errors = {};
-            $scope.currentUser = @json(Auth::guard('client')->user());
-            $scope.campaigns = [{
-                    id: 1,
-                    name: 'Shopee'
-                },
-                {
-                    id: 2,
-                    name: 'Tiki'
-                },
-                {
-                    id: 3,
-                    name: 'Lazada'
-                },
-                {
-                    id: 4,
-                    name: 'Sendo'
-                }
-            ];
-            $scope.affiliateLink = [{
-                    campaign_id: '',
-                    url_origin: ''
-                },
-                {
-                    campaign_id: '',
-                    url_origin: ''
-                },
-                {
-                    campaign_id: '',
-                    url_origin: ''
-                },
-            ];
-            $scope.addAffiliateLink = function() {
-                $scope.affiliateLink.push({
-                    campaign_id: '',
-                    url_origin: ''
-                });
-            }
-            $scope.removeAffiliateLink = function(index) {
-                $scope.affiliateLink.splice(index, 1);
-            }
-            $scope.createAffiliateLink = function() {
-                $scope.loading = true;
-                $.ajax({
-                    url: '{{ route('front.create-affiliate-link') }}',
-                    type: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    data: {
-                        affiliateLink: $scope.affiliateLink
-                    },
-                    success: function(response) {
-                        if (response.success) {
-                            $scope.affiliateLink = [{
-                                    campaign_id: '',
-                                    url_origin: ''
-                                },
-                                {
-                                    campaign_id: '',
-                                    url_origin: ''
-                                },
-                                {
-                                    campaign_id: '',
-                                    url_origin: ''
-                                },
-                            ];
-                            $scope.errors = {};
-                            toastr.success(response.message);
-                        } else {
-                            $scope.errors = response.errors;
-                            toastr.error(response.message);
-                            $scope.loading = false;
-                        }
-                    },
-                    error: function(response) {
-                        console.log(response);
-                        $scope.loading = false;
-                    },
-                    complete: function() {
-                        $scope.$applyAsync();
-                        $scope.loading = false;
-                    }
-                });
-            }
-        });
-    </script>
+
 @endpush
