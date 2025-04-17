@@ -193,8 +193,8 @@
             </div>
         </section> --}}
     </div>
-    <section class="affiliate-link container" ng-if="isAdminClient" ng-cloak>
-        <div class="affiliate-link-content" ng-controller="AffiliateLinkController">
+    <section class="affiliate-link container" ng-controller="AffiliateLinkController" ng-cloak>
+        <div class="affiliate-link-content" ng-if="isAdminClient">
             <div class="row">
                 <div class="col-md-12">
                     <div class="create-affiliate-link-title">Sản phẩm khách hàng đề xuất</div>
@@ -477,6 +477,7 @@
         app.controller('AffiliateLinkController', function($scope, $http) {
             $scope.loading = false;
             $scope.errors = {};
+            $scope.isAdminClient = @json(Auth::guard('client')->check());
             $scope.campaigns = [{
                     id: 1,
                     name: 'Shopee'
