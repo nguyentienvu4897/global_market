@@ -193,8 +193,8 @@
             </div>
         </section> --}}
     </div>
-    <section class="affiliate-link container" ng-controller="AffiliateLinkController" ng-show="isAdminClient" ng-cloak>
-        <div class="affiliate-link-content">
+    <section class="affiliate-link container" ng-if="isAdminClient" ng-cloak>
+        <div class="affiliate-link-content" ng-controller="AffiliateLinkController">
             <div class="row">
                 <div class="col-md-12">
                     <div class="create-affiliate-link-title">Sản phẩm khách hàng đề xuất</div>
