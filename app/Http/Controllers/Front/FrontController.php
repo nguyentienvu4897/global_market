@@ -557,8 +557,8 @@ class FrontController extends Controller
     public function createAffiliateLink(Request $request) {
         $rule = [
             'affiliateLink' => 'required|array|min:1',
-            'affiliateLink.*.campaign_id' => 'required_if:affiliateLink.*.url_origin,null',
-            'affiliateLink.*.url_origin' => 'required_if:affiliateLink.*.campaign_id,null|url',
+            'affiliateLink.*.campaign_id' => 'required',
+            'affiliateLink.*.url_origin' => 'required|url',
         ];
         $messages = [
             'affiliateLink.*.campaign_id.required_if' => 'Vui lòng chọn chiến dịch',
