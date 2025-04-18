@@ -496,15 +496,15 @@
             }
         ];
         $scope.affiliateLink = [{
-                campaign_id: '',
+                campaign_id: 1,
                 url_origin: ''
             },
             {
-                campaign_id: '',
+                campaign_id: 1,
                 url_origin: ''
             },
             {
-                campaign_id: '',
+                campaign_id: 1,
                 url_origin: ''
             },
         ];
