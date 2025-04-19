@@ -554,16 +554,16 @@ class FrontController extends Controller
     }
 
     // affiliate link
-    public function createAffiliateLink(Request $request) {
+    public function generateLink(Request $request) {
         $rule = [
-            'affiliateLink' => 'required|array|min:1',
-            'affiliateLink.*.campaign_id' => 'required',
-            'affiliateLink.*.url_origin' => 'required|url',
+            'arrGenerateLink' => 'required|array|min:1',
+            'arrGenerateLink.*.campaign_id' => 'required',
+            'arrGenerateLink.*.url_origin' => 'required|url',
         ];
         $messages = [
-            'affiliateLink.*.campaign_id.required_if' => 'Vui lòng chọn chiến dịch',
-            'affiliateLink.*.url_origin.required_if' => 'Vui lòng nhập link sản phẩm',
-            'affiliateLink.*.url_origin.url' => 'Link không hợp lệ',
+            'arrGenerateLink.*.campaign_id.required_if' => 'Vui lòng chọn chiến dịch',
+            'arrGenerateLink.*.url_origin.required_if' => 'Vui lòng nhập link sản phẩm',
+            'arrGenerateLink.*.url_origin.url' => 'Link không hợp lệ',
         ];
 
         $validate = Validator::make($request->all(), $rule, $messages);
@@ -575,26 +575,26 @@ class FrontController extends Controller
 
         $order_last = AffiliateLinkRequest::orderBy('id', 'desc')->first();
         $order_number = $order_last ? $order_last->order_number + 1 : 1;
-        foreach ($request->affiliateLink as $item) {
+        foreach ($request->arrGenerateLink as $item) {
             $campaign = array_find_el(AffiliateLinkRequest::CAMPAIGNS, function($el) use ($item) {
                 return $el['id'] == $item['campaign_id'];
             })['name'];
-            $affiliateLink = new AffiliateLinkRequest();
-            $affiliateLink->user_id = \Auth::guard('client')->user()->id;
-            $affiliateLink->order_number = $order_number;
-            $affiliateLink->url_origin = $item['url_origin'];
-            $affiliateLink->campaign_id = $item['campaign_id'];
-            $affiliateLink->campaign_name = $campaign;
-            $affiliateLink->status = AffiliateLinkRequest::STATUS_NEW;
-            $affiliateLink->save();
+            $object = new AffiliateLinkRequest();
+            $object->user_id = \Auth::guard('client')->user()->id;
+            $object->order_number = $order_number;
+            $object->url_origin = $item['url_origin'];
+            $object->campaign_id = $item['campaign_id'];
+            $object->campaign_name = $campaign;
+            $object->status = AffiliateLinkRequest::STATUS_NEW;
+            $object->save();
         }
 
         $users = User::query()->where('type', 1)->where('status', 1)->get();
         foreach ($users as $user) {
-            Mail::to($user->email)->send(new AffiliateLinkRequestMail($request->affiliateLink, \Auth::guard('client')->user()));
+            Mail::to($user->email)->send(new AffiliateLinkRequestMail($request->arrGenerateLink, \Auth::guard('client')->user()));
         }
 
-        // Mail::to('nguyentienvu4897@gmail.com')->send(new AffiliateLinkRequestMail($request->affiliateLink, \Auth::guard('client')->user()));
+        // Mail::to('nguyentienvu4897@gmail.com')->send(new AffiliateLinkRequestMail($request->arrGenerateLink, \Auth::guard('client')->user()));
 
         return $this->responseSuccess('Gửi yêu cầu thành công!');
     }

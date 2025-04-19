@@ -10,7 +10,7 @@
 @endsection
 @section('css')
     <style>
-        .affiliate-link-content {
+        .user-link-section-content {
             /* margin-top: 30px; */
             margin-bottom: 30px;
             padding: 30px 40px;
@@ -18,19 +18,19 @@
             border-radius: 10px;
         }
 
-        .create-affiliate-link-title {
+        .create-user-link-section-title {
             font-size: 24px;
             font-weight: 600;
             margin-bottom: 20px;
         }
 
-        .create-affiliate-link-item {
+        .create-user-link-section-item {
             display: flex;
             justify-content: space-between;
             gap: 10px;
         }
 
-        .create-affiliate-link-item .marchant-name select {
+        .create-user-link-section-item .marchant-name select {
             height: 40px;
             background-color: #fff;
             box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
@@ -43,12 +43,12 @@
             color: #000;
         }
 
-        .create-affiliate-link-item .form-group {
+        .create-user-link-section-item .form-group {
             flex: 1;
             margin-bottom: 15px;
         }
 
-        .create-affiliate-link-item .form-group input {
+        .create-user-link-section-item .form-group input {
             width: 100%;
             border: none;
             border-radius: 10px;
@@ -60,7 +60,7 @@
             margin-bottom: 0;
         }
 
-        .create-affiliate-link-item .btn-remove-link {
+        .create-user-link-section-item .btn-remove-link {
             width: 40px;
             height: 40px;
             background-color: #dddddd;
@@ -74,7 +74,7 @@
             box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
         }
 
-        .create-affiliate-link-button-add .btn-add-link {
+        .create-user-link-section-button-add .btn-add-link {
             width: 100%;
             border: 2px solid #0974ba;
             border-radius: 10px;
@@ -87,12 +87,12 @@
             font-weight: 600;
         }
 
-        .create-affiliate-link-button-add .btn-add-link:hover {
+        .create-user-link-section-button-add .btn-add-link:hover {
             background-color: #0974ba;
             color: #fff;
         }
 
-        .create-affiliate-link-button-submit .btn-submit {
+        .create-user-link-section-button-submit .btn-submit {
             width: 100%;
             border: 2px solid #0974ba;
             border-radius: 10px;
@@ -105,25 +105,25 @@
             background-color: #0974ba;
         }
 
-        .create-affiliate-link-button-submit .btn-submit:hover {
+        .create-user-link-section-button-submit .btn-submit:hover {
             background-color: #f69326;
             color: #fff;
             border: 2px solid #f69326;
         }
 
-        .create-affiliate-link-request-note {
+        .create-user-link-section-request-note {
             font-size: 15px;
             color: #000;
         }
 
         @media (max-width: 768px) {
-            .affiliate-link-content {
+            .user-link-section-content {
                 padding: 20px 10px;
             }
-            .create-affiliate-link-title {
+            .create-user-link-section-title {
                 font-size: 20px;
             }
-            .create-affiliate-link-request-note {
+            .create-user-link-section-request-note {
                 font-size: 13px;
             }
         }
@@ -193,23 +193,23 @@
             </div>
         </section> --}}
     </div>
-    <section class="affiliate-link container" ng-controller="AffiliateLinkController" ng-cloak>
-        <div class="affiliate-link-content" ng-if="canAffiliateLink">
+    <section class="user-link-section container" ng-controller="GenerateLinkController" ng-cloak>
+        <div class="user-link-section-content" ng-if="canGenerateLink">
             <div class="row">
                 <div class="col-md-12">
-                    <div class="create-affiliate-link-title">Sản phẩm khách hàng đề xuất</div>
+                    <div class="create-user-link-section-title">Sản phẩm khách hàng đề xuất</div>
                 </div>
                 <div class="col-md-10">
-                    <div class="create-affiliate-link-list">
-                        <div class="create-affiliate-link-item" ng-repeat="(index, item) in affiliateLink">
+                    <div class="create-user-link-section-list">
+                        <div class="create-user-link-section-item" ng-repeat="(index, item) in arrGenerateLink">
                             <div class="marchant-name">
                                 <select class="form-control" ng-model="item.campaign_id"
                                     ng-options="campaign.id as campaign.name for campaign in campaigns">
                                     <option value="">Chọn chiến dịch</option>
                                 </select>
                                 <div class="invalid-feedback d-block error" role="alert" style="margin-left: 10px;">
-                                    <span ng-if="errors && errors['affiliateLink.' + index + '.campaign_id']">
-                                        <% errors['affiliateLink.' + index + '.campaign_id'][0] %>
+                                    <span ng-if="errors && errors['arrGenerateLink.' + index + '.campaign_id']">
+                                        <% errors['arrGenerateLink.' + index + '.campaign_id'][0] %>
                                     </span>
                                 </div>
                             </div>
@@ -217,24 +217,24 @@
                                 <input type="text" class="form-control" id="name" name="name"
                                     placeholder="Gắn link sản phẩm ở đây" ng-model="item.url_origin">
                                 <div class="invalid-feedback d-block error" role="alert" style="margin-left: 10px;">
-                                    <span ng-if="errors && errors['affiliateLink.' + index + '.url_origin']">
-                                        <% errors['affiliateLink.' + index + '.url_origin'][0] %>
+                                    <span ng-if="errors && errors['arrGenerateLink.' + index + '.url_origin']">
+                                        <% errors['arrGenerateLink.' + index + '.url_origin'][0] %>
                                     </span>
                                 </div>
                             </div>
                             <div ng-if="index != 0">
                                 <button class="btn btn-remove-link" title="Xóa link"
-                                    ng-click="removeAffiliateLink($index)">-</button>
+                                    ng-click="removeArrGenerateLink($index)">-</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="create-affiliate-link-button-add">
-                        <button class="btn btn-add-link" title="Thêm link" ng-click="addAffiliateLink()">Thêm link</button>
+                    <div class="create-user-link-section-button-add">
+                        <button class="btn btn-add-link" title="Thêm link" ng-click="addArrGenerateLink()">Thêm link</button>
                     </div>
-                    <div class="create-affiliate-link-button-submit">
-                        <button class="btn btn-submit" title="Tạo link" ng-click="createAffiliateLink()" ng-disabled="loading">
+                    <div class="create-user-link-section-button-submit">
+                        <button class="btn btn-submit" title="Tạo link" ng-click="generateLink()" ng-disabled="loading">
                             <i ng-if="!loading" class="fa fa-paper-plane"></i>
                             <i ng-if="loading" class="fa fa-spinner fa-spin"></i>
                             Tạo link
@@ -242,7 +242,7 @@
                     </div>
                 </div>
                 <div class="col-md-12">
-                    <div class="create-affiliate-link-request-note">
+                    <div class="create-user-link-section-request-note">
                         Vui lòng nhập đầy đủ thông tin để tạo link. Mọi yêu cầu đã gửi đi sẽ được xử lý trong thời gian 5
                         - 10 phút.
                     </div>
@@ -474,10 +474,10 @@
 @endsection
 @push('script')
 <script>
-    app.controller('AffiliateLinkController', function($scope, $http) {
+    app.controller('GenerateLinkController', function($scope, $http) {
         $scope.loading = false;
         $scope.errors = {};
-        $scope.canAffiliateLink = @json(Auth::guard('client')->check());
+        $scope.canGenerateLink = @json(Auth::guard('client')->check());
         $scope.campaigns = [{
                 id: 1,
                 name: 'Shopee'
@@ -495,7 +495,7 @@
                 name: 'Sendo'
             }
         ];
-        $scope.affiliateLink = [{
+        $scope.arrGenerateLink = [{
                 campaign_id: 1,
                 url_origin: ''
             },
@@ -508,29 +508,29 @@
                 url_origin: ''
             },
         ];
-        $scope.addAffiliateLink = function() {
-            $scope.affiliateLink.push({
+        $scope.addArrGenerateLink = function() {
+            $scope.arrGenerateLink.push({
                 campaign_id: '',
                 url_origin: ''
             });
         }
-        $scope.removeAffiliateLink = function(index) {
-            $scope.affiliateLink.splice(index, 1);
+        $scope.removeArrGenerateLink = function(index) {
+            $scope.arrGenerateLink.splice(index, 1);
         }
-        $scope.createAffiliateLink = function() {
+        $scope.generateLink = function() {
             $scope.loading = true;
             $.ajax({
-                url: '{{ route('front.create-affiliate-link') }}',
+                url: '{{ route('front.generate-link') }}',
                 type: 'POST',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}'
                 },
                 data: {
-                    affiliateLink: $scope.affiliateLink
+                    arrGenerateLink: $scope.arrGenerateLink
                 },
                 success: function(response) {
                     if (response.success) {
-                        $scope.affiliateLink = [{
+                        $scope.arrGenerateLink = [{
                                 campaign_id: '',
                                 url_origin: ''
                             },

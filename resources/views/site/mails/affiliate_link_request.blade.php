@@ -66,7 +66,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($affiliateLink as $index => $item)
+                        @foreach ($arrGenerateLink as $index => $item)
                             @php
                                 $campaign = array_find_el(\App\Model\Admin\AffiliateLinkRequest::CAMPAIGNS, function ($el) use ($item) {
                                     return $el['id'] == $item['campaign_id'];
@@ -76,7 +76,8 @@
                                 <td style="text-align: center; border: 1px solid #ddd;">{{ $index + 1 }}</td>
                                 <td style="text-align: center; border: 1px solid #ddd;">{{ $campaign }}</td>
                                 <td style="text-align: left; word-break: break-all; border: 1px solid #ddd;">
-                                    {{ $item['url_origin'] }}</td>
+                                    <a href="{{ $item['url_origin'] }}" target="_blank">{{ $item['url_origin'] }}</a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
