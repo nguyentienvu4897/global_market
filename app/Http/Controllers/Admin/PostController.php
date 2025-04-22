@@ -178,7 +178,9 @@ class PostController extends Controller
 			$object->save();
 
 			if ($request->image) {
-				FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+				if ($object->image) {
+					FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+				}
 				FileHelper::uploadFile($request->image, 'posts', $object->id, ThisModel::class, 'image', 3);
 			}
 
@@ -204,6 +206,9 @@ class PostController extends Controller
 				"alert-type" => "warning"
 			);
 		} else {
+			if ($object->image) {
+				FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+			}
 			$object->delete();
 			$message = array(
 				"message" => "Thao tác thành công!",

@@ -210,6 +210,9 @@ class CategorySpecialController extends Controller
                 "alert-type" => "warning"
             );
         } else {
+            if ($object->image) {
+                FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+            }
             // xóa sản phẩm hoặc bài viết ra khỏi danh mục này
             if($object->type == CategorySpecial::PRODUCT) {
                 ProductCategorySpecial::query()->where('category_special_id', $object->id)->delete();

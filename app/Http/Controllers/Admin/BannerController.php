@@ -158,7 +158,6 @@ class BannerController extends Controller
                     FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
                 }
 
-
                 FileHelper::uploadFile($request->image, 'banners', $object->id, ThisModel::class, 'image', 99);
             }
 
@@ -182,6 +181,9 @@ class BannerController extends Controller
                 "alert-type" => "warning"
             );
         } else {
+            if ($object->image) {
+                FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+            }
             $object->delete();
             $message = array(
                 "message" => "Thao tác thành công!",

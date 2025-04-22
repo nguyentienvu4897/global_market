@@ -174,6 +174,9 @@ class ManufacturerController extends Controller
                 "alert-type" => "warning"
             );
         } else {
+            if ($object->image) {
+                FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+            }
             $object->delete();
             $message = array(
                 "message" => "Thao tác thành công!",

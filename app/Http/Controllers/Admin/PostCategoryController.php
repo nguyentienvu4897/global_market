@@ -152,7 +152,7 @@ class PostCategoryController extends Controller
 			$object->name = $request->name;
 			$object->intro = $request->intro;
             $object->show_home_page = $request->show_home_page;
-            
+
 			$object->save();
 
 			// Cập nhật lại stt các danh mục có stt lớn hơn
@@ -280,6 +280,9 @@ class PostCategoryController extends Controller
 				"alert-type" => "warning"
 			);
 		} else {
+            if ($object->image) {
+                FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+            }
 			$object->delete();
 			$message = array(
 				"message" => "Thao tác thành công!",

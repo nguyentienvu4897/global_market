@@ -21,7 +21,17 @@
         .create-user-link-section-title {
             font-size: 24px;
             font-weight: 600;
+            /* margin-bottom: 20px; */
+        }
+
+        .create-user-link-section-note {
+            font-size: 15px;
+            color: #000;
             margin-bottom: 20px;
+        }
+
+        .create-user-link-section-note p {
+            margin-bottom: 0;
         }
 
         .create-user-link-section-item {
@@ -82,7 +92,6 @@
             box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
             height: 40px;
             font-size: 17px;
-            margin-bottom: 15px;
             color: #0974ba;
             font-weight: 600;
         }
@@ -103,6 +112,7 @@
             font-weight: 600;
             color: #fff;
             background-color: #0974ba;
+            margin-bottom: 15px;
         }
 
         .create-user-link-section-button-submit .btn-submit:hover {
@@ -198,11 +208,18 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="create-user-link-section-title">Sản phẩm khách hàng đề xuất</div>
+                    <div class="create-user-link-section-note">
+                        @foreach (explode("\n", $config->aff_link_note) as $note)
+                            <p>
+                                {!! $note !!}
+                            </p>
+                        @endforeach
+                    </div>
                 </div>
                 <div class="col-md-10">
                     <div class="create-user-link-section-list">
                         <div class="create-user-link-section-item" ng-repeat="(index, item) in arrGenerateLink">
-                            <div class="marchant-name">
+                            {{-- <div class="marchant-name">
                                 <select class="form-control" ng-model="item.campaign_id"
                                     ng-options="campaign.id as campaign.name for campaign in campaigns">
                                     <option value="">Chọn chiến dịch</option>
@@ -212,7 +229,7 @@
                                         <% errors['arrGenerateLink.' + index + '.campaign_id'][0] %>
                                     </span>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group">
                                 <input type="text" class="form-control" id="name" name="name"
                                     placeholder="Gắn link sản phẩm ở đây" ng-model="item.url_origin">
@@ -230,15 +247,15 @@
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <div class="create-user-link-section-button-add">
-                        <button class="btn btn-add-link" title="Thêm link" ng-click="addArrGenerateLink()">Thêm link</button>
-                    </div>
                     <div class="create-user-link-section-button-submit">
-                        <button class="btn btn-submit" title="Tạo link" ng-click="generateLink()" ng-disabled="loading">
+                        <button class="btn btn-submit" title="Gửi đề xuất" ng-click="generateLink()" ng-disabled="loading">
                             <i ng-if="!loading" class="fa fa-paper-plane"></i>
                             <i ng-if="loading" class="fa fa-spinner fa-spin"></i>
-                            Tạo link
+                            Gửi đề xuất
                         </button>
+                    </div>
+                    <div class="create-user-link-section-button-add">
+                        <button class="btn btn-add-link" title="Thêm link" ng-click="addArrGenerateLink()">Thêm link</button>
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -495,14 +512,7 @@
                 name: 'Sendo'
             }
         ];
-        $scope.arrGenerateLink = [{
-                campaign_id: 1,
-                url_origin: ''
-            },
-            {
-                campaign_id: 1,
-                url_origin: ''
-            },
+        $scope.arrGenerateLink = [
             {
                 campaign_id: 1,
                 url_origin: ''
@@ -530,16 +540,9 @@
                 },
                 success: function(response) {
                     if (response.success) {
-                        $scope.arrGenerateLink = [{
-                                campaign_id: '',
-                                url_origin: ''
-                            },
+                        $scope.arrGenerateLink = [
                             {
-                                campaign_id: '',
-                                url_origin: ''
-                            },
-                            {
-                                campaign_id: '',
+                                campaign_id: 1,
                                 url_origin: ''
                             },
                         ];

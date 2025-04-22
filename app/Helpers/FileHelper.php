@@ -184,6 +184,18 @@ class FileHelper
         if (!is_array($fileIds)) {
             $fileIds = [$fileIds];
         }
+        $files = File::query()
+            ->where('model_id', $id)
+            ->where('model_type', $class)
+            ->where('custom_field', $custom)
+            ->whereIn('id', $fileIds)
+            ->get();
+        foreach ($files as $file) {
+            $path = public_path($file->path);
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
         File::query()
             ->where('model_id', $id)
             ->where('model_type', $class)

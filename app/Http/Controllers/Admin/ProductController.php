@@ -265,6 +265,14 @@ class ProductController extends Controller
 				"alert-type" => "warning"
 			);
 		} else {
+			if ($object->image) {
+				FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+			}
+            if (isset($object->galleries)) {
+                foreach ($object->galleries as $gallery) {
+                    FileHelper::forceDeleteFiles($gallery->id, $object->id, ProductGallery::class);
+                }
+            }
 			$object->delete();
 			$message = array(
 				"message" => "Thao tác thành công!",

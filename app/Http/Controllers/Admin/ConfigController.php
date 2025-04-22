@@ -45,6 +45,7 @@ class ConfigController extends Controller
                 'revenue_percent_2' => 'nullable|numeric|min:0|max:100',
                 'revenue_percent_1' => 'nullable|numeric|min:0|max:100',
 				'text_top_header' => 'nullable',
+				'aff_link_note' => 'nullable',
 			]
 		);
 
@@ -88,6 +89,7 @@ class ConfigController extends Controller
             $object->revenue_percent_2 = $request->revenue_percent_2;
             $object->revenue_percent_1 = $request->revenue_percent_1;
             $object->text_top_header = $request->text_top_header;
+            $object->aff_link_note = $request->aff_link_note;
 			$object->save();
 
 			if($request->image) {

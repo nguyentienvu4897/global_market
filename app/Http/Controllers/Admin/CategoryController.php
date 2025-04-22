@@ -275,6 +275,12 @@ class CategoryController extends Controller
 				"alert-type" => "warning"
 			);
 		} else {
+            if ($object->image) {
+                FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+            }
+            if ($object->banner) {
+                FileHelper::forceDeleteFiles($object->banner->id, $object->id, ThisModel::class, 'banner');
+            }
 			$object->delete();
 			$message = array(
 				"message" => "Thao tác thành công!",
