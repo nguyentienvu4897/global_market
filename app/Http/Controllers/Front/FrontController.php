@@ -589,12 +589,12 @@ class FrontController extends Controller
             $object->save();
         }
 
-        // $users = User::query()->where('type', 1)->where('status', 1)->get();
-        // foreach ($users as $user) {
-        //     Mail::to($user->email)->send(new AffiliateLinkRequestMail($request->arrGenerateLink, \Auth::guard('client')->user()));
-        // }
+        $users = User::query()->where('type', 1)->where('status', 1)->get();
+        foreach ($users as $user) {
+            Mail::to($user->email)->send(new AffiliateLinkRequestMail($request->arrGenerateLink, \Auth::guard('client')->user()));
+        }
 
-        Mail::to('nguyentienvu4897@gmail.com')->send(new AffiliateLinkRequestMail($request->arrGenerateLink, \Auth::guard('client')->user()));
+        // Mail::to('nguyentienvu4897@gmail.com')->send(new AffiliateLinkRequestMail($request->arrGenerateLink, \Auth::guard('client')->user()));
 
         return $this->responseSuccess('Gửi yêu cầu thành công!');
     }
