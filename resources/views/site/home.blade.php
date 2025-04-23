@@ -520,7 +520,7 @@
         ];
         $scope.addArrGenerateLink = function() {
             $scope.arrGenerateLink.push({
-                campaign_id: '',
+                campaign_id: 1,
                 url_origin: ''
             });
         }
