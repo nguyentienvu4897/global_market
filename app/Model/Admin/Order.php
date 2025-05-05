@@ -4,6 +4,7 @@ namespace App\Model\Admin;
 
 use App\Model\BaseModel;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Order extends Model
 {
@@ -66,7 +67,15 @@ class Order extends Model
     }
 
     public function canCancel() {
-        return $this->status == self::MOI && \Auth::guard('client')->user()->email == $this->customer_email;
+        return $this->status == self::MOI && Auth::guard('client')->user()->email == $this->customer_email;
+    }
+
+    public function canUpdateStatus() {
+        return Auth::guard('admin')->user()->canDo('Cập nhật trạng thái đơn hàng');
+    }
+
+    public function canView() {
+        return Auth::guard('admin')->user()->canDo('Xem chi tiết đơn hàng');
     }
 
     public function getTotalPriceAttribute()

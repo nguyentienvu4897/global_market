@@ -40,6 +40,8 @@ Danh sách người dùng
 			{data: 'DT_RowIndex', orderable: false, title: "STT"},
 			{data: 'name', title: "Tên"},
 			{data: 'email', title: "Email"},
+            {data: 'account_type', title: "Loại tài khoản"},
+			{data: 'role', title: "Chức vụ"},
 			{
 				data: 'status',
 				title: "Trạng thái",

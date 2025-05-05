@@ -15,11 +15,15 @@ use App\Model\Admin\OrderRevenueDetail;
 use JWTAuth;
 use App\Helpers\FileHelper;
 use App\Mail\RecoverPassword;
+use App\Mail\SellerRequestMail;
+use App\Mail\SellerRequestSuccessMail;
 use App\Mail\WithdrawMoney;
 use App\Model\Admin\Order;
+use App\Model\Admin\SellerRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-
+use App\Model\Admin\SellerStore;
+use Illuminate\Validation\Rule;
 class ClientRegisterController extends Controller
 {
     use ResponseTrait;
@@ -58,7 +62,7 @@ class ClientRegisterController extends Controller
             $field    => $request->account_name,
             'password' => $request->password,
             'status'   => 1,
-            'type'     => 10
+            'type'     => [10, 20]
         ];
 
         if (Auth::guard('client')->attempt($loginConditions, $remember)) {
@@ -568,5 +572,172 @@ class ClientRegisterController extends Controller
         ])->where('parent_id', $user->id)->where('status', 1)->get();
         // dd($users);
         return view('site.admin.user_level', compact('users'));
+    }
+
+    // seller
+    public function seller() {
+        if (\Auth::guard('admin')->check() && \Auth::guard('admin')->user()->is_seller) return redirect()->route('index');
+        $display = 'login';
+        return view('site.seller.seller_register', compact('display'));
+    }
+
+    public function sellerRegister() {
+        $display = 'register';
+        return view('site.seller.seller_register', compact('display'));
+    }
+
+    public function sellerRegisterSubmit(Request $request) {
+        $rule = [
+			'shop_name' => 'required',
+			'email' => 'required|email|unique:users,email',
+			'account_name' => 'required|unique:users,account_name',
+			'password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
+            'agree_terms' => 'required|in:1',
+		];
+        if (isset($request->use_account_client) && $request->use_account_client) {
+            $rule['email'] = [
+                'required',
+                'email',
+                Rule::exists('users', 'email')->where(function ($query) {
+                    $query->where('status', 1);
+                }),
+            ];
+            $rule['account_name'] = 'nullable|unique:users,account_name';
+            $rule['password'] = 'nullable|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/';
+        }
+
+		$validate = Validator::make(
+			$request->all(),
+			$rule,
+            [
+                'password.regex' => 'Mật khẩu không đúng định dạng',
+                'email.unique' => 'Email đã được sử dụng',
+                'account_name.unique' => 'Tên đăng nhập đã được sử dụng',
+                'email.exists' => 'Email không chính xác',
+                'account_name.exists' => 'Tên đăng nhập không chính xác',
+                'shop_name.required' => 'Tên shop không được để trống',
+                'agree_terms.required' => 'Bạn phải đồng ý với các điều khoản và điều kiện',
+                'agree_terms.in' => 'Bạn phải đồng ý với các điều khoản và điều kiện',
+            ]
+		);
+
+		if ($validate->fails()) {
+			return $this->responseErrors("Thao tác thất bại", $validate->errors());
+		}
+
+        $existing_seller = SellerRequest::where('email', $request->email)->where('status', SellerRequest::STATUS_PENDING)->first();
+        if ($existing_seller) {
+            return $this->responseErrors("Yêu cầu đăng ký trước đó chưa được duyệt", "Vui lòng chờ duyệt");
+        }
+
+        DB::beginTransaction();
+		try {
+            $user = User::query()->where('email', $request->email)->first();
+            $request->merge(['user_id' => $user ? $user->id : null]);
+			$object = new SellerRequest();
+			$object->fill($request->all());
+			$object->save();
+
+			DB::commit();
+
+            // Mail::to('nguyentienvu4897@gmail.com')->send(new SellerRequestMail($object));
+            $users = User::query()->where('type', 1)->where('status', 1)->get();
+
+            if($users->count()) {
+                foreach ($users as $user) {
+                    Mail::to($user->email)->send(new SellerRequestMail($object));
+                }
+            }
+            return $this->responseSuccess('Gửi đăng ký thành công!');
+		} catch (Exception $e) {
+            DB::rollBack();
+            throw new Exception($e->getMessage());
+        }
+    }
+
+    public function sellerRegisterNotice() {
+        return view('site.seller.seller_register_notice');
+    }
+
+    public function sellerApprove($id) {
+        $object = SellerRequest::find($id);
+        if (!$object) {
+            return $this->responseErrors("Thao tác thất bại", "Yêu cầu đăng ký không tồn tại");
+        }
+        if ($object->status == SellerRequest::STATUS_APPROVED) {
+            return $this->responseErrors("Thao tác thất bại", "Yêu cầu đăng ký đã được duyệt");
+        }
+
+        $object->status = SellerRequest::STATUS_APPROVED;
+        $object->approved_at = now();
+        $object->approved_by = 1;
+        $object->save();
+
+        if (!$object->use_account_client) {
+            $user = new User();
+            $user->name = $object->shop_name;
+			$user->email = $object->email;
+            $user->account_name = $object->account_name;
+            $user->password = bcrypt($object->password);
+            $user->type = 20;
+            $user->status = 1;
+            $user->save();
+        } else {
+            $user = User::query()->where('id', $object->user_id)->first();
+            $user->type = 20;
+            $user->save();
+        }
+
+        $seller_store = new SellerStore();
+        $seller_store->user_id = $user->id;
+        $seller_store->shop_name = $object->shop_name;
+        $seller_store->email = $object->email;
+        $seller_store->status = SellerStore::STATUS_ACTIVE;
+        $seller_store->save();
+
+        Mail::to('nguyentienvu4897@gmail.com')->send(new SellerRequestSuccessMail($object));
+        // Mail::to($user->email)->send(new SellerRequestSuccessMail($object));
+
+        return $this->responseSuccess('Đã duyệt đăng ký!');
+    }
+
+    public function sellerLoginSubmit(Request $request) {
+        $validate = Validator::make(
+            $request->all(),
+            [
+                'login_email' => 'required',
+                'login_password' => 'required',
+            ]
+        );
+
+        if ($validate->fails()) {
+            return $this->responseErrors("Thao tác thất bại", $validate->errors());
+        }
+
+        $remember = true;
+
+        // Xác định trường nào sẽ dùng để đăng nhập (email hoặc account_name)
+        $field = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'account_name';
+
+        // Thay đổi mảng điều kiện xác thực
+        $loginConditions = [
+            $field    => $request->login_email,
+            'password' => $request->login_password,
+            'status'   => 1,
+            'type'     => [20]
+        ];
+
+        if (Auth::guard('admin')->attempt($loginConditions, $remember)) {
+            // Đăng nhập thành công
+            $token = JWTAuth::attempt($loginConditions);
+
+            $data = array(
+                "token" => $token
+            );
+            return $this->responseSuccess('Đăng nhập thành công!', $data);
+        } else {
+            // Đăng nhập thất bại, trả về thông báo lỗi.
+            return $this->responseErrors('Đăng nhập thất bại, vui lòng thử lại!');
+        }
     }
 }

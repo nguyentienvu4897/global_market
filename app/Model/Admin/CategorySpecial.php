@@ -43,12 +43,16 @@ class CategorySpecial extends BaseModel
 
     public function canEdit()
     {
-        return Auth::guard('admin')->user()->id = $this->create_by;
+        if (Auth::guard('admin')->user()->is_super_admin) return true;
+        if (Auth::guard('admin')->user()->canDo('Sửa danh mục đặc biệt') && Auth::guard('admin')->user()->id == $this->created_by) return true;
+        return false;
     }
 
     public function canDelete()
     {
-        return true;
+        if (Auth::guard('admin')->user()->is_super_admin) return true;
+        if (Auth::guard('admin')->user()->canDo('Xóa danh mục đặc biệt') && Auth::guard('admin')->user()->id == $this->created_by) return true;
+        return false;
     }
 
     public function user()

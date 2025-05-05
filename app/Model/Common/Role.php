@@ -34,10 +34,16 @@ class Role extends BaseRole
     }
 
     public function canDelete() {
-        if (!in_array($this->type, Auth::guard('admin')->user()->getAccessTypes())) return false;
+        // if (!in_array($this->type, Auth::guard('admin')->user()->getAccessTypes())) return false;
+        if ($this->id == 3) return false;
         $user_count = ModelHasRole::where('role_id', $this->id)->count();
-        if ($user_count > 0) return false;
+        if ($user_count > 0 || !Auth::guard('admin')->user()->canDo('Xóa chức vụ')) return false;
         return true;
+    }
+
+    public function canEdit() {
+        if (Auth::guard('admin')->user()->canDo('Cập nhật chức vụ')) return true;
+        return false;
     }
 
     public static function searchByFilter($request) {

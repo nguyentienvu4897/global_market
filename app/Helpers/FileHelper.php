@@ -79,6 +79,10 @@ class FileHelper
                 Image::make($file)->resize(1920, 700)->save($destinationPath . DIRECTORY_SEPARATOR . $destinationFile);
             } else if ($type == 7) {
                 Image::make($file)->resize(32, 32)->save($destinationPath . DIRECTORY_SEPARATOR . $destinationFile);
+            } else if ($type == 8) {
+                Image::make($file)->resize(1260, 518)->save($destinationPath . DIRECTORY_SEPARATOR . $destinationFile); // ảnh bìa shop
+            } else if ($type == 9) {
+                Image::make($file)->resize(320, 320)->save($destinationPath . DIRECTORY_SEPARATOR . $destinationFile); // ảnh logo shop
             }  else {
                 $file->move($destinationPath, $destinationFile);
             }

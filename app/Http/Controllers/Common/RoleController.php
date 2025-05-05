@@ -43,11 +43,17 @@ class RoleController extends Controller
 			->editColumn('created_by', function ($object) {
                 return $object->user_create->name;
             })
+			->editColumn('updated_by', function ($object) {
+                return $object->user_update->name;
+            })
             ->editColumn('created_at', function ($object) {
                 return Carbon::parse($object->created_at)->format("d/m/Y");
             })
             ->addColumn('action', function ($object) {
-				$result = '<a href="' . route($this->route.'.edit',$object->id) .'" title="Sửa" class="btn btn-sm btn-primary edit"><i class="fas fa-pencil-alt"></i></a> ';
+				$result = '';
+				if ($object->canEdit()) {
+					$result .= '<a href="' . route($this->route.'.edit',$object->id) .'" title="Sửa" class="btn btn-sm btn-primary edit"><i class="fas fa-pencil-alt"></i></a> ';
+				}
 				// $result .= '<a href="'. route($this->route.'.copy', $object->id) .'" title="Sao chép" class="btn btn-sm btn-info"><i class="fa fa-files-o"></i></a> ';
 				if ($object->canDelete()) {
 					$result .= '<a href="' . route($this->route.'.delete', $object->id) . '" title="Xóa" class="btn btn-sm btn-danger confirm"><i class="fas fa-times"></i></a>';
@@ -67,6 +73,7 @@ class RoleController extends Controller
 	public function edit($id)
 	{
 		$object = ThisModel::findOrFail($id);
+		if (!$object->canEdit()) return view('not_found');
 		$rolePermissions = $object->permissions->pluck('id');
 		return view($this->view.'.edit', compact(['object', 'rolePermissions']));
 	}
@@ -144,12 +151,10 @@ class RoleController extends Controller
 		DB::beginTransaction();
 		try {
 			$object = ThisModel::findOrFail($id);
-			// if ($request->status == 0 && !$object->canDelete()) {
-			// 	$json->success = false;
-			// 	$json->message = "Không thể khóa chức vụ này!";
-			// 	return Response::json($json);
-			// }
-			$object->name = $object->display_name;
+			if (!$object->canEdit()) return response()->json(['success' => false, 'message' => 'Không có quyền!']);
+
+			$object->name = $request->display_name;
+			$object->display_name = $request->display_name;
 			if (empty($object->name)) $object->name = $request->display_name;
 
 			$permissions = Permission::find($request->permissions);
@@ -171,7 +176,7 @@ class RoleController extends Controller
 		$object = ThisModel::findOrFail($id);
 		if (!$object->canDelete()) {
 			$message = array(
-				"message" => "Đã có người dùng nhận chức vụ này!",
+				"message" => "Không có quyền!",
 				"alert-type" => "warning"
 			);
 		} else {

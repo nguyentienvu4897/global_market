@@ -16,7 +16,7 @@ class CheckPermission
      */
     public function handle($request, Closure $next, $permission)
     {
-        if (Auth::guard('admin')->user() && Auth::guard('admin')->user()->can($permission) || Auth::guard('admin')->user()->id == 1) {
+        if (Auth::guard('admin')->user() && Auth::guard('admin')->user()->can($permission) || Auth::guard('admin')->user()->is_super_admin) {
             return $next($request);
         } else {
 			if ($request->ajax()){

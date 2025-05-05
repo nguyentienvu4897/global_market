@@ -1,3 +1,12 @@
+<div class="top-header-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-6 col-xlcus-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 header-logo">
+                <a href="{{route('front.seller-login')}}">Kênh người bán</a> <span style="color: #fff;">|</span> <a href="{{route('front.seller-register')}}">Trở thành người bán hàng</a>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="top-header" ng-cloak>
     <div class="container">
         <div class="row">

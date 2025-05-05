@@ -87,6 +87,15 @@ Route::group(['namespace' => 'Front'], function () {
 
     // affiliate link
     Route::post('/generate-link','FrontController@generateLink')->name('front.generate-link');
+
+    // seller
+    Route::get('/seller/login','ClientRegisterController@seller')->name('front.seller-login');
+    Route::get('/seller/register','ClientRegisterController@sellerRegister')->name('front.seller-register');
+    Route::post('/seller/register','ClientRegisterController@sellerRegisterSubmit')->name('front.seller-register-submit');
+    Route::get('/seller/register/notice','ClientRegisterController@sellerRegisterNotice')->name('front.seller-register-notice');
+    Route::get('/seller/{id}/approve','ClientRegisterController@sellerApprove')->name('front.seller-approve')->middleware('signed');
+
+    Route::post('/seller/login','ClientRegisterController@sellerLoginSubmit')->name('front.seller-login-submit');
 });
 
 

@@ -60,8 +60,10 @@ class OrderController extends Controller
                 <i class = "fa fa-cog"></i>
                 </button>
                 <div class="dropdown-menu">';
-                $result = $result . ' <a href="" title="đổi trạng thái" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Đổi trạng thái</a>';
-                if ($object->type == 0) {
+                if ($object->canUpdateStatus()) {
+                    $result = $result . ' <a href="" title="đổi trạng thái" class="dropdown-item update-status"><i class="fa fa-angle-right"></i>Đổi trạng thái</a>';
+                }
+                if ($object->canView()) {
                     $result = $result . ' <a href="'.route('orders.show', $object->id).'" title="xem chi tiết" class="dropdown-item"><i class="fa fa-angle-right"></i>Xem chi tiết</a>';
                 }
                 $result = $result . '</div></div>';
@@ -95,7 +97,9 @@ class OrderController extends Controller
     public function updateStatus(Request $request)
     {
         $order = Order::query()->find($request->order_id);
-
+        if (!$order->canUpdateStatus()) {
+            return Response::json(['success' => false, 'message' => 'Không có quyền!']);
+        }
         $order->status = $request->status;
         $order->save();
         $order_revenue_details = OrderRevenueDetail::query()->where('order_id', $order->id)->get();
@@ -116,6 +120,9 @@ class OrderController extends Controller
     }
 
     public function exportList(Request $request) {
+        if (!Auth::guard('admin')->user()->canDo('Xuất excel đơn hàng')) {
+            return view('not_found');
+        }
         $data = Order::searchByFilter($request)->where('type', 0)->values();
         $result['CHI_TIET'] = Order::getTableList($data);
         $result['COLSPAN'] = 8;
@@ -129,6 +136,9 @@ class OrderController extends Controller
 
     // Import Excel
 	public function importExcel(Request $request) {
+        if (!Auth::guard('admin')->user()->canDo('Import excel đơn hàng')) {
+            return Response::json(['success' => false, 'message' => 'Không có quyền!']);
+        }
 		$validate = Validator::make(
 			$request->all(),
 			[

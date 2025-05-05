@@ -55,8 +55,12 @@ class CategorySpecialController extends Controller
             })
             ->addColumn('action', function ($object) {
                 $result = '';
-                $result .= '<a href="javascript:void(0)" title="Sửa" class="btn btn-sm btn-primary edit"><i class="fas fa-pencil-alt"></i></a> ';
-                $result .= '<a href="' . route($this->route.'.delete', $object->id) . '" title="Xóa" class="btn btn-sm btn-danger remove"><i class="fas fa-times"></i></a>';
+                if ($object->canEdit()) {
+                    $result .= '<a href="javascript:void(0)" title="Sửa" class="btn btn-sm btn-primary edit"><i class="fas fa-pencil-alt"></i></a> ';
+                }
+                if ($object->canDelete()) {
+                    $result .= '<a href="' . route($this->route.'.delete', $object->id) . '" title="Xóa" class="btn btn-sm btn-danger remove"><i class="fas fa-times"></i></a>';
+                }
                 return $result;
             })
             ->addIndexColumn()
@@ -172,6 +176,8 @@ class CategorySpecialController extends Controller
                 }
             }
             $object = ThisModel::findOrFail($id);
+            if (!$object->canEdit()) return response()->json(['success' => false, 'message' => 'Không có quyền!']);
+
             $object->code = $request->code;
             $object->name = $request->name;
             $object->type = $request->type;
@@ -206,7 +212,7 @@ class CategorySpecialController extends Controller
         $object = ThisModel::findOrFail($id);
         if (!$object->canDelete()) {
             $message = array(
-                "message" => "Không thể xóa!",
+                "message" => "Không có quyền!",
                 "alert-type" => "warning"
             );
         } else {
@@ -234,9 +240,11 @@ class CategorySpecialController extends Controller
 
     public function getDataForEdit($id)
     {
+        $object = ThisModel::getDataForEdit($id);
+        if (!$object->canEdit()) return response()->json(['success' => false, 'message' => 'Không có quyền!']);
         $json = new stdclass();
         $json->success = true;
-        $json->data = ThisModel::getDataForEdit($id);
+        $json->data = $object;
         return Response::json($json);
     }
 

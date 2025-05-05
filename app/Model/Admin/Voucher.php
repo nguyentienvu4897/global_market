@@ -4,6 +4,7 @@ namespace App\Model\Admin;
 
 use Illuminate\Database\Eloquent\Model;
 use App\Model\BaseModel;
+use Illuminate\Support\Facades\Auth;
 
 class Voucher extends Model
 {
@@ -29,5 +30,19 @@ class Voucher extends Model
     {
         return self::where('id', $id)
             ->firstOrFail();
+    }
+
+    public function canEdit()
+    {
+        if (Auth::guard('admin')->user()->is_super_admin) return true;
+        if (Auth::guard('admin')->user()->canDo('Sửa mã giảm giá') && Auth::guard('admin')->user()->id == $this->created_by) return true;
+        return false;
+    }
+
+    public function canDelete()
+    {
+        if (Auth::guard('admin')->user()->is_super_admin) return true;
+        if (Auth::guard('admin')->user()->canDo('Xóa mã giảm giá') && Auth::guard('admin')->user()->id == $this->created_by) return true;
+        return false;
     }
 }

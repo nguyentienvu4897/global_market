@@ -69,12 +69,14 @@ class Product extends BaseModel
 
     public function canDelete()
     {
-        return true;
+        if (Auth::guard('admin')->user()->canDo('Xóa hàng hóa') && $this->created_by == Auth::guard('admin')->user()->id) return true;
+        return false;
     }
 
     public function canEdit()
     {
-        return Auth::guard('admin')->user()->type == User::SUPER_ADMIN || Auth::guard('admin')->user()->type == User::QUAN_TRI_VIEN;
+        if (Auth::guard('admin')->user()->canDo('Sửa hàng hóa') && $this->created_by == Auth::guard('admin')->user()->id) return true;
+        return false;
     }
 
     public function image()
@@ -154,6 +156,11 @@ class Product extends BaseModel
             'category',
             'image',
         ]);
+
+        if (!Auth::guard('admin')->user()->is_seller) {
+        } else {
+            $result = $result->where('created_by', Auth::guard('admin')->user()->id);
+        }
 
         if (!empty($request->name)) {
             $result = $result->where('name', 'like', '%' . $request->name . '%');

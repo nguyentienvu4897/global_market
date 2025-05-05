@@ -47,6 +47,19 @@ class UserController extends Controller
 			->editColumn('status', function ($object) {
                 return getStatus($object->status, ThisModel::STATUSES);
             })
+			->editColumn('account_type', function ($object) {
+                return $object->getTypeUser($object->type);
+            })
+            ->editColumn('role', function ($object) {
+                $roles = $object->getRoleNames();
+                $result = '';
+                if (!$roles->isEmpty()) {
+                    foreach ($roles as $role) {
+                        $result .= '<span class="badge badge-secondary">' . $role . '</span> ';
+                    }
+                }
+                return $result;
+            })
 			->editColumn('created_by', function ($object) {
                 return $object->user_create ? $object->user_create->name : '';
             })
@@ -61,7 +74,7 @@ class UserController extends Controller
 				return $result;
 
             })
-			->rawColumns(['image', 'status', 'action'])
+			->rawColumns(['image', 'status', 'action', 'role'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -74,6 +87,7 @@ class UserController extends Controller
 	public function edit($id)
 	{
 		$object = ThisModel::getDataForEdit($id);
+		if (!$object->canEdit()) return view('not_found');
 		return view($this->view.'.edit', compact(['object']));
 	}
 
@@ -130,7 +144,7 @@ class UserController extends Controller
 	public function update(Request $request, $id)
 	{
 		$object = ThisModel::findOrFail($id);
-
+		if (!$object->canEdit()) return response()->json(['success' => false, 'message' => 'Không có quyền!']);
 		$rule = [
 			'name' => 'required',
 			'email' => 'required|email|unique:users,email,'.$id,
@@ -182,7 +196,7 @@ class UserController extends Controller
 		$object = ThisModel::findOrFail($id);
 		if (!$object->canDelete()) {
 			$message = array(
-				"message" => "Không thể khóa!",
+				"message" => "Không có quyền!",
 				"alert-type" => "warning"
 			);
 		} else {

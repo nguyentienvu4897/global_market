@@ -2411,7 +2411,7 @@ ul.tabs li.current {
         border-bottom: 1px solid #f69326;
         padding-bottom: 5px;
         /* margin-bottom: 10px; */
-        border-top: 5px solid #f69326;
+        border-top: 1px solid #f69326;
     }
 
     .top-header #btn-menu-mobile {
@@ -5383,3 +5383,19 @@ header .menu_mega:hover .title_menu {
     /* color: #f69326; */
     font-size: 16px;
 }
+
+.top-header-wrapper {
+    background-color: #0974ba;
+    border-top: 1px solid #f69326;
+}
+
+.top-header-wrapper a {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.top-header-wrapper a:hover {
+    color: #f69326;
+}
+

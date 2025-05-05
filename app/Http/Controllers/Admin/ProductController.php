@@ -168,6 +168,7 @@ class ProductController extends Controller
 	public function edit($id)
 	{
 		$object = ThisModel::getDataForEdit($id);
+		if (!$object->canEdit()) return view('not_found');
         $tags = Tag::query()->where('type', Tag::TYPE_PRODUCT)->latest()->get();
         $config = Config::query()->first(['revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5']);
         $object->tag_ids = $object->tags->pluck('id')->toArray();

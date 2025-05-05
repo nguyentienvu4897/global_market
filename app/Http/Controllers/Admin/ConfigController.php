@@ -23,11 +23,16 @@ class ConfigController extends Controller
 	{
 		$id = 1;
 		$object = ThisModel::getDataForEdit($id);
+		if (!$object->canEdit()) return view('not_found');
 		return view($this->view.'.edit', compact('object'));
 	}
 
 	public function update(Request $request)
 	{
+		$object = ThisModel::where('id',1)->first();
+		if (!$object->canEdit()) {
+			return response()->json(['success' => false, 'message' => 'Bạn không có quyền']);
+		}
 		$validate = Validator::make(
 			$request->all(),
 			[
@@ -60,7 +65,6 @@ class ConfigController extends Controller
 
 		DB::beginTransaction();
 		try {
-			$object = ThisModel::where('id',1)->first();
 			$object->web_title = $request->web_title;
 			$object->meta_title = $request->meta_title;
 			$object->short_name_company = $request->short_name_company;

@@ -1,4 +1,5 @@
 $scope.loading = {};
+$scope.typeOptions = USER_TYPES;
 
 $(document).on("click", ".show-password", function() {
     var input = $(this).closest(".form-group").find("input");

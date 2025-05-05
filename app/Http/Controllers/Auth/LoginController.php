@@ -58,10 +58,11 @@ class LoginController extends Controller
         // if(isset($request->remember_me)) {
         //     $remember = true;
         // }
+        $types = [ 1, 2, 20 ];
 
-        if (Auth::guard('admin')->attempt(['account_name' => $request->account_name, 'password' => $request->password, 'status' => 1, 'type' => 1], $remember)) {
+        if (Auth::guard('admin')->attempt(['account_name' => $request->account_name, 'password' => $request->password, 'status' => 1, 'type' => $types], $remember)) {
             // Đăng nhập thành công
-            $token = JWTAuth::attempt(['account_name' => $request->account_name, 'password' => $request->password, 'status' => 1, 'type' => 1]);
+            $token = JWTAuth::attempt(['account_name' => $request->account_name, 'password' => $request->password, 'status' => 1, 'type' => $types]);
 
             $message = array(
                 "message" => "Đăng nhập thành công!",
@@ -80,6 +81,13 @@ class LoginController extends Controller
     }
 
     public function logout() {
+        if (Auth::guard('admin')->user()->is_seller) {
+            Auth::guard('admin')->logout();
+            $message = array(
+                "logout" => "logout"
+            );
+            return redirect()->route('front.seller-login')->with($message);
+        }
         Auth::guard('admin')->logout();
         $message = array(
             "logout" => "logout"

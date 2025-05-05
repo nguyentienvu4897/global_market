@@ -166,12 +166,15 @@ class CategoryController extends Controller
 	public function edit($id)
 	{
 		$object = ThisModel::getDataForEdit($id);
+        if (!$object->canEdit()) return view('not_found');
 		$categories = ThisModel::getAllForEdit($id);
 		return view($this->view.'.edit', compact('object','categories'));
 	}
 
 	public function update(Request $request, $id)
 	{
+		$object = ThisModel::find($id);
+		if (!$object->canEdit()) return response()->json(['success' => false, 'message' => 'Bạn không có quyền']);
 		$validate = Validator::make(
 			$request->all(),
 			[
@@ -194,8 +197,6 @@ class CategoryController extends Controller
 
 		DB::beginTransaction();
 		try {
-			$object = ThisModel::find($id);
-
 			if($request->parent_id) {
                 $parent = ThisModel::where('id',$request->parent_id)->first();
                 if($parent->level + 1 > 3) {
@@ -271,7 +272,7 @@ class CategoryController extends Controller
 		$object = ThisModel::findOrFail($id);
 		if (!$object->canDelete()) {
 			$message = array(
-				"message" => "Không thể xóa!",
+				"message" => "Không có quyền xóa!",
 				"alert-type" => "warning"
 			);
 		} else {

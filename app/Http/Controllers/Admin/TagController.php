@@ -35,9 +35,14 @@ class TagController extends Controller
                 return Tag::TYPES[$object->type];
             })
             ->addColumn('action', function ($object) {
-                return '<a href="javascript:void(0)" title="Sửa" class="btn btn-sm btn-primary edit"><i class="fas fa-pencil-alt"></i></a> ' .
-                    '<a href="' . route('tags.delete',
-                        $object->id) . '" title="Xóa" class="btn btn-sm btn-danger delete confirm"><i class="fas fa-times"></i></a>';
+                $result = '';
+                if ($object->canEdit()) {
+                    $result .= '<a href="javascript:void(0)" title="Sửa" class="btn btn-sm btn-primary edit"><i class="fas fa-pencil-alt"></i></a> ';
+                }
+                if ($object->canDelete()) {
+                    $result .= '<a href="' . route('tags.delete', $object->id) . '" title="Xóa" class="btn btn-sm btn-danger delete confirm"><i class="fas fa-times"></i></a>';
+                }
+                return $result;
             })
             ->addIndexColumn()
             ->rawColumns(['action'])
@@ -92,7 +97,7 @@ class TagController extends Controller
     public function edit(Request $request, $id)
     {
         $object = ThisModel::getDataForEdit($id);
-
+        if (!$object->canEdit()) return view('not_found');
         return view($this->view . '.edit', compact('object'));
     }
 
@@ -118,6 +123,7 @@ class TagController extends Controller
         DB::beginTransaction();
         try {
             $object = ThisModel::findOrFail($id);
+            if (!$object->canEdit()) return response()->json(['success' => false, 'message' => 'Không có quyền!']);
             $object->fill($request->all());
 
             $object->save();
@@ -155,9 +161,11 @@ class TagController extends Controller
 
     public function getDataForEdit($id)
     {
+        $data = ThisModel::getDataForEdit($id);
+        if (!$data->canEdit()) return response()->json(['success' => false, 'message' => 'Không có quyền!']);
         $json = new stdclass();
         $json->success = true;
-        $json->data = ThisModel::getDataForEdit($id);
+        $json->data = $data;
         return Response::json($json);
     }
 
