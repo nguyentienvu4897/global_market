@@ -219,11 +219,15 @@ class FrontController extends Controller
             ])->where('status', 1)->whereIn('cate_id', $arr_category_id)->orderBy('created_at', 'desc')->paginate(15);
         } else {
             $category = CategorySpecial::findBySlug($categorySlug);
-            $products = $category->products()->with([
-                'product_rates' => function($q) {
-                    $q->where('status', 2);
-                }
-            ])->where('status', 1)->orderBy('created_at', 'desc')->paginate(15);
+            if ($category) {
+                $products = $category->products()->with([
+                    'product_rates' => function($q) {
+                        $q->where('status', 2);
+                    }
+                ])->where('status', 1)->orderBy('created_at', 'desc')->paginate(15);
+            } else {
+                return view('site.errors');
+            }
         }
 
         $title = $category->name;
