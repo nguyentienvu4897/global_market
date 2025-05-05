@@ -103,7 +103,6 @@ class ProductController extends Controller
 
 	public function store(ProductStoreRequest $request)
 	{
-        dd($request->all());
 		$json = new stdClass();
 		DB::beginTransaction();
 		try {
