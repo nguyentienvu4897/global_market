@@ -17,6 +17,7 @@ use App\Helpers\FileHelper;
 use App\Mail\RecoverPassword;
 use App\Mail\WithdrawMoney;
 use App\Model\Admin\Order;
+use App\Services\SyncUserAccountService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 
@@ -115,6 +116,9 @@ class ClientRegisterController extends Controller
             $object->parent_id = $request->invite_code ? User::where('invite_code', $request->invite_code)->first()->id : null;
 			$object->save();
 
+            $syncUserAccountService = new SyncUserAccountService();
+            $syncUserAccountService->sendSyncUserAccount($object);
+
 			DB::commit();
             $data = [
                 'account_name' => $request->account_name,
@@ -189,6 +193,9 @@ class ClientRegisterController extends Controller
 				FileHelper::uploadFile($request->image, 'users', $object->id, User::class, 'image');
 			}
 
+            $syncUserAccountService = new SyncUserAccountService();
+            $syncUserAccountService->sendSyncUserAccount($object);
+
 			DB::commit();
 			return $this->responseSuccess('Cập nhật thành công');
 		} catch (Exception $e) {
@@ -232,6 +239,10 @@ class ClientRegisterController extends Controller
 		try {
             $user->password = bcrypt($request->new_password);
             $user->save();
+
+            $syncUserAccountService = new SyncUserAccountService();
+            $syncUserAccountService->sendSyncUserAccount($user);
+
             DB::commit();
             return $this->responseSuccess('Đổi mật khẩu thành công');
         } catch (Exception $e) {
@@ -265,6 +276,9 @@ class ClientRegisterController extends Controller
         $new_password = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 8)), 0, 8);
         $user->password = bcrypt($new_password);
         $user->save();
+
+        $syncUserAccountService = new SyncUserAccountService();
+        $syncUserAccountService->sendSyncUserAccount($user);
 
         Mail::to($user->email)->send(new RecoverPassword($user, $new_password));
         // Mail::to('nguyentienvu4897@gmail.com')->send(new RecoverPassword($user, $new_password));

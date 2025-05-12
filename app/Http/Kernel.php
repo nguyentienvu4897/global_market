@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
         'checkRole' => \App\Http\Middleware\CheckRole::class,
         'checkType' => \App\Http\Middleware\CheckType::class,
         'clientAuth' => \App\Http\Middleware\ClientAuthenticate::class,
+        'verifySyncUserToken' => \App\Http\Middleware\VerifySyncUserToken::class,
     ];
 
     /**
