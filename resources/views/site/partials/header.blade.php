@@ -1,3 +1,19 @@
+<div class="top-top-header" ng-cloak>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12 col-xlcus-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
+                <div class="top-top-header-content d-flex justify-content-end">
+                    <div class="top-top-header-content-item">
+                            <i class="fa fa-user"></i> Đăng nhập
+                    </div>
+                    <div class="top-top-header-content-item">
+                        <i class="fa fa-user-plus"></i> Đăng ký
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="top-header" ng-cloak>
     <div class="container">
         <div class="row">
