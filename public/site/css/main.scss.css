@@ -2565,7 +2565,8 @@ ul.tabs li.current {
 @media (max-width: 1025px) {
     .top-header .list-top-item {
         float:right;
-        width: calc(100% - 50px)
+        width: calc(100% - 50px);
+        margin-top: 0;
     }
 }
 
@@ -5407,3 +5408,18 @@ header .menu_mega:hover .title_menu {
     float: right;
 }
 
+.float-left {
+    float: left;
+}
+
+@media (min-width: 768px) {
+    .d-md-none {
+        display: none !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .d-sm-none {
+        display: none !important;
+    }
+}
