@@ -1,15 +1,8 @@
-<div class="top-top-header" ng-cloak>
+<div class="top-header-wrapper" ng-cloak>
     <div class="container">
         <div class="row">
-            <div class="col-xl-12 col-xlcus-12 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12">
-                <div class="top-top-header-content d-flex justify-content-end">
-                    <div class="top-top-header-content-item">
-                            <i class="fa fa-user"></i> Đăng nhập
-                    </div>
-                    <div class="top-top-header-content-item">
-                        <i class="fa fa-user-plus"></i> Đăng ký
-                    </div>
-                </div>
+            <div class="col-xl-6 col-xlcus-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 header-logo">
+                <a href="">Kênh người bán</a> <span style="color: #fff;">|</span> <a href="">Trở thành người bán hàng</a>
             </div>
         </div>
     </div>
