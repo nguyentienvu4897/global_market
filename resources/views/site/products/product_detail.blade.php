@@ -153,6 +153,9 @@
                                 </div>
                                 <div class="details-pro col-12 col-md-7 col-lg-7">
                                     <h1 class="title-product">{{ $product->name }}</h1>
+                                    {{-- @if (isset($product->type) && $product->type == 1) --}}
+                                        <span class="product-top-text" style="font-size: 16px"><i class="fa fa-exclamation-triangle" style="color: #f69326; margin-right: 5px;"></i> Sản phẩm thuộc sàn Shopee</span>
+                                    {{-- @endif --}}
                                     {{-- <div class="product-top clearfix">
                                         <div class="sku-product clearfix">
                                             <span class="d-none" itemprop="brand" itemtype="http://schema.org/Brand"
@@ -220,7 +223,7 @@
                                         <div class="form-product  ">
                                             <div class="clearfix form-group ">
                                                 <div class="flex-quantity">
-                                                    <div class="custom custom-btn-number show">
+                                                    {{-- <div class="custom custom-btn-number show">
                                                         <div class="input_number_product">
                                                             <button class="btn_num num_1 button button_qty"
                                                                 onclick="minusQuantity()"
@@ -233,23 +236,23 @@
                                                                 onclick="plusQuantity()"
                                                                 type="button"><span>&plus;</span></button>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                     <div class="mb-break">
                                                         <div style="font-size: 18px">
                                                             <span><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 16px">Thưởng hoa hồng lên đến</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency($product->revenue_price) }}₫</span></span>
                                                         </div>
                                                     </div>
                                                     <div class="btn-mua button_actions clearfix">
-                                                        <button type="submit" ng-click="addToCartFromProductDetail()"
+                                                        {{-- <button type="submit" ng-click="addToCartFromProductDetail()"
                                                             class="btn btn_base normal_button btn_add_cart btn-cart">
                                                             <span class="txt-main text_1"><i></i>Thêm vào giỏ hàng</span>
-                                                        </button>
+                                                        </button> --}}
                                                         @if ($product->button_type == 0)
                                                             <a href="javascript:void(0)" class="btn btn-buy-now" ng-click="addToCartCheckoutFromProductDetail()">
-                                                            <span class="txt-main text_1">Mua trực tiếp</span></a>
+                                                            <span class="txt-main text_1">Mua hàng</span></a>
                                                         @else
                                                             <a href="{{ $product->short_link ?? $product->aff_link }}" class="btn btn-buy-now" target="_blank">
-                                                                <span class="txt-main text_1">Mua qua sàn thương mại</span></a>
+                                                                <span class="txt-main text_1">Mua hàng</span></a>
                                                         @endif
                                                     </div>
                                                 </div>

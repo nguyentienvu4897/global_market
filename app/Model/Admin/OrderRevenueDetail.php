@@ -120,7 +120,7 @@ class OrderRevenueDetail extends Model
     }
 
     public static function searchByFilter($request) {
-        $results = self::where('user_id', \Auth::guard('client')->user()->id);
+        $results = self::where('user_id', $request->request_user_id);
 
         if (!empty($request->order_code)) {
             $results->where('order_code', $request->order_code);

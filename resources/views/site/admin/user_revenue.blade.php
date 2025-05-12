@@ -21,7 +21,9 @@
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('libs/sweetalert/css/sweetalert.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css"
+        integrity="sha512-vKMx8UnXk60zUwyUnUPM3HbQo8QfmNx7+ltw8Pm5zLusl1XIfwcxo8DbWCqMGKaWeNxWA8yrx5v3SaVpMvR3CA=="
+        crossorigin="anonymous" />
     <link rel="stylesheet" href="{{ asset('libs/angularjs/select.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/3.4.5/select2.css">
 
@@ -43,55 +45,68 @@
             box-shadow: inset 0 0 0 rgba(0, 0, 0, 0);
             transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
         }
+
         .table-responsive .select2-container .select2-selection--single {
             line-height: 1.5 !important;
             height: calc(2.25rem + 2px) !important;
         }
+
         .select2-container--default .select2-selection--single .select2-selection__rendered {
             color: #444;
             line-height: 2.5 !important;
         }
+
         .select2-search--dropdown .select2-search__field {
             padding: 0 !important;
         }
+
         .select2-results__option {
             font-size: 14px !important;
         }
+
         .table-responsive .btn {
             height: 38px !important;
             line-height: 38px !important;
             padding: 0 12px !important;
             border-radius: 5px !important;
         }
+
         .table-responsive .btn.btn-success {
             background-color: #0974ba !important;
             color: #fff !important;
         }
+
         .table-responsive .btn.btn-danger {
             background-color: #f44336 !important;
             color: #fff !important;
         }
+
         .table-responsive .btn.btn-info {
             background-color: #0974ba !important;
             color: #fff !important;
         }
+
         .text-right {
             text-align: right !important;
         }
+
         .total-revenue {
             margin-bottom: 20px;
             background-color: #cccccc3d;
             padding: 20px;
             border-radius: 5px;
         }
+
         .total-revenue .total-revenue-item {
             font-size: 16px;
             font-weight: 600;
         }
+
         .total-revenue .total-revenue-item span {
             color: #0974ba;
             font-size: 18px;
         }
+
         .total-revenue .btn.btn-success {
             color: #fff;
             background-color: #28a745;
@@ -100,39 +115,53 @@
             font-weight: 600;
             border-radius: 5px;
         }
-        #modal-withdraw-money .modal-header .modal-title, #modal-check-order .modal-header .modal-title {
+
+        #modal-withdraw-money .modal-header .modal-title,
+        #modal-check-order .modal-header .modal-title {
             font-size: 20px;
             font-weight: 600;
         }
-        #modal-withdraw-money .modal-body .info-item, #modal-withdraw-money .modal-body label,
-        #modal-check-order .modal-body .info-item, #modal-check-order .modal-body label {
+
+        #modal-withdraw-money .modal-body .info-item,
+        #modal-withdraw-money .modal-body label,
+        #modal-check-order .modal-body .info-item,
+        #modal-check-order .modal-body label {
             font-size: 16px;
             font-weight: 600;
         }
-        #modal-withdraw-money .modal-body .info-item span, #modal-check-order .modal-body .info-item span {
+
+        #modal-withdraw-money .modal-body .info-item span,
+        #modal-check-order .modal-body .info-item span {
             color: #0974ba;
         }
-        #modal-withdraw-money .modal-body .form-group input, #modal-check-order .modal-body .form-group input {
+
+        #modal-withdraw-money .modal-body .form-group input,
+        #modal-check-order .modal-body .form-group input {
             margin-bottom: 0px !important;
             padding: 0 15px !important;
             font-size: 16px;
             font-weight: 600;
             border-radius: 5px !important;
         }
-        #modal-withdraw-money .modal-body button, #modal-check-order .modal-body button {
+
+        #modal-withdraw-money .modal-body button,
+        #modal-check-order .modal-body button {
             background-color: #28a745 !important;
             color: #fff !important;
             font-size: 16px;
             font-weight: 600;
             border-radius: 5px !important;
         }
+
         #modal-check-order .modal-body .info-item span .badge {
             color: #fff;
         }
+
         #modal-otp .otp-group {
             margin: 20px 0;
             text-align: center;
         }
+
         #modal-otp .otp-group .otp-inputs {
             display: flex;
             justify-content: center;
@@ -155,7 +184,8 @@
             padding-top: 26px;
             margin-bottom: 60px;
         }
-        #modal-otp .countdown-text span{
+
+        #modal-otp .countdown-text span {
             position: absolute;
             top: 50%;
             left: 50%;
@@ -168,6 +198,7 @@
             border-radius: 5px;
             width: 22%;
         }
+
         #modal-otp .btn-resend-otp {
             background-color: #6baedb;
             border: 1px solid #0974ba;
@@ -175,6 +206,7 @@
             border-radius: 5px;
             color: #fff;
         }
+
         #modal-otp .btn-submit-otp {
             background-color: #28a745 !important;
             color: #fff !important;
@@ -184,7 +216,6 @@
             float: right;
         }
     </style>
-
 @endsection
 @section('content')
     <div ng-controller="UserRevenueController" ng-cloak>
@@ -195,20 +226,25 @@
                         <div class="total-revenue">
                             <div class="row">
                                 <div class="col-md-8">
-                                    <div class="total-revenue-item">Tổng hoa hồng : <span class="revenue-amount"><% revenueAmount | number: 0 %>₫</span></div>
-                                    <div class="total-revenue-item">Đã quyết toán : <span class="revenue-amount"><% quyetToanAmount | number: 0 %>₫</span></div>
-                                    <div class="total-revenue-item">Chưa quyết toán (số dư) : <span class="revenue-amount"><% waitingQuyetToanAmount | number: 0 %>₫</span></div>
+                                    <div class="total-revenue-item">Tổng hoa hồng : <span
+                                            class="revenue-amount"><% revenueAmount | number: 0 %>₫</span></div>
+                                    <div class="total-revenue-item">Đã quyết toán : <span
+                                            class="revenue-amount"><% quyetToanAmount | number: 0 %>₫</span></div>
+                                    <div class="total-revenue-item">Chưa quyết toán (số dư) : <span
+                                            class="revenue-amount"><% waitingQuyetToanAmount | number: 0 %>₫</span></div>
 
                                 </div>
                                 <div class="col-md-4 text-right">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <button class="btn btn-success" ng-click="showWithdrawMoneyModal()">Rút tiền</button>
+                                            <button class="btn btn-success" ng-click="showWithdrawMoneyModal()">Rút
+                                                tiền</button>
                                         </div>
                                     </div>
                                     <div class="row" style="margin-top: 10px;">
                                         <div class="col-md-12">
-                                            <button class="btn btn-primary" ng-click="showCheckOrderModal()">Tra soát đơn hàng</button>
+                                            <button class="btn btn-primary" ng-click="showCheckOrderModal()">Tra soát đơn
+                                                hàng</button>
                                         </div>
                                     </div>
                                 </div>
@@ -229,11 +265,13 @@
                         </div>
                         <div class="modal-body">
                             <div class="row">
-                                <div class="col-md-12" style="display: flex; gap: 20px; font-size: 14px; font-style: italic; margin-bottom: 20px;">
+                                <div class="col-md-12"
+                                    style="display: flex; gap: 20px; font-size: 14px; font-style: italic; margin-bottom: 20px;">
                                     <div style="width: 100px;"><span style="color: red;">*</span> Lưu ý: </div>
                                     <div>
                                         <span>- Số tiền rút tối thiểu là 100.000 VNĐ</span><br>
-                                        <span>- Nếu chưa có thông tin chuyển khoản, vui lòng quay lại trang thông tin tài khoản để cập nhật</span>
+                                        <span>- Nếu chưa có thông tin chuyển khoản, vui lòng quay lại trang thông tin tài
+                                            khoản để cập nhật</span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
@@ -242,19 +280,24 @@
                                     <div class="info-item">Email: <span><% currentUser.email %></span></div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="info-item">Chủ tài khoản: <span><% currentUser.bank_account_name %></span></div>
-                                    <div class="info-item">Số tài khoản: <span><% currentUser.bank_account_number %></span></div>
+                                    <div class="info-item">Chủ tài khoản: <span><% currentUser.bank_account_name %></span>
+                                    </div>
+                                    <div class="info-item">Số tài khoản: <span><% currentUser.bank_account_number %></span>
+                                    </div>
                                     <div class="info-item">Tên ngân hàng: <span><% currentUser.bank_name %></span></div>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 20px;">
                                 <div class="col-md-4 form-group">
                                     <label for="amount">Số dư</label>
-                                    <input type="text" class="form-control" id="amount" only-number decimal-upto="0" allow-decimal="false" ng-model="waitingQuyetToanAmount" disabled>
+                                    <input type="text" class="form-control" id="amount" only-number decimal-upto="0"
+                                        allow-decimal="false" ng-model="waitingQuyetToanAmount" disabled>
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label for="withdraw-amount">Số tiền cần rút <span style="color: red;">*</span></label>
-                                    <input type="text" class="form-control" id="withdraw-amount" ng-model="form.withdrawAmount" only-number decimal-upto="0" allow-decimal="false" ng-change="calculateRemainingAmount()">
+                                    <input type="text" class="form-control" id="withdraw-amount"
+                                        ng-model="form.withdrawAmount" only-number decimal-upto="0" allow-decimal="false"
+                                        ng-change="calculateRemainingAmount()">
                                     <div class="invalid-feedback d-block error" role="alert">
                                         <span ng-if="errors && errors.withdrawAmount">
                                             <% errors.withdrawAmount[0] %>
@@ -263,7 +306,8 @@
                                 </div>
                                 <div class="col-md-4 form-group">
                                     <label for="remaining-amount">Số tiền còn lại</label>
-                                    <input type="text" class="form-control" id="remaining-amount" only-number decimal-upto="0" allow-decimal="false" ng-model="form.remainingAmount" disabled>
+                                    <input type="text" class="form-control" id="remaining-amount" only-number
+                                        decimal-upto="0" allow-decimal="false" ng-model="form.remainingAmount" disabled>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 20px;">
@@ -289,7 +333,8 @@
                                 <div class="col-md-12" style="font-size: 14px; font-style: italic; margin-bottom: 20px;">
                                     <div style="width: 100px;"><span style="color: red;">*</span> Lưu ý: </div>
                                     <div>
-                                        <span>- Chức năng này chỉ sử dụng để kiểm tra đối soát lại đơn hàng affiliate</span><br>
+                                        <span>- Chức năng này chỉ sử dụng để kiểm tra đối soát lại đơn hàng
+                                            affiliate</span><br>
                                         <span>- Vui lòng tra soát đơn hàng sau 24h kể từ khi đặt hàng</span>
                                     </div>
                                 </div>
@@ -304,18 +349,26 @@
                                         </span>
                                     </div>
                                     <div class="result-success" ng-if="resultCheckOrder">
-                                        <div class="info-item" style="font-size: 16px; font-weight: 600; background-color: #28a74695; color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 10px; margin-top: 20px;"><i class="fa fa-check-circle"></i> Kết quả tra soát thành công!</div>
+                                        <div class="info-item"
+                                            style="font-size: 16px; font-weight: 600; background-color: #28a74695; color: #fff; padding: 10px; border-radius: 5px; margin-bottom: 10px; margin-top: 20px;">
+                                            <i class="fa fa-check-circle"></i> Kết quả tra soát thành công!</div>
                                         {{-- <div class="info-item">Mã đơn hàng: <span><% resultCheckOrder.code %></span></div> --}}
-                                        <div class="info-item">Trạng thái đơn hàng: <span ng-bind-html="resultCheckOrder.status_text" style="color: #fff;"></span></div>
-                                        <div class="info-item">Ngày đặt hàng: <span><% resultCheckOrder.aff_order_at | date_time %></span></div>
-                                        <div class="info-item">Giá trị đơn hàng: <span><% resultCheckOrder.total_after_discount | number: 0 %>₫</span></div>
-                                        <div class="info-item">Hoa hồng được tính: <span><% resultCheckOrder.revenue_amount | number: 0 %>₫</span></div>
+                                        <div class="info-item">Trạng thái đơn hàng: <span
+                                                ng-bind-html="resultCheckOrder.status_text" style="color: #fff;"></span>
+                                        </div>
+                                        <div class="info-item">Ngày đặt hàng:
+                                            <span><% resultCheckOrder.aff_order_at | date_time %></span></div>
+                                        <div class="info-item">Giá trị đơn hàng:
+                                            <span><% resultCheckOrder.total_after_discount | number: 0 %>₫</span></div>
+                                        <div class="info-item">Hoa hồng được tính:
+                                            <span><% resultCheckOrder.revenue_amount | number: 0 %>₫</span></div>
                                     </div>
                                 </div>
                             </div>
                             <div class="row" style="margin-top: 20px;">
                                 <div class="col-md-12 text-right">
-                                    <button class="btn btn-success" ng-click="submitCheckOrder()" ng-disabled="isLoading">
+                                    <button class="btn btn-success" ng-click="submitCheckOrder()"
+                                        ng-disabled="isLoading">
                                         <span ng-if="!isLoading">Tra soát</span>
                                         <span ng-if="isLoading"><i class="fa fa-spinner fa-spin"></i> Đang xử lý...</span>
                                     </button>
@@ -336,7 +389,8 @@
                                 <div class="col-md-12" style="font-size: 14px; font-style: italic; margin-bottom: 20px;">
                                     <div style="width: 100px;"><span style="color: red;">*</span> Lưu ý: </div>
                                     <div>
-                                        <span>- Mã OTP đã được gửi đến email <span style="color: #0974ba;"><% currentUser.email %></span></span><br>
+                                        <span>- Mã OTP đã được gửi đến email <span
+                                                style="color: #0974ba;"><% currentUser.email %></span></span><br>
                                         <span>- Vui lòng kiểm tra email và nhập mã OTP để xác nhận</span>
                                     </div>
                                 </div>
@@ -344,10 +398,8 @@
 
                             <div class="otp-group text-center">
                                 <div class="otp-inputs">
-                                    <input type="text" maxlength="1"
-                                        ng-repeat="digit in otp track by $index"
-                                        ng-model="otp[$index]"
-                                        ng-keyup="moveToNext($event, $index)"
+                                    <input type="text" maxlength="1" ng-repeat="digit in otp track by $index"
+                                        ng-model="otp[$index]" ng-keyup="moveToNext($event, $index)"
                                         ng-class="{'is-invalid': errors && errors.otp}">
                                 </div>
                                 <div class="invalid-feedback d-block error" role="alert">
@@ -356,12 +408,15 @@
                                     </span>
                                 </div>
                             </div>
-                            <p class="countdown-text text-center"><span><% minutes %> : <% seconds < 10 ? '0' + seconds : seconds %></span></p>
-                            <button class="btn btn-primary btn-resend-otp" ng-click="resendOTP()" ng-disabled="!canResend">
+                            <p class="countdown-text text-center"><span><% minutes %> :
+                                    <% seconds < 10 ? '0' + seconds : seconds %></span></p>
+                            <button class="btn btn-primary btn-resend-otp" ng-click="resendOTP()"
+                                ng-disabled="!canResend">
                                 <span ng-if="!isLoadingResend">Gửi lại mã</span>
                                 <span ng-if="isLoadingResend"><i class="fa fa-spinner fa-spin"></i> Đang gửi...</span>
                             </button>
-                            <button class="btn btn-success btn-submit-otp" ng-click="submitOTP()" ng-disabled="isLoading">
+                            <button class="btn btn-success btn-submit-otp" ng-click="submitOTP()"
+                                ng-disabled="isLoading">
                                 <span ng-if="!isLoading">Xác nhận</span>
                                 <span ng-if="isLoading"><i class="fa fa-spinner fa-spin"></i> Đang xử lý...</span>
                             </button>
@@ -382,40 +437,82 @@
     <script src="{{ asset('libs/datepicker/datepicker.full.min.js') }}"></script>
     <script src="{{ asset('libs/select2/js/select2.min.js') }}"></script>
     <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
-
+    <script src="{{ asset('plugins/moment/moment.min.js') }}"></script>
+    <script src="{{ asset('plugins/daterangepicker/daterangepicker.js') }}"></script>
     <script src="{{ asset('js/constant.js') }}?version={{ env('APP_VERSION', '1') }}"></script>
     <script src="{{ asset('js/custom.js') }}?version={{ env('APP_VERSION', '1') }}"></script>
     @include('partial.classes.base.Datatable')
     <script src="{{ asset('libs/angularjs/app.directive.js') }}"></script>
-
     <script>
         app.controller('UserRevenueController', function($scope, $interval) {
 
             let datatable = new DATATABLE('table-list', {
                 ajax: {
                     url: '{{ route('front.user-revenue-search-data') }}',
-                    data: function (d, context) {
+                    data: function(d, context) {
                         DATATABLE.mergeSearch(d, context);
+                        d.request_user_id = '{{ $request_user_id }}';
                     },
                 },
-                columns: [
-                    {data: 'DT_RowIndex', orderable: false, title: "STT", className: "text-center"},
-                    {data: 'order_code', title: 'Mã đơn hàng'},
-                    {data: 'order_employee', title: 'Người đặt hàng', className: "text-left"},
-                    {data: 'revenue_amount', title: 'Hoa hồng'},
-                    {data: 'settlement_amount', title: 'Đã quyết toán'},
-                    {data: 'remaining_amount', title: 'Còn lại'},
-                    {data: 'status', title: 'Trạng thái'},
-                    {data: 'created_at', title: 'Ngày đặt hàng'},
-                    {data: 'settlement_date', title: 'Ngày quyết toán'},
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        title: "STT",
+                        className: "text-center"
+                    },
+                    {
+                        data: 'order_code',
+                        title: 'Mã đơn hàng'
+                    },
+                    {
+                        data: 'order_employee',
+                        title: 'Người đặt hàng',
+                        className: "text-left"
+                    },
+                    {
+                        data: 'revenue_amount',
+                        title: 'Hoa hồng'
+                    },
+                    {
+                        data: 'settlement_amount',
+                        title: 'Đã quyết toán'
+                    },
+                    {
+                        data: 'remaining_amount',
+                        title: 'Còn lại'
+                    },
+                    {
+                        data: 'status',
+                        title: 'Trạng thái'
+                    },
+                    {
+                        data: 'created_at',
+                        title: 'Ngày đặt hàng'
+                    },
+                    {
+                        data: 'settlement_date',
+                        title: 'Ngày quyết toán'
+                    },
                 ],
-                search_columns: [
-                    {data: 'order_code', search_type: "text", placeholder: "Mã đơn hàng"},
-                    {data: 'order_employee', search_type: "text", placeholder: "Người đặt hàng"},
-                    {data: 'status', search_type: "select", placeholder: "Trạng thái", column_data: @json(\App\Model\Admin\OrderRevenueDetail::STATUSES)},
+                search_columns: [{
+                        data: 'order_code',
+                        search_type: "text",
+                        placeholder: "Mã đơn hàng"
+                    },
+                    {
+                        data: 'order_employee',
+                        search_type: "text",
+                        placeholder: "Người đặt hàng"
+                    },
+                    {
+                        data: 'status',
+                        search_type: "select",
+                        placeholder: "Trạng thái",
+                        column_data: @json(\App\Model\Admin\OrderRevenueDetail::STATUSES)
+                    },
                     // {data: 'settlement_date', search_type: "date", placeholder: "Ngày quyết toán"},
                 ],
-                // search_by_time: true,
+                search_by_time: true,
             }).datatable;
 
             $scope.currentUser = @json($user);
@@ -476,7 +573,7 @@
                             $scope.isLoadingResend = false;
                             $scope.canResend = false;
                             // Đếm ngược 5 phút
-                            var countdown = $interval(function () {
+                            var countdown = $interval(function() {
                                 if ($scope.minutes === 0 && $scope.seconds === 0) {
                                     $interval.cancel(countdown);
                                     $scope.canResend = true;
@@ -505,20 +602,20 @@
             }
 
             // Hàm chuyển ô nhập khi gõ số
-            $scope.moveToNext = function (event, index) {
+            $scope.moveToNext = function(event, index) {
                 var key = event.key;
                 $scope.errors = {};
                 if (key >= "0" && key <= "9") {
-                var nextInput = document.querySelectorAll(".otp-inputs input")[index + 1];
-                if (nextInput) nextInput.focus();
+                    var nextInput = document.querySelectorAll(".otp-inputs input")[index + 1];
+                    if (nextInput) nextInput.focus();
                 } else if (key === "Backspace") {
-                var prevInput = document.querySelectorAll(".otp-inputs input")[index - 1];
-                if (prevInput) prevInput.focus();
+                    var prevInput = document.querySelectorAll(".otp-inputs input")[index - 1];
+                    if (prevInput) prevInput.focus();
                 }
             };
 
             // Gửi lại OTP
-            $scope.resendOTP = function () {
+            $scope.resendOTP = function() {
                 $scope.isLoadingResend = true;
                 $scope.withdrawMoney();
                 $scope.otp = ["", "", "", "", "", ""];
@@ -535,7 +632,9 @@
                         headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                        data: {otp: otpCode},
+                        data: {
+                            otp: otpCode
+                        },
                         success: function(response) {
                             if (response.success) {
                                 toastr.success(response.message);
@@ -547,7 +646,8 @@
                                     url: '{{ route('front.withdraw-money') }}',
                                     type: 'POST',
                                     headers: {
-                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr(
+                                            'content')
                                     },
                                     data: data,
                                     success: function(response) {
@@ -630,4 +730,3 @@
         })
     </script>
 @endpush
-

@@ -30,6 +30,7 @@
                                     <th>Email</th>
                                     <th>Số điện thoại</th>
                                     <th>Cấp bậc</th>
+                                    <th>Hành động</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -39,6 +40,9 @@
                                     <td><% user.email %></td>
                                     <td><% user.phone %></td>
                                     <td>Cấp 1</td>
+                                    <td>
+                                        <a href="{{ route('front.user-revenue')}}?mail=<% user.email %>" style="text-decoration: underline; color: #0974ba; font-size: 15px; font-weight: 400;" target="_blank">Xem hoa hồng</a>
+                                    </td>
                                 </tr>
                                     <tr ng-repeat-start="(index1, user1) in user.childs track by $index" style="font-size: 15px;">
                                         <td><% index + 1 %>.<% index1 + 1 %></td>
@@ -46,6 +50,9 @@
                                         <td><% user1.email %></td>
                                         <td><% user1.phone %></td>
                                         <td>Cấp 2</td>
+                                        <td>
+                                            <a href="{{ route('front.user-revenue')}}?mail=<% user1.email %>" style="text-decoration: underline; color: #0974ba" target="_blank">Xem hoa hồng</a>
+                                        </td>
                                     </tr>
                                         <tr ng-repeat-start="(index2, user2) in user1.childs track by $index" style="font-size: 15px;">
                                             <td><% index + 1 %>.<% index1 + 1 %>.<% index2 + 1 %></td>
@@ -53,6 +60,9 @@
                                             <td><% user2.email %></td>
                                             <td><% user2.phone %></td>
                                             <td>Cấp 3</td>
+                                            <td>
+                                                <a href="{{ route('front.user-revenue')}}?mail=<% user2.email %>" style="text-decoration: underline; color: #0974ba" target="_blank">Xem hoa hồng</a>
+                                            </td>
                                         </tr>
                                             <tr ng-repeat="(index3, user3) in user2.childs track by $index" style="font-size: 15px;">
                                                 <td><% index + 1 %>.<% index1 + 1 %>.<% index2 + 1 %>.<% index3 + 1 %></td>
@@ -60,6 +70,9 @@
                                                 <td><% user3.email %></td>
                                                 <td><% user3.phone %></td>
                                                 <td>Cấp 4</td>
+                                                <td>
+                                                    <a href="{{ route('front.user-revenue')}}?mail=<% user3.email %>" style="text-decoration: underline; color: #0974ba" target="_blank">Xem hoa hồng</a>
+                                                </td>
                                             </tr>
                                         <tr ng-repeat-end></tr>
                                     <tr ng-repeat-end></tr>

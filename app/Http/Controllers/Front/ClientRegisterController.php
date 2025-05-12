@@ -336,8 +336,11 @@ class ClientRegisterController extends Controller
             ->make(true);
     }
 
-    public function userRevenue() {
+    public function userRevenue(Request $request) {
         $user = Auth::guard('client')->user();
+        $request_user = User::where('email', $request->mail)->first();
+        $request_user_id = $request_user ? $request_user->id : $user->id;
+        // dd($request_user_id);
         $revenue_amount = OrderRevenueDetail::where('user_id', $user->id)->whereNotIn('status', [OrderRevenueDetail::STATUS_CANCEL])->sum('revenue_amount');
         $quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where(function($q) {
             $q->where('status', OrderRevenueDetail::STATUS_QUYET_TOAN)
@@ -353,7 +356,7 @@ class ClientRegisterController extends Controller
                 ->where('settlement_amount', '>', 0);
             });
         })->sum('revenue_amount') - $quyet_toan_amount;
-        return view('site.admin.user_revenue', compact('user', 'revenue_amount', 'quyet_toan_amount', 'waiting_quyet_toan_amount'));
+        return view('site.admin.user_revenue', compact('user', 'revenue_amount', 'quyet_toan_amount', 'waiting_quyet_toan_amount', 'request_user_id'));
     }
 
     public function userRevenueSearchData(Request $request) {
