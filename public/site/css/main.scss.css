@@ -2856,6 +2856,7 @@ ul.tabs li.current {
     padding-left: 17.5%;
     margin-bottom: 8px;
     margin-top: 8px;
+    justify-content: flex-end;
 }
 
 @media (max-width: 1440px) {
@@ -5421,5 +5422,15 @@ header .menu_mega:hover .title_menu {
 @media (max-width: 767px) {
     .d-sm-none {
         display: none !important;
+    }
+}
+
+.top-header .box-icon-right .header-acc:last-child {
+    margin-right: 0px;
+}
+
+@media (max-width: 767px) {
+    .top-header .box-icon-right .header-acc:last-child .img_acc {
+        margin-right: 0px;
     }
 }

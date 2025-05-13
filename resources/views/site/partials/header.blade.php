@@ -129,7 +129,7 @@
                         </div>
                         <span>Tài khoản <br>{{ Auth::guard('client')->check() ? Auth::guard('client')->user()->name : 'của bạn' }}</span>
                     </a>
-                    <div class="header-action_cart">
+                    {{-- <div class="header-action_cart">
                         <div class="header-acc" style="margin-right: 0;">
                             <a href="{{ route('cart.index') }}" class="cart-header" title="Giỏ hàng">
                                 <img width="32" height="32"
@@ -187,7 +187,6 @@
                                             </div>
                                         </div>
                                         <div class="cart__btn-proceed-checkout-dt ">
-                                            {{-- <button onclick="location.href='{{ route('cart.checkout') }}'" type="button" class="button btn btn-default cart__btn-proceed-checkout" id="btn-proceed-checkout" title="Thanh toán" style="margin-bottom: 10px;">Thanh toán</button> --}}
                                             <button onclick="location.href='{{ route('cart.index') }}'" type="button" class="button btn btn-default cart__btn-proceed-checkout" id="btn-proceed-checkout" title="Xem giỏ hàng">Xem giỏ hàng</button>
                                         </div>
                                     </div>
@@ -198,7 +197,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="box-swisa">
                     <div class="img_hot">
