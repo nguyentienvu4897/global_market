@@ -69,6 +69,9 @@ class ProductController extends Controller
             ->addColumn('category_special', function ($object) {
                 return $object->category_specials->implode('name', ', ');
             })
+            ->addColumn('type', function ($object) {
+                return $object->type == ThisModel::TYPE_AFFILIATE ? 'Affiliate' : 'Thông thường';
+            })
 			->addColumn('action', function ($object) {
                 $result = '<div class="btn-group btn-action">
                 <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

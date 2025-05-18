@@ -119,6 +119,7 @@
             columns: [
                 {data: 'id', orderable: false},
                 {data: 'DT_RowIndex', orderable: false, title: "STT", className: "text-center"},
+                {data: 'type', title: "Loại sản phẩm", className: "text-center"},
                 {
                     data: 'image', title: "Hình ảnh", orderable: false, className: "text-center",
                     render: function (data) {
