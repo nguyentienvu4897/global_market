@@ -153,6 +153,24 @@
             padding: 5px 10px !important;
             transition: all 0.3s ease-in-out !important;
         }
+        .notification-email{
+            background-color: #ffe1c3;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+        .notification-email i{
+            margin-right: 5px;
+            color: #ec5127;
+        }
+        .notification-email a{
+            color: #0974ba !important;
+            font-style: italic;
+        }
+        .notification-email a:hover{
+            color: #ff9933 !important;
+            text-decoration: underline;
+        }
     </style>
 @endsection
 @section('content')
@@ -182,6 +200,9 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-lg-9 col-right-ac">
+                        <div class="notification-email" ng-if="currentUser.email && !currentUser.email_verified_at">
+                            <i class="fa fa-exclamation-triangle"></i> Tài khoản chưa xác minh email. Vui lòng xác minh trước ngày 25/05/2025 để tiếp tục sử dụng hệ thống <a href="{{ route('email.verify.form') }}">tại đây</a>.
+                        </div>
                         <h1 class="title-head margin-top-0 d-flex" style="align-items: center; justify-content: flex-end; flex-wrap: wrap; padding-top: 25px;">
                             <div style="font-size: 19px; font-weight: 500; flex: 1 1 50%;" ng-if="!showChangePassword">Thông tin tài khoản</div>
                             <div style="font-size: 19px; font-weight: 500; flex: 1 1 50%;" ng-if="showChangePassword">Thay đổi mật khẩu</div>
