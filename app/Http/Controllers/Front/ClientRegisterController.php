@@ -14,12 +14,14 @@ use App\Http\Traits\ResponseTrait;
 use App\Model\Admin\OrderRevenueDetail;
 use JWTAuth;
 use App\Helpers\FileHelper;
+use App\Mail\EmailVerificationLinkMail;
 use App\Mail\RecoverPassword;
 use App\Mail\SellerRequestMail;
 use App\Mail\SellerRequestSuccessMail;
 use App\Mail\WithdrawMoney;
 use App\Model\Admin\Order;
 use App\Model\Admin\SellerRequest;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Model\Admin\SellerStore;
@@ -27,7 +29,8 @@ use Illuminate\Validation\Rule;
 class ClientRegisterController extends Controller
 {
     use ResponseTrait;
-    public function loginClient() {
+    public function loginClient()
+    {
         return view('site.login_client');
     }
 
@@ -65,6 +68,24 @@ class ClientRegisterController extends Controller
             'type'     => [10, 20]
         ];
 
+        // Thêm điều kiện email_verified_at nếu sau ngày 25/05/2025
+        if (now()->greaterThan(Carbon::create(2025, 5, 25, 0, 0, 0))) { // 25/05/2025 00:00:00
+            $user = User::where($field, $request->account_name)
+                ->where('status', 1)
+                ->where('type', 10)
+                ->whereNotNull('email_verified_at')
+                ->first();
+
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return $this->responseErrors('Tài khoản chưa xác minh email hoặc sai thông tin đăng nhập!');
+            }
+
+            Auth::guard('client')->login($user, $remember);
+            $token = JWTAuth::fromUser($user);
+
+            return $this->responseSuccess('Đăng nhập thành công!', ['token' => $token]);
+        }
+
         if (Auth::guard('client')->attempt($loginConditions, $remember)) {
             // Đăng nhập thành công
             $token = JWTAuth::attempt($loginConditions);
@@ -79,19 +100,20 @@ class ClientRegisterController extends Controller
         }
     }
 
-    public function registerClientSubmit(Request $request) {
+    public function registerClientSubmit(Request $request)
+    {
         $rule = [
-			'name' => 'required',
-			'email' => 'required|email|unique:users,email',
-			'account_name' => 'required|unique:users,account_name',
-			'password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'account_name' => 'required|unique:users,account_name',
+            'password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
             'phone_number' => 'nullable|regex:/^(0)[0-9]{9,11}$/|unique:users,phone_number',
             'invite_code' => 'nullable|exists:users,invite_code',
-		];
+        ];
 
-		$validate = Validator::make(
-			$request->all(),
-			$rule,
+        $validate = Validator::make(
+            $request->all(),
+            $rule,
             [
                 'invite_code.exists' => 'Mã giới thiệu không tồn tại',
                 'phone_number.regex' => 'Số điện thoại không đúng định dạng',
@@ -100,38 +122,49 @@ class ClientRegisterController extends Controller
                 'account_name.unique' => 'Tên đăng nhập đã được sử dụng',
                 'phone_number.unique' => 'Số điện thoại đã được sử dụng',
             ]
-		);
+        );
 
-		if ($validate->fails()) {
-			return $this->responseErrors("Thao tác thất bại", $validate->errors());
-		}
+        if ($validate->fails()) {
+            return $this->responseErrors("Thao tác thất bại", $validate->errors());
+        }
 
         DB::beginTransaction();
-		try {
-			$object = new User();
-			$object->name = $request->name;
-			$object->email = $request->email;
+        try {
+            $object = new User();
+            $object->name = $request->name;
+            $object->email = $request->email;
             $object->account_name = $request->account_name;
             $object->password = bcrypt($request->password);
-			$object->phone_number = $request->phone_number;
-			$object->status = 1;
-			$object->type = 10;
+            $object->phone_number = $request->phone_number;
+            $object->status = 1;
+            $object->type = 10;
             $object->parent_id = $request->invite_code ? User::where('invite_code', $request->invite_code)->first()->id : null;
-			$object->save();
+            $object->save();
 
-			DB::commit();
+            // Xác minh email
+            $token = Str::random(64);
+            $hashedToken = Hash::make($token);
+            $object->email_verification_token = $hashedToken;
+            $object->email_verification_sent_at = now();
+            $object->save();
+            // Gửi bản plain trong URL
+            $link = route('email.verify.token', ['token' => $token]);
+            Mail::to($object->email)->send(new EmailVerificationLinkMail($link));
+
+            DB::commit();
             $data = [
                 'account_name' => $request->account_name,
                 'password' => $request->password,
             ];
-			return $this->responseSuccess('Đăng ký thành công!', $data);
-		} catch (Exception $e) {
+            return $this->responseSuccess('Đăng ký thành công!', $data);
+        } catch (Exception $e) {
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
 
-    public function logoutClient() {
+    public function logoutClient()
+    {
         Auth::guard('client')->logout();
         $message = array(
             "logout" => "logout"
@@ -139,72 +172,74 @@ class ClientRegisterController extends Controller
         return redirect()->route('front.login-client')->with($message);
     }
 
-    public function account() {
+    public function account()
+    {
         $user = User::with('image')->where('id', Auth::guard('client')->user()->id)->first();
         return view('site.admin.account', compact('user'));
     }
 
     public function updateAccount(Request $request, $id)
-	{
-		$object = User::findOrFail($id);
+    {
+        $object = User::findOrFail($id);
 
-		$rule = [
-			'name' => 'required',
-			'email' => 'required|email|unique:users,email,'.$id,
-            'account_name' => 'required||unique:users,account_name,'.$id,
-			'status' => 'required|in:0,1',
-            'phone_number' => 'required|regex:/^(0)[0-9]{9,11}$/|unique:users,phone_number,'.$id,
+        $rule = [
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'account_name' => 'required||unique:users,account_name,' . $id,
+            'status' => 'required|in:0,1',
+            'phone_number' => 'required|regex:/^(0)[0-9]{9,11}$/|unique:users,phone_number,' . $id,
             'bank_name' => 'required',
             'bank_account_number' => 'required',
             'bank_account_name' => 'required',
             'address' => 'nullable',
-		];
+        ];
 
-		$validate = Validator::make(
-			$request->all(),
-			$rule,
-			[
+        $validate = Validator::make(
+            $request->all(),
+            $rule,
+            [
                 'email.unique' => 'Email đã được sử dụng',
                 'account_name.unique' => 'Tên đăng nhập đã được sử dụng',
                 'phone_number.unique' => 'Số điện thoại đã được sử dụng',
             ]
-		);
+        );
 
-		if ($validate->fails()) {
-			return $this->responseErrors("", $validate->errors());
-		}
+        if ($validate->fails()) {
+            return $this->responseErrors("", $validate->errors());
+        }
 
-		DB::beginTransaction();
-		try {
-			$object->name = $request->name;
-			$object->email = $request->email;
-			$object->account_name = $request->account_name;
-			$object->phone_number = $request->phone_number;
-			$object->bank_name = $request->bank_name;
-			$object->bank_account_number = $request->bank_account_number;
-			$object->bank_account_name = $request->bank_account_name;
-			$object->address = $request->address;
-			$object->save();
+        DB::beginTransaction();
+        try {
+            $object->name = $request->name;
+            $object->email = $request->email;
+            $object->account_name = $request->account_name;
+            $object->phone_number = $request->phone_number;
+            $object->bank_name = $request->bank_name;
+            $object->bank_account_number = $request->bank_account_number;
+            $object->bank_account_name = $request->bank_account_name;
+            $object->address = $request->address;
+            $object->save();
 
-			if($request->image) {
+            if ($request->image) {
                 if ($object->image) {
                     FileHelper::forceDeleteFiles($object->image->id, $object->id, User::class, 'image');
                 }
-				FileHelper::uploadFile($request->image, 'users', $object->id, User::class, 'image');
-			}
+                FileHelper::uploadFile($request->image, 'users', $object->id, User::class, 'image');
+            }
 
-			DB::commit();
-			return $this->responseSuccess('Cập nhật thành công');
-		} catch (Exception $e) {
+            DB::commit();
+            return $this->responseSuccess('Cập nhật thành công');
+        } catch (Exception $e) {
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
-	}
+    }
 
-    public function changePassword(Request $request, $id) {
+    public function changePassword(Request $request, $id)
+    {
         $user = User::findOrFail($id);
         $rule = [
-			'current_password' => [
+            'current_password' => [
                 'required',
                 function ($attribute, $value, $fail) use ($user) {
                     if (!Hash::check($value, $user->password)) {
@@ -212,13 +247,13 @@ class ClientRegisterController extends Controller
                     }
                 },
             ],
-			'new_password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/|different:current_password',
-			'confirm_password' => 'required|same:new_password',
-		];
+            'new_password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/|different:current_password',
+            'confirm_password' => 'required|same:new_password',
+        ];
 
-		$validate = Validator::make(
-			$request->all(),
-			$rule,
+        $validate = Validator::make(
+            $request->all(),
+            $rule,
             [
                 'current_password.required' => 'Mật khẩu cũ không được để trống',
                 'new_password.required' => 'Mật khẩu mới không được để trống',
@@ -227,13 +262,13 @@ class ClientRegisterController extends Controller
                 'new_password.regex' => 'Mật khẩu không đúng định dạng',
                 'new_password.different' => 'Mật khẩu mới không được giống mật khẩu cũ',
             ]
-		);
+        );
 
-		if ($validate->fails()) {
-			return $this->responseErrors("Thao tác thất bại", $validate->errors());
-		}
+        if ($validate->fails()) {
+            return $this->responseErrors("Thao tác thất bại", $validate->errors());
+        }
         DB::beginTransaction();
-		try {
+        try {
             $user->password = bcrypt($request->new_password);
             $user->save();
             DB::commit();
@@ -244,22 +279,23 @@ class ClientRegisterController extends Controller
         }
     }
 
-    public function recoverPassword(Request $request) {
+    public function recoverPassword(Request $request)
+    {
         $rule = [
-			'recover_email' => 'required|email|exists:users,email',
-		];
+            'recover_email' => 'required|email|exists:users,email',
+        ];
 
-		$validate = Validator::make(
-			$request->all(),
-			$rule,
-			[
+        $validate = Validator::make(
+            $request->all(),
+            $rule,
+            [
                 'recover_email.exists' => 'Email không tồn tại',
             ]
-		);
+        );
 
-		if ($validate->fails()) {
-			return $this->responseErrors("Thao tác thất bại", $validate->errors());
-		}
+        if ($validate->fails()) {
+            return $this->responseErrors("Thao tác thất bại", $validate->errors());
+        }
 
         // gửi mail thông báo lấy lại mật khẩu cho user
         $user = User::query()->where('type', 10)->where('status', 1)->where('email', $request->recover_email)->first();
@@ -276,7 +312,8 @@ class ClientRegisterController extends Controller
         return $this->responseSuccess('Đã gửi thông tin lấy lại mật khẩu, vui lòng kiểm tra email');
     }
 
-    public function updateInviteCode(Request $request) {
+    public function updateInviteCode(Request $request)
+    {
         $user = User::findOrFail($request->user_id);
         do {
             $inviteCode = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 8)), 0, 8);
@@ -287,16 +324,19 @@ class ClientRegisterController extends Controller
         return $this->responseSuccess('Đã tạo lại mã giới thiệu', ['invite_code' => $user->invite_code]);
     }
 
-    public function userOrder() {
+    public function userOrder()
+    {
         return view('site.admin.user_order');
     }
 
-    public function showOrderDetail($id) {
+    public function showOrderDetail($id)
+    {
         $order = Order::query()->with(['details.product'])->find($id);
         return $this->responseSuccess('Đã lấy thông tin đơn hàng', $order);
     }
 
-    public function cancelOrder(Request $request, $id) {
+    public function cancelOrder(Request $request, $id)
+    {
         $order = Order::findOrFail($id);
         $order->status = Order::HUY;
         $order->comment = $request->reason;
@@ -309,7 +349,8 @@ class ClientRegisterController extends Controller
         return $this->responseSuccess('Đã hủy đơn hàng');
     }
 
-    public function userOrderSearchData(Request $request) {
+    public function userOrderSearchData(Request $request)
+    {
         $objects = Order::searchByFilter($request);
         return Datatables::of($objects)
             ->addColumn('total_price', function ($object) {
@@ -319,7 +360,7 @@ class ClientRegisterController extends Controller
                 return $object->type == 0 ? 'Đơn hàng thường' : 'Đơn hàng affiliate';
             })
             ->editColumn('code_client', function ($object) {
-                return '<a href = "javascript:void(0)" title = "Xem chi tiết" class="show-order-detail" data-href="'.route('front.show-order-detail', $object->id).'">' . $object->code . '</a>';
+                return '<a href = "javascript:void(0)" title = "Xem chi tiết" class="show-order-detail" data-href="' . route('front.show-order-detail', $object->id) . '">' . $object->code . '</a>';
             })
             ->editColumn('created_at', function ($object) {
                 return $object->type == 0 ? formatDate($object->created_at) : formatDate($object->aff_order_at);
@@ -327,9 +368,9 @@ class ClientRegisterController extends Controller
             ->addColumn('action_client', function ($object) {
                 $result = '<div class="btn-group btn-action">';
                 if ($object->type == 0) {
-                    $result = $result . ' <a href="javascript:void(0)" data-href="'.route('front.show-order-detail', $object->id).'" title="xem chi tiết" class="btn btn-info show-order-detail"><i class="fa fa-eye"></i></a>';
+                    $result = $result . ' <a href="javascript:void(0)" data-href="' . route('front.show-order-detail', $object->id) . '" title="xem chi tiết" class="btn btn-info show-order-detail"><i class="fa fa-eye"></i></a>';
                     if ($object->canCancel()) {
-                        $result = $result . ' <a href="javascript:void(0)" title="Hủy đơn hàng" class="btn btn-danger cancel-order" data-href="'.route('front.cancel-order', $object->id).'"><i class="fa fa-trash"></i></a>';
+                        $result = $result . ' <a href="javascript:void(0)" title="Hủy đơn hàng" class="btn btn-danger cancel-order" data-href="' . route('front.cancel-order', $object->id) . '"><i class="fa fa-trash"></i></a>';
                     }
                 }
                 $result = $result . '</div>';
@@ -340,27 +381,29 @@ class ClientRegisterController extends Controller
             ->make(true);
     }
 
-    public function userRevenue() {
+    public function userRevenue()
+    {
         $user = Auth::guard('client')->user();
         $revenue_amount = OrderRevenueDetail::where('user_id', $user->id)->whereNotIn('status', [OrderRevenueDetail::STATUS_CANCEL])->sum('revenue_amount');
-        $quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where(function($q) {
+        $quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where(function ($q) {
             $q->where('status', OrderRevenueDetail::STATUS_QUYET_TOAN)
-            ->orWhere(function($query) {
-                $query->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)
-                ->where('settlement_amount', '>', 0);
-            });
+                ->orWhere(function ($query) {
+                    $query->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)
+                        ->where('settlement_amount', '>', 0);
+                });
         })->sum('settlement_amount');
-        $waiting_quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where(function($q) {
+        $waiting_quyet_toan_amount = OrderRevenueDetail::where('user_id', $user->id)->where(function ($q) {
             $q->where('status', OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN)
-            ->orWhere(function($query) {
-                $query->where('status', OrderRevenueDetail::STATUS_QUYET_TOAN)
-                ->where('settlement_amount', '>', 0);
-            });
+                ->orWhere(function ($query) {
+                    $query->where('status', OrderRevenueDetail::STATUS_QUYET_TOAN)
+                        ->where('settlement_amount', '>', 0);
+                });
         })->sum('revenue_amount') - $quyet_toan_amount;
         return view('site.admin.user_revenue', compact('user', 'revenue_amount', 'quyet_toan_amount', 'waiting_quyet_toan_amount'));
     }
 
-    public function userRevenueSearchData(Request $request) {
+    public function userRevenueSearchData(Request $request)
+    {
         $objects = OrderRevenueDetail::searchByFilter($request);
         return Datatables::of($objects)
             ->addColumn('revenue_amount', function ($object) {
@@ -389,24 +432,25 @@ class ClientRegisterController extends Controller
             ->make(true);
     }
 
-    public function withdrawMoney(Request $request) {
+    public function withdrawMoney(Request $request)
+    {
         $rule = [
-			'withdrawAmount' => 'required|numeric|min:100000|max:'.$request->waitingQuyetToanAmount,
-		];
+            'withdrawAmount' => 'required|numeric|min:100000|max:' . $request->waitingQuyetToanAmount,
+        ];
 
-		$validate = Validator::make(
-			$request->all(),
-			$rule,
+        $validate = Validator::make(
+            $request->all(),
+            $rule,
             [
                 'withdrawAmount.required' => 'Số tiền cần rút không được để trống',
                 'withdrawAmount.numeric' => 'Số tiền cần rút không được để trống',
                 'withdrawAmount.min' => 'Số tiền cần rút không được nhỏ hơn 100.000',
             ]
-		);
+        );
 
-		if ($validate->fails()) {
-			return $this->responseErrors("Thao tác thất bại", $validate->errors());
-		}
+        if ($validate->fails()) {
+            return $this->responseErrors("Thao tác thất bại", $validate->errors());
+        }
 
         $currentUser = Auth::guard('client')->user();
         // gửi mail thông báo rút tiền cho admin
@@ -414,7 +458,7 @@ class ClientRegisterController extends Controller
         // Mail::to('nguyentienvu4897@gmail.com')->send(new WithdrawMoney($currentUser, $request->all()));
 
 
-        if($users->count()) {
+        if ($users->count()) {
             foreach ($users as $user) {
                 Mail::to($user->email)->send(new WithdrawMoney($currentUser, $request->all()));
             }
@@ -422,7 +466,8 @@ class ClientRegisterController extends Controller
         return $this->responseSuccess('Đã gửi thông tin rút tiền, vui lòng chờ xác nhận');
     }
 
-    public function checkOrder(Request $request) {
+    public function checkOrder(Request $request)
+    {
         $rule = [
             'order_code' => 'required|exists:orders,code',
         ];
@@ -433,10 +478,10 @@ class ClientRegisterController extends Controller
             'order_code.boolean' => 'Mã đơn hàng không hợp lệ',
         ];
         $order = Order::query()->where('type', Order::TYPE_AFFILIATE)->where('code', $request->order_code)->first();
-        if(!isset($order)) {
+        if (!isset($order)) {
             $rule['order_code'] = 'required|exists:orders,code|boolean';
         }
-        if(isset($order) && (isset($order->customer_email) || $order->customer_email != '')) {
+        if (isset($order) && (isset($order->customer_email) || $order->customer_email != '')) {
             $rule['order_code'] = 'required|exists:orders,code|boolean';
             $messages['order_code.boolean'] = 'Đơn hàng đã được đối soát';
         }
@@ -448,13 +493,13 @@ class ClientRegisterController extends Controller
 
         $order = Order::query()->where('type', Order::TYPE_AFFILIATE)->whereNull('customer_email')->where('code', $request->order_code)->first();
         $current_user = User::query()->with([
-            'parent' => function($q) {
+            'parent' => function ($q) {
                 $q->with([
-                    'parent' => function($q) {
+                    'parent' => function ($q) {
                         $q->with([
-                            'parent' => function($q) {
+                            'parent' => function ($q) {
                                 $q->with([
-                                    'parent' => function($q) {
+                                    'parent' => function ($q) {
                                         $q->where('status', 1)->where('type', 10);
                                     }
                                 ])->where('status', 1)->where('type', 10);
@@ -464,9 +509,9 @@ class ClientRegisterController extends Controller
                 ])->where('status', 1)->where('type', 10);
             }
         ])->where('id', auth()->guard('client')->user()->id)->where('status', 1)->where('type', 10)->first();
-        $config = \App\Model\Admin\Config::where('id',1)->select('revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5')->first();
+        $config = \App\Model\Admin\Config::where('id', 1)->select('revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5')->first();
 
-        if($order) {
+        if ($order) {
             $revenue_amount_level_1 = $order->total_after_discount * $config->revenue_percent_1 / 100;
             $revenue_amount_level_2 = $order->total_after_discount * $config->revenue_percent_2 / 100;
             $revenue_amount_level_3 = $order->total_after_discount * $config->revenue_percent_3 / 100;
@@ -474,16 +519,16 @@ class ClientRegisterController extends Controller
             $revenue_amount_level_5 = $order->total_after_discount * $config->revenue_percent_5 / 100;
 
             $status = 0;
-            if($order->status == Order::MOI) {
+            if ($order->status == Order::MOI) {
                 $status = OrderRevenueDetail::STATUS_PENDING;
-            } else if($order->status == Order::DUYET) {
+            } else if ($order->status == Order::DUYET) {
                 $status = OrderRevenueDetail::STATUS_PAID;
-            } else if($order->status == Order::THANH_CONG) {
+            } else if ($order->status == Order::THANH_CONG) {
                 $status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
-            } else if($order->status == Order::HUY) {
+            } else if ($order->status == Order::HUY) {
                 $status = OrderRevenueDetail::STATUS_CANCEL;
             }
-            if($current_user) {
+            if ($current_user) {
                 $order_revenue_detail = new OrderRevenueDetail();
                 $order_revenue_detail->order_id = $order->id;
                 $order_revenue_detail->order_code = $order->code;
@@ -495,7 +540,7 @@ class ClientRegisterController extends Controller
                 $order_revenue_detail->save();
             }
 
-            if(isset($current_user->parent)) {
+            if (isset($current_user->parent)) {
                 $order_revenue_detail = new OrderRevenueDetail();
                 $order_revenue_detail->order_id = $order->id;
                 $order_revenue_detail->order_code = $order->code;
@@ -507,7 +552,7 @@ class ClientRegisterController extends Controller
                 $order_revenue_detail->save();
             }
 
-            if(isset($current_user->parent) && isset($current_user->parent->parent)) {
+            if (isset($current_user->parent) && isset($current_user->parent->parent)) {
                 $order_revenue_detail = new OrderRevenueDetail();
                 $order_revenue_detail->order_id = $order->id;
                 $order_revenue_detail->order_code = $order->code;
@@ -519,7 +564,7 @@ class ClientRegisterController extends Controller
                 $order_revenue_detail->save();
             }
 
-            if(isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent)) {
+            if (isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent)) {
                 $order_revenue_detail = new OrderRevenueDetail();
                 $order_revenue_detail->order_id = $order->id;
                 $order_revenue_detail->order_code = $order->code;
@@ -531,7 +576,7 @@ class ClientRegisterController extends Controller
                 $order_revenue_detail->save();
             }
 
-            if(isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent) && isset($current_user->parent->parent->parent->parent)) {
+            if (isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent) && isset($current_user->parent->parent->parent->parent)) {
                 $order_revenue_detail = new OrderRevenueDetail();
                 $order_revenue_detail->order_id = $order->id;
                 $order_revenue_detail->order_code = $order->code;
@@ -555,14 +600,15 @@ class ClientRegisterController extends Controller
         return $this->responseErrors("Thao tác thất bại", "Đơn hàng không tồn tại");
     }
 
-    public function userLevel() {
+    public function userLevel()
+    {
         $user = Auth::guard('client')->user();
         $users = User::with([
-            'childs' => function($query) {
+            'childs' => function ($query) {
                 $query->with([
-                    'childs' => function($query) {
+                    'childs' => function ($query) {
                         $query->with([
-                            'childs' => function($query) {
+                            'childs' => function ($query) {
                                 $query->where('status', 1);
                             }
                         ])->where('status', 1);
