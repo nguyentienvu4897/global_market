@@ -47,15 +47,15 @@ class SyncUserAccountService
 
             // Gửi email để thông báo
             if ($response->getStatusCode() == 200) {
-                Notification::route('mail', 'nguyentienvu4897@gmail.com')
+                Notification::route('mail', 'vudev4897@gmail.com')
                     ->notify(new SyncUserAccountSuccessNotification($user));
             } else {
-                Notification::route('mail', 'nguyentienvu4897@gmail.com')
+                Notification::route('mail', 'vudev4897@gmail.com')
                     ->notify(new SyncUserAccountFailedNotification($user, $response->getBody()));
             }
         } catch (\Exception $e) {
             \Log::error('Sync user failed: ' . $e->getMessage());
-            Notification::route('mail', 'nguyentienvu4897@gmail.com')
+            Notification::route('mail', 'vudev4897@gmail.com')
                 ->notify(new SyncUserAccountFailedNotification($user, $e->getMessage()));
         }
     }
