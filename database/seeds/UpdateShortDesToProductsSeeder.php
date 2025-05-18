@@ -14,6 +14,8 @@ class UpdateShortDesToProductsSeeder extends Seeder
     {
         $products = Product::where('status', 1)->where('type', Product::TYPE_AFFILIATE)->get();
         foreach ($products as $product) {
+            $product->origin_id = 5;
+            $product->origin = 'Shopee';
             $product->short_des = '<p style="text-align:justify"><span style="font-size:14pt"><span style="line-height:115%"><span style="font-family:&quot;Times New Roman&quot;,serif">- Sản phẩm thuộc s&agrave;n TMĐT Shopee, gi&aacute; hiển thị tr&ecirc;n Globalmarket ch&iacute;nh l&agrave; gi&aacute; b&aacute;n tr&ecirc;n s&agrave;n Shopee. Qu&yacute; kh&aacute;ch sẽ tiến h&agrave;nh mua sản phẩm trực tiếp tr&ecirc;n s&agrave;n Shopee sau khi ấn v&agrave;o n&uacute;t “Mua h&agrave;ng”.</span></span></span></p>
 
 <p style="text-align:justify"><span style="font-size:14pt"><span style="line-height:115%"><span style="font-family:&quot;Times New Roman&quot;,serif">- Khi mua h&agrave;ng th&ocirc;ng qua globalmarket.com.vn, ngo&agrave;i việc đảm bảo giữ nguy&ecirc;n c&aacute;c ch&iacute;nh s&aacute;ch ưu đ&atilde;i, voucher từ Shopee th&igrave; qu&yacute; kh&aacute;ch c&ograve;n được tr&iacute;ch thưởng hoa hồng tại s&agrave;n Globalmarket.</span></span></span></p>
