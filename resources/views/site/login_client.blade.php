@@ -220,6 +220,10 @@
             $scope.title = 'Đăng ký tài khoản';
         }
 
+        if (window.location.href.includes('register')) {
+            $scope.showFormRegister();
+        }
+
         if (DEFAULT_CLIENT_USER) {
             localStorage.setItem('showMenuAdminClient', true);
             window.location.href = '{{route('front.client-account')}}';
