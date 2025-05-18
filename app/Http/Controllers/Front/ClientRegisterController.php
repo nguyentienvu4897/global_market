@@ -14,6 +14,7 @@ use App\Http\Traits\ResponseTrait;
 use App\Model\Admin\OrderRevenueDetail;
 use JWTAuth;
 use App\Helpers\FileHelper;
+use App\Jobs\SyncUserAccountJob;
 use App\Mail\RecoverPassword;
 use App\Mail\WithdrawMoney;
 use App\Model\Admin\Order;
@@ -116,8 +117,10 @@ class ClientRegisterController extends Controller
             $object->parent_id = $request->invite_code ? User::where('invite_code', $request->invite_code)->first()->id : null;
 			$object->save();
 
-            $syncUserAccountService = new SyncUserAccountService();
-            $syncUserAccountService->sendSyncUserAccount($object);
+            // $syncUserAccountService = new SyncUserAccountService();
+            // $syncUserAccountService->sendSyncUserAccount($object);
+
+            SyncUserAccountJob::dispatch($object);
 
 			DB::commit();
             $data = [
