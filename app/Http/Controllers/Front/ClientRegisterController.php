@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Model\Admin\SellerStore;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Str;
 class ClientRegisterController extends Controller
 {
     use ResponseTrait;
