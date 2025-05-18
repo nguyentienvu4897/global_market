@@ -117,7 +117,7 @@ class Product extends BaseModel
         return $this->belongsTo(Manufacturer::class, 'manufacturer_id');
     }
 
-    public function origin()
+    public function product_origin()
     {
         return $this->belongsTo(Origin::class, 'origin_id');
     }

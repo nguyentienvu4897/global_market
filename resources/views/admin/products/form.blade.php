@@ -53,7 +53,7 @@
         </div>
         <div class="form-group custom-group mb-4">
             <label class="form-label" ng-class="{'required-label': form.type == 0}">Danh mục sản phẩm</label>
-            <ui-select class="" remove-selected="true" ng-model="form.cate_id" theme="select2" ng-change="changeCategory(form.cate_id)">
+            <ui-select class="" remove-selected="true" ng-model="form.cate_id" theme="select2">
                 <ui-select-match placeholder="Chọn danh mục">
                     <% $select.selected.name %>
                 </ui-select-match>
@@ -207,10 +207,17 @@
         </div>
         <div class="form-group custom-group mb-4">
             <label class="form-label">Nguồn gốc</label>
-            <input class="form-control " type="text" ng-model="form.origin">
+            <ui-select class="" remove-selected="true" ng-model="form.origin_id" theme="select2" ng-change="form.changeOrigin()">
+                <ui-select-match placeholder="Chọn nguồn gốc">
+                    <% $select.selected.name %>
+                </ui-select-match>
+                <ui-select-choices repeat="t.id as t in (origins | filter: $select.search)">
+                    <span ng-bind="t.name"></span>
+                </ui-select-choices>
+            </ui-select>
             <span class="invalid-feedback d-block" role="alert">
                 <strong>
-                    <% errors.origin[0] %>
+                    <% errors.origin_id[0] %>
                 </strong>
             </span>
         </div>

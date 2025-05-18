@@ -138,12 +138,12 @@
                     </p>
                 </a>
                 <ul class="nav nav-treeview">
-                    {{-- <li class="nav-item">
+                    <li class="nav-item">
                         <a href="{{ route('origins.index') }}" class="nav-link {{ Request::routeIs('origins.create') ? 'active' : '' }}">
                             <i class="far fas  fa-angle-right nav-icon"></i>
-                            <p>Danh mục nguồn gốc xuất xứ</p>
+                            <p>Danh mục nguồn gốc</p>
                         </a>
-                    </li> --}}
+                    </li>
 {{--                    <li class="nav-item">--}}
 {{--                        <a href="{{ route('manufacturers.index') }}" class="nav-link {{ Request::routeIs('manufacturers.index') ? 'active' : '' }}">--}}
 {{--                            <i class="far fas  fa-angle-right nav-icon"></i>--}}

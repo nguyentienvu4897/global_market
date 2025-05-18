@@ -5,6 +5,7 @@
     class Product extends BaseClass {
         no_set = [];
         all_categories = @json(\App\Model\Admin\Category::getForSelect());
+        origins = @json(\App\Model\Admin\Origin::getForSelect());
 
         before(form) {
             this.image = {};
@@ -179,6 +180,10 @@
 
         updateRevenuePrice() {
             this._revenue_price = this._price * (this.revenue_percent_5 / 100);
+        }
+
+        changeOrigin() {
+            this.origin = this.origins.find(val => val.id == this._origin_id).name;
         }
 
         // get tag_ids() {

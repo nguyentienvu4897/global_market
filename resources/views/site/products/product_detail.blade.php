@@ -153,9 +153,9 @@
                                 </div>
                                 <div class="details-pro col-12 col-md-7 col-lg-7">
                                     <h1 class="title-product">{{ $product->name }}</h1>
-                                    {{-- @if (isset($product->type) && $product->type == 1) --}}
-                                        {{-- <span class="product-top-text" style="font-size: 16px"><i class="fa fa-exclamation-triangle" style="color: #f69326; margin-right: 5px;"></i> Sản phẩm thuộc sàn Shopee</span> --}}
-                                    {{-- @endif --}}
+                                    @if (isset($product->type) && $product->type == 1 && isset($product->origin))
+                                        <span class="product-top-text" style="font-size: 16px"><i class="fa fa-exclamation-triangle" style="color: #f69326; margin-right: 5px;"></i> Sản phẩm thuộc sàn {{ $product->origin }}</span>
+                                    @endif
                                     {{-- <div class="product-top clearfix">
                                         <div class="sku-product clearfix">
                                             <span class="d-none" itemprop="brand" itemtype="http://schema.org/Brand"
