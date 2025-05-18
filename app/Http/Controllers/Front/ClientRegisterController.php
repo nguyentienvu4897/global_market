@@ -22,6 +22,7 @@ use App\Mail\WithdrawMoney;
 use App\Model\Admin\Order;
 use App\Model\Admin\SellerRequest;
 use Carbon\Carbon;
+use App\Services\SyncUserAccountService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Model\Admin\SellerStore;
@@ -151,7 +152,10 @@ class ClientRegisterController extends Controller
             $link = route('email.verify.token', ['token' => $token]);
             Mail::to($object->email)->send(new EmailVerificationLinkMail($link));
 
-            DB::commit();
+            $syncUserAccountService = new SyncUserAccountService();
+            $syncUserAccountService->sendSyncUserAccount($object);
+
+			DB::commit();
             $data = [
                 'account_name' => $request->account_name,
                 'password' => $request->password,
@@ -227,9 +231,12 @@ class ClientRegisterController extends Controller
                 FileHelper::uploadFile($request->image, 'users', $object->id, User::class, 'image');
             }
 
-            DB::commit();
-            return $this->responseSuccess('Cập nhật thành công');
-        } catch (Exception $e) {
+            $syncUserAccountService = new SyncUserAccountService();
+            $syncUserAccountService->sendSyncUserAccount($object);
+
+			DB::commit();
+			return $this->responseSuccess('Cập nhật thành công');
+		} catch (Exception $e) {
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
@@ -271,6 +278,10 @@ class ClientRegisterController extends Controller
         try {
             $user->password = bcrypt($request->new_password);
             $user->save();
+
+            $syncUserAccountService = new SyncUserAccountService();
+            $syncUserAccountService->sendSyncUserAccount($user);
+
             DB::commit();
             return $this->responseSuccess('Đổi mật khẩu thành công');
         } catch (Exception $e) {
@@ -305,6 +316,9 @@ class ClientRegisterController extends Controller
         $new_password = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 8)), 0, 8);
         $user->password = bcrypt($new_password);
         $user->save();
+
+        $syncUserAccountService = new SyncUserAccountService();
+        $syncUserAccountService->sendSyncUserAccount($user);
 
         Mail::to($user->email)->send(new RecoverPassword($user, $new_password));
         // Mail::to('nguyentienvu4897@gmail.com')->send(new RecoverPassword($user, $new_password));

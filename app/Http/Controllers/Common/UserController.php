@@ -22,29 +22,29 @@ use App\Model\Common\User;
 
 class UserController extends Controller
 {
-	use ResponseTrait;
+    use ResponseTrait;
 
-	protected $view = 'common.users';
-	protected $route = 'User';
+    protected $view = 'common.users';
+    protected $route = 'User';
 
-	public function index()
-	{
-		return view($this->view.'.index');
-	}
+    public function index()
+    {
+        return view($this->view . '.index');
+    }
 
-	// Hàm phân trang, search cho datatable
+    // Hàm phân trang, search cho datatable
     public function searchData(Request $request)
     {
         $objects = ThisModel::searchByFilter($request);
 
         return Datatables::of($objects)
-			->editColumn('updated_by', function ($object) {
-				return $object->user_update ? $object->user_update->name : '';
-			})
+            ->editColumn('updated_by', function ($object) {
+                return $object->user_update ? $object->user_update->name : '';
+            })
             ->editColumn('created_at', function ($object) {
                 return Carbon::parse($object->created_at)->format("d/m/Y");
             })
-			->editColumn('status', function ($object) {
+            ->editColumn('status', function ($object) {
                 return getStatus($object->status, ThisModel::STATUSES);
             })
 			->editColumn('account_type', function ($object) {
@@ -64,25 +64,24 @@ class UserController extends Controller
                 return $object->user_create ? $object->user_create->name : '';
             })
             ->addColumn('action', function ($object) {
-				$result = '';
-				if ($object->canEdit()) {
-					$result = '<a href="' . route($this->route.'.edit',$object->id) .'" title="Sửa" class="btn btn-sm btn-primary edit"><i class="fas fa-pencil-alt"></i></a> ';
-				}
-				if ($object->canDelete()) {
-					$result .= '<a href="' . route($this->route.'.delete', $object->id) . '" title="Khóa" class="btn btn-sm btn-danger confirm"><i class="fas fa-times"></i></a>';
-				}
-				return $result;
-
+                $result = '';
+                if ($object->canEdit()) {
+                    $result = '<a href="' . route($this->route . '.edit', $object->id) . '" title="Sửa" class="btn btn-sm btn-primary edit"><i class="fas fa-pencil-alt"></i></a> ';
+                }
+                if ($object->canDelete()) {
+                    $result .= '<a href="' . route($this->route . '.delete', $object->id) . '" title="Khóa" class="btn btn-sm btn-danger confirm"><i class="fas fa-times"></i></a>';
+                }
+                return $result;
             })
 			->rawColumns(['image', 'status', 'action', 'role'])
             ->addIndexColumn()
             ->make(true);
     }
 
-	public function create()
-	{
-		return view($this->view.'.create', compact([]));
-	}
+    public function create()
+    {
+        return view($this->view . '.create', compact([]));
+    }
 
 	public function edit($id)
 	{
@@ -91,55 +90,55 @@ class UserController extends Controller
 		return view($this->view.'.edit', compact(['object']));
 	}
 
-	public function store(Request $request)
-	{
-		$rule = [
-			'name' => 'required',
-			'email' => 'required|email|unique:users',
-			'account_name' => 'required|unique:users',
-			'password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
-			'password_confirm' => 'required|same:password',
-			'status' => 'required|in:0,1',
-			'image' => 'required|file|mimes:jpg,jpeg,png|max:3000',
-//			'roles' => 'required|array|min:1',
-//			'roles.*' => 'required|exists:roles,id'
-		];
+    public function store(Request $request)
+    {
+        $rule = [
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'account_name' => 'required|unique:users',
+            'password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
+            'password_confirm' => 'required|same:password',
+            'status' => 'required|in:0,1',
+            'image' => 'required|file|mimes:jpg,jpeg,png|max:3000',
+            //			'roles' => 'required|array|min:1',
+            //			'roles.*' => 'required|exists:roles,id'
+        ];
 
-		$validate = Validator::make(
-			$request->all(),
-			$rule,
+        $validate = Validator::make(
+            $request->all(),
+            $rule,
             []
-		);
+        );
 
-		if ($validate->fails()) {
-			return $this->responseErrors("", $validate->errors());
-		}
+        if ($validate->fails()) {
+            return $this->responseErrors("", $validate->errors());
+        }
 
 
-		DB::beginTransaction();
-		try {
-			$object = new ThisModel();
-			$object->name = $request->name;
-			$object->email = $request->email;
+        DB::beginTransaction();
+        try {
+            $object = new ThisModel();
+            $object->name = $request->name;
+            $object->email = $request->email;
             $object->account_name = $request->account_name;
             $object->password = bcrypt($request->password);
-			$object->status = $request->status;
-			$object->phone_number = $request->phone_number;
-			$object->type = 1;
+            $object->status = $request->status;
+            $object->phone_number = $request->phone_number;
+            $object->type = 1;
 
-			$object->save();
+            $object->save();
 
             $object->roles()->sync([3]);
 
-			FileHelper::uploadFile($request->image, 'users', $object->id, ThisModel::class, 'image');
+            FileHelper::uploadFile($request->image, 'users', $object->id, ThisModel::class, 'image');
 
-			DB::commit();
-			return $this->responseSuccess();
-		} catch (Exception $e) {
+            DB::commit();
+            return $this->responseSuccess();
+        } catch (Exception $e) {
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
-	}
+    }
 
 	public function update(Request $request, $id)
 	{
@@ -211,11 +210,12 @@ class UserController extends Controller
 	}
 
 
-	// Xuất Excel
-    public function exportExcel() {
+    // Xuất Excel
+    public function exportExcel()
+    {
         return (new FastExcel(ThisModel::all()))->download('danh_sach_tai_khoan.xlsx', function ($object) {
             return [
-				'ID' => $object->id,
+                'ID' => $object->id,
                 'Tên' => $object->name,
                 'email' => $object->email,
                 'Loại' => $object->getTypeUser($object->type),
@@ -224,11 +224,59 @@ class UserController extends Controller
         });
     }
 
-	// Xuất PDF
-    public function exportPDF() {
+    // Xuất PDF
+    public function exportPDF()
+    {
         $data = ThisModel::all();
-		PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadView($this->view.'.pdf', compact('data'));
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadView($this->view . '.pdf', compact('data'));
         return $pdf->download('danh_sach_tai_khoan.pdf');
+    }
+
+    public function syncUserAccount(Request $request)
+    {
+        try {
+            $data = $request->form_params;
+            $user = User::where('email', $data['email'])->first();
+            if ($user) {
+                $user->name = $data['name'];
+                $user->email = $data['email'];
+                $user->account_name = $data['account_name'];
+                $user->phone_number = $data['phone_number'];
+                $user->password = bcrypt($data['password']);
+                $user->status = $data['status'];
+                $user->type = $data['type'];
+                $user->parent_id = $data['parent_id'] ?? null;
+                $user->address = $data['address'] ?? null;
+                $user->bank_account_number = $data['bank_account_number'] ?? null;
+                $user->bank_account_name = $data['bank_account_name'] ?? null;
+                $user->bank_name = $data['bank_name'] ?? null;
+            } else {
+                $user = new ThisModel();
+                $user->name = $data['name'];
+                $user->email = $data['email'];
+                $user->account_name = $data['account_name'];
+                $user->phone_number = $data['phone_number'];
+                $user->password = bcrypt($data['password']);
+                $user->status = $data['status'];
+                $user->type = $data['type'];
+                $user->parent_id = $data['parent_id'] ?? null;
+                $user->address = $data['address'] ?? null;
+                $user->bank_account_number = $data['bank_account_number'] ?? null;
+                $user->bank_account_name = $data['bank_account_name'] ?? null;
+                $user->bank_name = $data['bank_name'] ?? null;
+            }
+
+            $user->save();
+
+            if (isset($user) && $user->id) {
+                return $this->responseSuccess('Tài khoản đã được đồng bộ thành công');
+            } else {
+                return $this->responseErrors('Tài khoản không được đồng bộ');
+            }
+        } catch (Exception $e) {
+            \Log::error('Sync user failed: ' . $e->getMessage());
+            return $this->responseErrors($e->getMessage());
+        }
     }
 }

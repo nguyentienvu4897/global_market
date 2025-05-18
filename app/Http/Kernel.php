@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'checkType' => \App\Http\Middleware\CheckType::class,
         'clientAuth' => \App\Http\Middleware\ClientAuthenticate::class,
         'throttle.user' => \App\Http\Middleware\ThrottlePerUser::class,
+        'verifySyncUserToken' => \App\Http\Middleware\VerifySyncUserToken::class,
     ];
 
     /**
