@@ -23,6 +23,7 @@ use Carbon\Carbon;
 use App\Services\SyncUserAccountService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Str;
 
 class ClientRegisterController extends Controller
 {
