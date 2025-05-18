@@ -222,7 +222,8 @@ class UserController extends Controller
     public function syncUserAccount(Request $request)
     {
         try {
-            $data = $request->form_params;
+            $data = $request->all();
+            \Log::info($data);
             $user = User::where('email', $data['email'])->first();
             if ($user) {
                 $user->name = $data['name'];

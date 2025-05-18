@@ -15,6 +15,7 @@ use App\Model\Admin\OrderRevenueDetail;
 use JWTAuth;
 use App\Helpers\FileHelper;
 use App\Mail\EmailVerificationLinkMail;
+use App\Jobs\SyncUserAccountJob;
 use App\Mail\RecoverPassword;
 use App\Mail\WithdrawMoney;
 use App\Model\Admin\Order;
@@ -148,8 +149,10 @@ class ClientRegisterController extends Controller
             $link = route('email.verify.token', ['token' => $token]);
             Mail::to($object->email)->send(new EmailVerificationLinkMail($link));
 
-            $syncUserAccountService = new SyncUserAccountService();
-            $syncUserAccountService->sendSyncUserAccount($object);
+            // $syncUserAccountService = new SyncUserAccountService();
+            // $syncUserAccountService->sendSyncUserAccount($object);
+
+            SyncUserAccountJob::dispatch($object);
 
 			DB::commit();
             $data = [
@@ -227,8 +230,10 @@ class ClientRegisterController extends Controller
                 FileHelper::uploadFile($request->image, 'users', $object->id, User::class, 'image');
             }
 
-            $syncUserAccountService = new SyncUserAccountService();
-            $syncUserAccountService->sendSyncUserAccount($object);
+            // $syncUserAccountService = new SyncUserAccountService();
+            // $syncUserAccountService->sendSyncUserAccount($object);
+
+            SyncUserAccountJob::dispatch($object);
 
 			DB::commit();
 			return $this->responseSuccess('Cập nhật thành công');
@@ -275,8 +280,10 @@ class ClientRegisterController extends Controller
             $user->password = bcrypt($request->new_password);
             $user->save();
 
-            $syncUserAccountService = new SyncUserAccountService();
-            $syncUserAccountService->sendSyncUserAccount($user);
+            // $syncUserAccountService = new SyncUserAccountService();
+            // $syncUserAccountService->sendSyncUserAccount($user);
+
+            SyncUserAccountJob::dispatch($user);
 
             DB::commit();
             return $this->responseSuccess('Đổi mật khẩu thành công');
@@ -313,8 +320,10 @@ class ClientRegisterController extends Controller
         $user->password = bcrypt($new_password);
         $user->save();
 
-        $syncUserAccountService = new SyncUserAccountService();
-        $syncUserAccountService->sendSyncUserAccount($user);
+        // $syncUserAccountService = new SyncUserAccountService();
+        // $syncUserAccountService->sendSyncUserAccount($user);
+
+        SyncUserAccountJob::dispatch($user);
 
         Mail::to($user->email)->send(new RecoverPassword($user, $new_password));
         // Mail::to('nguyentienvu4897@gmail.com')->send(new RecoverPassword($user, $new_password));
