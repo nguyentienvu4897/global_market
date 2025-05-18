@@ -1,6 +1,6 @@
 @extends('site.layouts.master')
 @section('title')
-    Quản lý cấp bậc
+    Quản lý thành viên đã giới thiệu
 @endsection
 @section('description')
     {{ $config->web_des }}
@@ -29,7 +29,7 @@
                                     <th>Tên</th>
                                     <th>Email</th>
                                     <th>Số điện thoại</th>
-                                    <th>Cấp bậc</th>
+                                    {{-- <th>Cấp bậc</th> --}}
                                     <th>Hành động</th>
                                 </tr>
                             </thead>
@@ -39,7 +39,7 @@
                                     <td><% user.name %></td>
                                     <td><% user.email %></td>
                                     <td><% user.phone %></td>
-                                    <td>Cấp 1</td>
+                                    {{-- <td>Cấp 1</td> --}}
                                     <td>
                                         <a href="{{ route('front.user-revenue')}}?mail=<% user.email %>" style="text-decoration: underline; color: #0974ba; font-size: 15px; font-weight: 400;" target="_blank">Xem hoa hồng</a>
                                     </td>
@@ -49,7 +49,7 @@
                                         <td><% user1.name %></td>
                                         <td><% user1.email %></td>
                                         <td><% user1.phone %></td>
-                                        <td>Cấp 2</td>
+                                        {{-- <td>Cấp 2</td> --}}
                                         <td>
                                             <a href="{{ route('front.user-revenue')}}?mail=<% user1.email %>" style="text-decoration: underline; color: #0974ba" target="_blank">Xem hoa hồng</a>
                                         </td>
@@ -59,7 +59,7 @@
                                             <td><% user2.name %></td>
                                             <td><% user2.email %></td>
                                             <td><% user2.phone %></td>
-                                            <td>Cấp 3</td>
+                                            {{-- <td>Cấp 3</td> --}}
                                             <td>
                                                 <a href="{{ route('front.user-revenue')}}?mail=<% user2.email %>" style="text-decoration: underline; color: #0974ba" target="_blank">Xem hoa hồng</a>
                                             </td>
@@ -69,7 +69,7 @@
                                                 <td><% user3.name %></td>
                                                 <td><% user3.email %></td>
                                                 <td><% user3.phone %></td>
-                                                <td>Cấp 4</td>
+                                                {{-- <td>Cấp 4</td> --}}
                                                 <td>
                                                     <a href="{{ route('front.user-revenue')}}?mail=<% user3.email %>" style="text-decoration: underline; color: #0974ba" target="_blank">Xem hoa hồng</a>
                                                 </td>

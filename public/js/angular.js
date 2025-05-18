@@ -117,6 +117,7 @@ app.directive("ckEditor", function() {
                             "PageBreak"
                         ]
                     },
+                    { name: "links", items: ["Link", "Unlink", "Anchor"] },
                     "/",
                     {
                         name: "styles",

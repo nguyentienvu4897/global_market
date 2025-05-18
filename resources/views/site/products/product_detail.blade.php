@@ -154,7 +154,7 @@
                                 <div class="details-pro col-12 col-md-7 col-lg-7">
                                     <h1 class="title-product">{{ $product->name }}</h1>
                                     {{-- @if (isset($product->type) && $product->type == 1) --}}
-                                        <span class="product-top-text" style="font-size: 16px"><i class="fa fa-exclamation-triangle" style="color: #f69326; margin-right: 5px;"></i> Sản phẩm thuộc sàn Shopee</span>
+                                        {{-- <span class="product-top-text" style="font-size: 16px"><i class="fa fa-exclamation-triangle" style="color: #f69326; margin-right: 5px;"></i> Sản phẩm thuộc sàn Shopee</span> --}}
                                     {{-- @endif --}}
                                     {{-- <div class="product-top clearfix">
                                         <div class="sku-product clearfix">
@@ -203,9 +203,9 @@
                                             @endif
                                         </div>
                                         <div class="product-summary">
-                                            <div class="title_summary">Mô tả sản phẩm</div>
+                                            <div class="title_summary">Giới thiệu</div>
                                             <div class="rte">
-                                                {!! $product->intro !!}
+                                                {!! $product->short_des !!}
                                             </div>
                                         </div>
                                         @if(isset($product->attributes) && count($product->attributes) > 0)
@@ -239,7 +239,9 @@
                                                     </div> --}}
                                                     <div class="mb-break">
                                                         <div style="font-size: 18px">
-                                                            <span><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 16px">Thưởng hoa hồng lên đến</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency($product->revenue_price) }}₫</span></span>
+                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 16px"> Hoa hồng trực tiếp</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency($product->revenue_price) }}₫</span></div>
+                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 16px"> Hoa hồng dành cho người giới thiệu</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency($product->price * $config->revenue_percent_4 / 100) }}₫</span></div>
+                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 16px"> Bonus cho thành viên tích cực</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency($product->price * $config->revenue_percent_3 / 100 + $product->price * $config->revenue_percent_2 / 100 + $product->price * $config->revenue_percent_1 / 100) }}₫</span></div>
                                                         </div>
                                                     </div>
                                                     <div class="btn-mua button_actions clearfix">
@@ -464,8 +466,11 @@
                                     <li class="tab-link active" data-tab="#tab-1">
                                         <h3>Chi tiết sản phẩm</h3>
                                     </li>
-                                    <li class="tab-link" data-tab="#tab-2" >
+                                    {{-- <li class="tab-link" data-tab="#tab-2" >
                                         <h3>Đánh giá sản phẩm</h3>
+                                    </li> --}}
+                                    <li class="tab-link" data-tab="#tab-3" >
+                                        <h3>Mô tả sản phẩm</h3>
                                     </li>
                                 </ul>
                                 <div class="tab-float">
@@ -474,9 +479,14 @@
                                             {!! $product->body !!}
                                         </div>
                                     </div>
-                                    <div id="tab-2" class="tab-content content_extab">
+                                    {{-- <div id="tab-2" class="tab-content content_extab">
                                         <div class="rte product_getcontent" id="onireviewapp">
                                             @include('site.partials.onireview')
+                                        </div>
+                                    </div> --}}
+                                    <div id="tab-3" class="tab-content content_extab">
+                                        <div class="rte product_getcontent">
+                                            {!! $product->intro !!}
                                         </div>
                                     </div>
                                 </div>

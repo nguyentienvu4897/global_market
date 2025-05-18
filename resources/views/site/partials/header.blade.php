@@ -285,7 +285,7 @@
                                 <a class="nav-link" href="{{route('front.user-revenue')}}" title="Hoa hồng">Hoa hồng</a>
                             </li>
                             <li class="nav-item {{ Route::currentRouteName() == 'front.user-level' ? 'active' : '' }}">
-                                <a class="nav-link" href="{{route('front.user-level')}}" title="Cấp bậc">Cấp bậc</a>
+                                <a class="nav-link" href="{{route('front.user-level')}}" title="Thành viên đã giới thiệu">Thành viên</a>
                             </li>
                             <li class="nav-item ">
                                 <a class="nav-link" href="javascript:void(0)" title="Quay lại" ng-click="changeMenuClient($event)">Quay lại</a>

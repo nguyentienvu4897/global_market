@@ -79,6 +79,16 @@
         </div>
 
         <div class="form-group custom-group mb-4">
+            <label class="form-label">Giới thiệu</label>
+            <textarea class="form-control ck-editor" ck-editor rows="5" ng-model="form.short_des"></textarea>
+            <span class="invalid-feedback d-block" role="alert">
+                <strong>
+                    <% errors.short_des[0] %>
+                </strong>
+            </span>
+        </div>
+
+        <div class="form-group custom-group mb-4">
             <label class="form-label">Mô tả ngắn</label>
             <textarea class="form-control ck-editor" ck-editor rows="5" ng-model="form.intro"></textarea>
             <span class="invalid-feedback d-block" role="alert">
