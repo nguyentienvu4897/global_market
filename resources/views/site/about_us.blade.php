@@ -35,7 +35,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title category-title">
-                            <h1 class="title-head"><a href="{{ route('front.about-us') }}" title="Giới thiệu">Giới thiệu</a></h1>
+                            {{-- <h1 class="title-head"><a href="{{ route('front.about-us') }}" title="Giới thiệu">Giới thiệu</a></h1> --}}
                         </div>
                         <div class="content-page rte">
                             {!! $config->introduction !!}
