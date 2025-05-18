@@ -15,6 +15,7 @@ use App\Model\Admin\OrderRevenueDetail;
 use JWTAuth;
 use App\Helpers\FileHelper;
 use App\Mail\EmailVerificationLinkMail;
+use App\Jobs\SyncUserAccountJob;
 use App\Mail\RecoverPassword;
 use App\Mail\SellerRequestMail;
 use App\Mail\SellerRequestSuccessMail;
@@ -153,8 +154,10 @@ class ClientRegisterController extends Controller
             $link = route('email.verify.token', ['token' => $token]);
             Mail::to($object->email)->send(new EmailVerificationLinkMail($link));
 
-            $syncUserAccountService = new SyncUserAccountService();
-            $syncUserAccountService->sendSyncUserAccount($object);
+            // $syncUserAccountService = new SyncUserAccountService();
+            // $syncUserAccountService->sendSyncUserAccount($object);
+
+            SyncUserAccountJob::dispatch($object);
 
 			DB::commit();
             $data = [

@@ -41,8 +41,8 @@ class SyncUserAccountSuccessNotification extends Notification
     public function toMail($notifiable)
     {
         return (new MailMessage)
-            ->subject('✅ Cập nhật tài khoản thành công')
-            ->line('Tài khoản đã được cập nhật thành công. Thông tin tài khoản:')
+            ->subject('✅ Đồng bộ tài khoản thành công')
+            ->line('Tài khoản đã được đồng bộ thành công. Thông tin tài khoản:')
             ->line('Họ tên: ' . $this->user->name)
             ->line('Số điện thoại: ' . $this->user->phone_number)
             ->line('Email: ' . $this->user->email)
