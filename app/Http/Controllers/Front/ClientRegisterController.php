@@ -196,8 +196,10 @@ class ClientRegisterController extends Controller
 				FileHelper::uploadFile($request->image, 'users', $object->id, User::class, 'image');
 			}
 
-            $syncUserAccountService = new SyncUserAccountService();
-            $syncUserAccountService->sendSyncUserAccount($object);
+            // $syncUserAccountService = new SyncUserAccountService();
+            // $syncUserAccountService->sendSyncUserAccount($object);
+
+            SyncUserAccountJob::dispatch($object);
 
 			DB::commit();
 			return $this->responseSuccess('Cập nhật thành công');
@@ -243,8 +245,10 @@ class ClientRegisterController extends Controller
             $user->password = bcrypt($request->new_password);
             $user->save();
 
-            $syncUserAccountService = new SyncUserAccountService();
-            $syncUserAccountService->sendSyncUserAccount($user);
+            // $syncUserAccountService = new SyncUserAccountService();
+            // $syncUserAccountService->sendSyncUserAccount($user);
+
+            SyncUserAccountJob::dispatch($user);
 
             DB::commit();
             return $this->responseSuccess('Đổi mật khẩu thành công');
@@ -280,8 +284,10 @@ class ClientRegisterController extends Controller
         $user->password = bcrypt($new_password);
         $user->save();
 
-        $syncUserAccountService = new SyncUserAccountService();
-        $syncUserAccountService->sendSyncUserAccount($user);
+        // $syncUserAccountService = new SyncUserAccountService();
+        // $syncUserAccountService->sendSyncUserAccount($user);
+
+        SyncUserAccountJob::dispatch($user);
 
         Mail::to($user->email)->send(new RecoverPassword($user, $new_password));
         // Mail::to('nguyentienvu4897@gmail.com')->send(new RecoverPassword($user, $new_password));
