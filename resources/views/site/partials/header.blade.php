@@ -23,18 +23,6 @@
                         <line y1="19.5" x2="24" y2="19.5" stroke="#fff"></line>
                     </svg>
                 </button>
-                <ul class="list-search-key">
-                    @foreach($tag_search as $key => $tag)
-                    @if ($key == 2)
-                    <li><a href="{{ route('front.search').'?tag='.$tag->name }}" title="{{ $tag->name }}">{{ $tag->name }} </a>
-                    </li>
-                    @else
-                    <li><a href="{{ route('front.search').'?tag='.$tag->name }}" title="{{ $tag->name }}">{{ $tag->name }} </a>
-                        <span>|</span>
-                    </li>
-                    @endif
-                    @endforeach
-                </ul>
                 <div class="list-top-item header_tim_kiem">
                     <form action="{{ route('front.search') }}" method="get" class="header-search-form input-group search-bar"
                         role="search">
@@ -57,26 +45,20 @@
                         </div>
                     </form>
                 </div>
-                {{-- <div style="margin-top: 10px;">
-                    <img src="/site/images/cs.png" alt="banner" style="width: 100%; height: auto;">
-                </div> --}}
+                <ul class="list-search-key">
+                    @foreach($tag_search as $key => $tag)
+                    @if ($key == 2)
+                    <li><a href="{{ route('front.search').'?tag='.$tag->name }}" title="{{ $tag->name }}">{{ $tag->name }} </a>
+                    </li>
+                    @else
+                    <li><a href="{{ route('front.search').'?tag='.$tag->name }}" title="{{ $tag->name }}">{{ $tag->name }} </a>
+                        <span>|</span>
+                    </li>
+                    @endif
+                    @endforeach
+                </ul>
             </div>
             <div class="col-xl-5 col-xlcus-6 col-lg-12 box-right">
-                <div class="box-swisa">
-                    <div class="img_hot">
-                        <img width="14" height="18"
-                            src="/site/images/icon_hot.png?1729657650563"
-                            alt="Icon" />
-                    </div>
-                    @php
-                        $text_top_header = explode("\n", $config->text_top_header);
-                    @endphp
-                    <div class="fullpage">
-                        @foreach($text_top_header as $text)
-                        <span class="quotes" style="font-size: 15px;">{{ $text }}</span>
-                        @endforeach
-                    </div>
-                </div>
                 <div class="box-icon-right">
                     {{-- <a href="/san-pham-yeu-thich" class="header-acc" title="Sản phẩm yêu thích">
                         <div class="img_acc">
@@ -171,6 +153,21 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                </div>
+                <div class="box-swisa">
+                    <div class="img_hot">
+                        <img width="14" height="18"
+                            src="/site/images/icon_hot.png?1729657650563"
+                            alt="Icon" />
+                    </div>
+                    @php
+                        $text_top_header = explode("\n", $config->text_top_header);
+                    @endphp
+                    <div class="fullpage">
+                        @foreach($text_top_header as $text)
+                        <span class="quotes" style="font-size: 15px;">{{ $text }}</span>
+                        @endforeach
                     </div>
                 </div>
             </div>

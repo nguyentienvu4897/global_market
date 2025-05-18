@@ -771,7 +771,7 @@ a:hover {
 
 body,input,textarea,button,select {
     line-height: 1.7;
-    font-family: "Quicksand",sans-serif;
+    font-family: "Roboto",sans-serif;
     color: #000;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%
@@ -783,7 +783,9 @@ body:focus,input:focus,textarea:focus,button:focus,select:focus {
 }
 
 body {
-    font-size: 18px;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 14px;
     color: #000;
     background-color: #fff;
     max-width: 1920px;
@@ -791,11 +793,11 @@ body {
 }
 
 header nav {
-    font-family: "Quicksand",sans-serif
+    font-family: "Roboto",sans-serif
 }
 
 h1,h2,h3,h4,h5,h6 {
-    font-family: "Quicksand",sans-serif;
+    font-family: "Roboto",sans-serif;
     line-height: 1.4
 }
 
@@ -2306,7 +2308,7 @@ label {
 }
 
 .item_product_main .product-info .product-name a {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 400;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2409,9 +2411,9 @@ ul.tabs li.current {
 @media (min-width: 1025px) {
     .top-header {
         border-bottom: 1px solid #f69326;
-        padding-bottom: 5px;
+        /* padding-bottom: 5px; */
         /* margin-bottom: 10px; */
-        border-top: 1px solid #f69326;
+        border-top: 5px solid #f69326;
     }
 
     .top-header #btn-menu-mobile {
@@ -2519,7 +2521,7 @@ ul.tabs li.current {
 
 .top-header .list-search-key {
     text-align: left;
-    margin-top: 14px
+    margin-top: 8px;
 }
 
 @media (max-width: 1025px) {
@@ -2534,7 +2536,7 @@ ul.tabs li.current {
 
 .top-header .list-search-key li a {
     color: #000;
-    font-size: 15px;
+    font-size: 14px;
     line-height: 17.5px;
     font-weight: 400
 }
@@ -2544,7 +2546,7 @@ ul.tabs li.current {
 }
 
 .top-header .list-search-key li span {
-    margin: 0px 10px
+    margin: 0px 5px;
 }
 
 @media (max-width: 1367px) {
@@ -2556,13 +2558,15 @@ ul.tabs li.current {
 .top-header .list-top-item {
     height: 40px;
     line-height: 40px;
-    font-size: 14px
+    font-size: 14px;
+    margin-top: 18px;
 }
 
 @media (max-width: 1025px) {
     .top-header .list-top-item {
         float:right;
-        width: calc(100% - 50px)
+        width: calc(100% - 50px);
+        margin-top: 0;
     }
 }
 
@@ -2849,9 +2853,10 @@ ul.tabs li.current {
     display: flex;
     align-items: flex-end;
     line-height: 1;
-    padding-left: 35.5%;
-    margin-bottom: 14px;
-    margin-top: 13px
+    padding-left: 17.5%;
+    margin-bottom: 8px;
+    margin-top: 8px;
+    justify-content: flex-end;
 }
 
 @media (max-width: 1440px) {
@@ -2909,7 +2914,8 @@ ul.tabs li.current {
     align-items: center;
     justify-content: flex-end;
     height: 40px;
-    margin: 8px 0px
+    margin: 8px 0px;
+    margin-top: 17px;
 }
 
 @media (max-width: 767px) {
@@ -2925,8 +2931,8 @@ ul.tabs li.current {
 }
 
 .top-header .box-icon-right .cart-header {
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
     line-height: 1;
     border-radius: 5px;
     color: #fff;
@@ -3048,8 +3054,8 @@ ul.tabs li.current {
 }
 
 .top-header .box-icon-right .header-acc .img_acc {
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
     line-height: 1;
     border-radius: 5px;
     background-color: #0974ba;
@@ -4025,7 +4031,7 @@ header .menu_mega .ul_menu .ul_content_right_1 .nav_item .ul_content_right_2 .na
         padding: 9px 30px 9px 0px;
         text-align: center;
         position: relative;
-        font-weight: 600;
+        font-weight: 500;
     }
 }
 
@@ -4743,7 +4749,7 @@ footer.footer .list-menu {
 
 footer.footer .list-menu.list-info {
     margin-bottom: 10px;
-    font-size: 16px
+    font-size: 14px;
 }
 
 @media (min-width: 767px) {
@@ -4769,7 +4775,7 @@ footer.footer .list-menu .li_menu a {
     padding: 5px 0;
     position: relative;
     color: #000;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
     line-height: normal;
     display: block;
@@ -4815,7 +4821,7 @@ footer.footer .list-menu .li_menu a:hover,footer.footer .list-menu .li_menu a:fo
 .mid-footer .des_foo {
     color: #000;
     margin-bottom: 10px;
-    font-size: 16px
+    font-size: 14px;
 }
 
 .livechat-mes {
@@ -5392,10 +5398,45 @@ header .menu_mega:hover .title_menu {
 .top-header-wrapper a {
     color: #fff;
     font-size: 14px;
-    font-weight: 600;
+    font-weight: 400;
 }
 
 .top-header-wrapper a:hover {
     color: #f69326;
 }
 
+.float-right {
+    float: right;
+}
+
+.float-left {
+    float: left;
+}
+
+@media (min-width: 768px) {
+    .d-md-none {
+        display: none !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .d-sm-none {
+        display: none !important;
+    }
+}
+
+.top-header .box-icon-right .header-acc:last-child {
+    margin-right: 0px;
+}
+
+@media (max-width: 767px) {
+    .top-header .box-icon-right .header-acc:last-child .img_acc {
+        margin-right: 0px;
+    }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1024px) {
+    .top-header .box-icon-right {
+        margin-top: 5px;
+    }
+}

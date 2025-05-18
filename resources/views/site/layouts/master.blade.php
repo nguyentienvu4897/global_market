@@ -10,7 +10,261 @@
     <link rel="preload" as="script" href="/site/js/lazy.js?1729657650563" />
     <script src="/site/js/lazy.js?1729657650563" type="text/javascript"></script>
     <script>
-        !function (t) { "function" == typeof define && define.amd ? define(["jquery"], t) : t("object" == typeof exports ? require("jquery") : jQuery) }(function (t) { function s(s) { var e = !1; return t('[data-notify="container"]').each(function (i, n) { var a = t(n), o = a.find('[data-notify="title"]').text().trim(), r = a.find('[data-notify="message"]').html().trim(), l = o === t("<div>" + s.settings.content.title + "</div>").html().trim(), d = r === t("<div>" + s.settings.content.message + "</div>").html().trim(), g = a.hasClass("alert-" + s.settings.type); return l && d && g && (e = !0), !e }), e } function e(e, n, a) { var o = { content: { message: "object" == typeof n ? n.message : n, title: n.title ? n.title : "", icon: n.icon ? n.icon : "", url: n.url ? n.url : "#", target: n.target ? n.target : "-" } }; a = t.extend(!0, {}, o, a), this.settings = t.extend(!0, {}, i, a), this._defaults = i, "-" === this.settings.content.target && (this.settings.content.target = this.settings.url_target), this.animations = { start: "webkitAnimationStart oanimationstart MSAnimationStart animationstart", end: "webkitAnimationEnd oanimationend MSAnimationEnd animationend" }, "number" == typeof this.settings.offset && (this.settings.offset = { x: this.settings.offset, y: this.settings.offset }), (this.settings.allow_duplicates || !this.settings.allow_duplicates && !s(this)) && this.init() } var i = { element: "body", position: null, type: "info", allow_dismiss: !0, allow_duplicates: !0, newest_on_top: !1, showProgressbar: !1, placement: { from: "top", align: "right" }, offset: 20, spacing: 10, z_index: 1031, delay: 5e3, timer: 1e3, url_target: "_blank", mouse_over: null, animate: { enter: "animated fadeInDown", exit: "animated fadeOutUp" }, onShow: null, onShown: null, onClose: null, onClosed: null, icon_type: "class", template: '<div data-notify="container" class="col-xs-11 col-sm-4 alert alert-{0}" role="alert"><button type="button" aria-hidden="true" class="close" data-notify="dismiss">&times;</button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>' }; String.format = function () { for (var t = arguments[0], s = 1; s < arguments.length; s++)t = t.replace(RegExp("\\{" + (s - 1) + "\\}", "gm"), arguments[s]); return t }, t.extend(e.prototype, { init: function () { var t = this; this.buildNotify(), this.settings.content.icon && this.setIcon(), "#" != this.settings.content.url && this.styleURL(), this.styleDismiss(), this.placement(), this.bind(), this.notify = { $ele: this.$ele, update: function (s, e) { var i = {}; "string" == typeof s ? i[s] = e : i = s; for (var n in i) switch (n) { case "type": this.$ele.removeClass("alert-" + t.settings.type), this.$ele.find('[data-notify="progressbar"] > .progress-bar').removeClass("progress-bar-" + t.settings.type), t.settings.type = i[n], this.$ele.addClass("alert-" + i[n]).find('[data-notify="progressbar"] > .progress-bar').addClass("progress-bar-" + i[n]); break; case "icon": var a = this.$ele.find('[data-notify="icon"]'); "class" === t.settings.icon_type.toLowerCase() ? a.removeClass(t.settings.content.icon).addClass(i[n]) : (a.is("img") || a.find("img"), a.attr("src", i[n])); break; case "progress": var o = t.settings.delay - t.settings.delay * (i[n] / 100); this.$ele.data("notify-delay", o), this.$ele.find('[data-notify="progressbar"] > div').attr("aria-valuenow", i[n]).css("width", i[n] + "%"); break; case "url": this.$ele.find('[data-notify="url"]').attr("href", i[n]); break; case "target": this.$ele.find('[data-notify="url"]').attr("target", i[n]); break; default: this.$ele.find('[data-notify="' + n + '"]').html(i[n]) }var r = this.$ele.outerHeight() + parseInt(t.settings.spacing) + parseInt(t.settings.offset.y); t.reposition(r) }, close: function () { t.close() } } }, buildNotify: function () { var s = this.settings.content; this.$ele = t(String.format(this.settings.template, this.settings.type, s.title, s.message, s.url, s.target)), this.$ele.attr("data-notify-position", this.settings.placement.from + "-" + this.settings.placement.align), this.settings.allow_dismiss || this.$ele.find('[data-notify="dismiss"]').css("display", "none"), (this.settings.delay > 0 || this.settings.showProgressbar) && this.settings.showProgressbar || this.$ele.find('[data-notify="progressbar"]').remove() }, setIcon: function () { "class" === this.settings.icon_type.toLowerCase() ? this.$ele.find('[data-notify="icon"]').addClass(this.settings.content.icon) : this.$ele.find('[data-notify="icon"]').is("img") ? this.$ele.find('[data-notify="icon"]').attr("src", this.settings.content.icon) : this.$ele.find('[data-notify="icon"]').append('<img src="' + this.settings.content.icon + '" alt="Notify Icon" />') }, styleDismiss: function () { this.$ele.find('[data-notify="dismiss"]').css({ position: "absolute", right: "10px", top: "5px", zIndex: this.settings.z_index + 2 }) }, styleURL: function () { this.$ele.find('[data-notify="url"]').css({ backgroundImage: "url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)", height: "100%", left: 0, position: "absolute", top: 0, width: "100%", zIndex: this.settings.z_index + 1 }) }, placement: function () { var s = this, e = this.settings.offset.y, i = { display: "inline-block", margin: "0px auto", position: this.settings.position ? this.settings.position : "body" === this.settings.element ? "fixed" : "absolute", transition: "all .5s ease-in-out", zIndex: this.settings.z_index }, n = !1, a = this.settings; switch (t('[data-notify-position="' + this.settings.placement.from + "-" + this.settings.placement.align + '"]:not([data-closing="true"])').each(function () { e = Math.max(e, parseInt(t(this).css(a.placement.from)) + parseInt(t(this).outerHeight()) + parseInt(a.spacing)) }), this.settings.newest_on_top === !0 && (e = this.settings.offset.y), i[this.settings.placement.from] = e + "px", this.settings.placement.align) { case "left": case "right": i[this.settings.placement.align] = this.settings.offset.x + "px"; break; case "center": i.left = 0, i.right = 0 }this.$ele.css(i).addClass(this.settings.animate.enter), t.each(["webkit-", "moz-", "o-", "ms-", ""], function (t, e) { s.$ele[0].style[e + "AnimationIterationCount"] = 1 }), t(this.settings.element).append(this.$ele), this.settings.newest_on_top === !0 && (e = parseInt(e) + parseInt(this.settings.spacing) + this.$ele.outerHeight(), this.reposition(e)), t.isFunction(s.settings.onShow) && s.settings.onShow.call(this.$ele), this.$ele.one(this.animations.start, function () { n = !0 }).one(this.animations.end, function () { t.isFunction(s.settings.onShown) && s.settings.onShown.call(this) }), setTimeout(function () { n || t.isFunction(s.settings.onShown) && s.settings.onShown.call(this) }, 600) }, bind: function () { var s = this; if (this.$ele.find('[data-notify="dismiss"]').on("click", function () { s.close() }), this.$ele.mouseover(function () { t(this).data("data-hover", "true") }).mouseout(function () { t(this).data("data-hover", "false") }), this.$ele.data("data-hover", "false"), this.settings.delay > 0) { s.$ele.data("notify-delay", s.settings.delay); var e = setInterval(function () { var t = parseInt(s.$ele.data("notify-delay")) - s.settings.timer; if ("false" === s.$ele.data("data-hover") && "pause" === s.settings.mouse_over || "pause" != s.settings.mouse_over) { var i = (s.settings.delay - t) / s.settings.delay * 100; s.$ele.data("notify-delay", t), s.$ele.find('[data-notify="progressbar"] > div').attr("aria-valuenow", i).css("width", i + "%") } t > -s.settings.timer || (clearInterval(e), s.close()) }, s.settings.timer) } }, close: function () { var s = this, e = parseInt(this.$ele.css(this.settings.placement.from)), i = !1; this.$ele.data("closing", "true").addClass(this.settings.animate.exit), s.reposition(e), t.isFunction(s.settings.onClose) && s.settings.onClose.call(this.$ele), this.$ele.one(this.animations.start, function () { i = !0 }).one(this.animations.end, function () { t(this).remove(), t.isFunction(s.settings.onClosed) && s.settings.onClosed.call(this) }), setTimeout(function () { i || (s.$ele.remove(), s.settings.onClosed && s.settings.onClosed(s.$ele)) }, 600) }, reposition: function (s) { var e = this, i = '[data-notify-position="' + this.settings.placement.from + "-" + this.settings.placement.align + '"]:not([data-closing="true"])', n = this.$ele.nextAll(i); this.settings.newest_on_top === !0 && (n = this.$ele.prevAll(i)), n.each(function () { t(this).css(e.settings.placement.from, s), s = parseInt(s) + parseInt(e.settings.spacing) + t(this).outerHeight() }) } }), t.notify = function (t, s) { var i = new e(this, t, s); return i.notify }, t.notifyDefaults = function (s) { return i = t.extend(!0, {}, i, s) }, t.notifyClose = function (s) { void 0 === s || "all" === s ? t("[data-notify]").find('[data-notify="dismiss"]').trigger("click") : t('[data-notify-position="' + s + '"]').find('[data-notify="dismiss"]').trigger("click") } });
+        ! function(t) {
+            "function" == typeof define && define.amd ? define(["jquery"], t) : t("object" == typeof exports ? require(
+                "jquery") : jQuery)
+        }(function(t) {
+            function s(s) {
+                var e = !1;
+                return t('[data-notify="container"]').each(function(i, n) {
+                    var a = t(n),
+                        o = a.find('[data-notify="title"]').text().trim(),
+                        r = a.find('[data-notify="message"]').html().trim(),
+                        l = o === t("<div>" + s.settings.content.title + "</div>").html().trim(),
+                        d = r === t("<div>" + s.settings.content.message + "</div>").html().trim(),
+                        g = a.hasClass("alert-" + s.settings.type);
+                    return l && d && g && (e = !0), !e
+                }), e
+            }
+
+            function e(e, n, a) {
+                var o = {
+                    content: {
+                        message: "object" == typeof n ? n.message : n,
+                        title: n.title ? n.title : "",
+                        icon: n.icon ? n.icon : "",
+                        url: n.url ? n.url : "#",
+                        target: n.target ? n.target : "-"
+                    }
+                };
+                a = t.extend(!0, {}, o, a), this.settings = t.extend(!0, {}, i, a), this._defaults = i, "-" === this
+                    .settings.content.target && (this.settings.content.target = this.settings.url_target), this
+                    .animations = {
+                        start: "webkitAnimationStart oanimationstart MSAnimationStart animationstart",
+                        end: "webkitAnimationEnd oanimationend MSAnimationEnd animationend"
+                    }, "number" == typeof this.settings.offset && (this.settings.offset = {
+                        x: this.settings.offset,
+                        y: this.settings.offset
+                    }), (this.settings.allow_duplicates || !this.settings.allow_duplicates && !s(this)) && this.init()
+            }
+            var i = {
+                element: "body",
+                position: null,
+                type: "info",
+                allow_dismiss: !0,
+                allow_duplicates: !0,
+                newest_on_top: !1,
+                showProgressbar: !1,
+                placement: {
+                    from: "top",
+                    align: "right"
+                },
+                offset: 20,
+                spacing: 10,
+                z_index: 1031,
+                delay: 5e3,
+                timer: 1e3,
+                url_target: "_blank",
+                mouse_over: null,
+                animate: {
+                    enter: "animated fadeInDown",
+                    exit: "animated fadeOutUp"
+                },
+                onShow: null,
+                onShown: null,
+                onClose: null,
+                onClosed: null,
+                icon_type: "class",
+                template: '<div data-notify="container" class="col-xs-11 col-sm-4 alert alert-{0}" role="alert"><button type="button" aria-hidden="true" class="close" data-notify="dismiss">&times;</button><span data-notify="icon"></span> <span data-notify="title">{1}</span> <span data-notify="message">{2}</span><div class="progress" data-notify="progressbar"><div class="progress-bar progress-bar-{0}" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;"></div></div><a href="{3}" target="{4}" data-notify="url"></a></div>'
+            };
+            String.format = function() {
+                for (var t = arguments[0], s = 1; s < arguments.length; s++) t = t.replace(RegExp("\\{" + (s - 1) +
+                    "\\}", "gm"), arguments[s]);
+                return t
+            }, t.extend(e.prototype, {
+                init: function() {
+                    var t = this;
+                    this.buildNotify(), this.settings.content.icon && this.setIcon(), "#" != this.settings
+                        .content.url && this.styleURL(), this.styleDismiss(), this.placement(), this.bind(),
+                        this.notify = {
+                            $ele: this.$ele,
+                            update: function(s, e) {
+                                var i = {};
+                                "string" == typeof s ? i[s] = e : i = s;
+                                for (var n in i) switch (n) {
+                                    case "type":
+                                        this.$ele.removeClass("alert-" + t.settings.type), this.$ele
+                                            .find('[data-notify="progressbar"] > .progress-bar')
+                                            .removeClass("progress-bar-" + t.settings.type), t
+                                            .settings.type = i[n], this.$ele.addClass("alert-" + i[
+                                                n]).find(
+                                                '[data-notify="progressbar"] > .progress-bar')
+                                            .addClass("progress-bar-" + i[n]);
+                                        break;
+                                    case "icon":
+                                        var a = this.$ele.find('[data-notify="icon"]');
+                                        "class" === t.settings.icon_type.toLowerCase() ? a
+                                            .removeClass(t.settings.content.icon).addClass(i[n]) : (
+                                                a.is("img") || a.find("img"), a.attr("src", i[n]));
+                                        break;
+                                    case "progress":
+                                        var o = t.settings.delay - t.settings.delay * (i[n] / 100);
+                                        this.$ele.data("notify-delay", o), this.$ele.find(
+                                            '[data-notify="progressbar"] > div').attr(
+                                            "aria-valuenow", i[n]).css("width", i[n] + "%");
+                                        break;
+                                    case "url":
+                                        this.$ele.find('[data-notify="url"]').attr("href", i[n]);
+                                        break;
+                                    case "target":
+                                        this.$ele.find('[data-notify="url"]').attr("target", i[n]);
+                                        break;
+                                    default:
+                                        this.$ele.find('[data-notify="' + n + '"]').html(i[n])
+                                }
+                                var r = this.$ele.outerHeight() + parseInt(t.settings.spacing) +
+                                    parseInt(t.settings.offset.y);
+                                t.reposition(r)
+                            },
+                            close: function() {
+                                t.close()
+                            }
+                        }
+                },
+                buildNotify: function() {
+                    var s = this.settings.content;
+                    this.$ele = t(String.format(this.settings.template, this.settings.type, s.title, s
+                            .message, s.url, s.target)), this.$ele.attr("data-notify-position", this
+                            .settings.placement.from + "-" + this.settings.placement.align), this.settings
+                        .allow_dismiss || this.$ele.find('[data-notify="dismiss"]').css("display", "none"),
+                        (this.settings.delay > 0 || this.settings.showProgressbar) && this.settings
+                        .showProgressbar || this.$ele.find('[data-notify="progressbar"]').remove()
+                },
+                setIcon: function() {
+                    "class" === this.settings.icon_type.toLowerCase() ? this.$ele.find(
+                            '[data-notify="icon"]').addClass(this.settings.content.icon) : this.$ele.find(
+                            '[data-notify="icon"]').is("img") ? this.$ele.find('[data-notify="icon"]').attr(
+                            "src", this.settings.content.icon) : this.$ele.find('[data-notify="icon"]')
+                        .append('<img src="' + this.settings.content.icon + '" alt="Notify Icon" />')
+                },
+                styleDismiss: function() {
+                    this.$ele.find('[data-notify="dismiss"]').css({
+                        position: "absolute",
+                        right: "10px",
+                        top: "5px",
+                        zIndex: this.settings.z_index + 2
+                    })
+                },
+                styleURL: function() {
+                    this.$ele.find('[data-notify="url"]').css({
+                        backgroundImage: "url(data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7)",
+                        height: "100%",
+                        left: 0,
+                        position: "absolute",
+                        top: 0,
+                        width: "100%",
+                        zIndex: this.settings.z_index + 1
+                    })
+                },
+                placement: function() {
+                    var s = this,
+                        e = this.settings.offset.y,
+                        i = {
+                            display: "inline-block",
+                            margin: "0px auto",
+                            position: this.settings.position ? this.settings.position : "body" === this
+                                .settings.element ? "fixed" : "absolute",
+                            transition: "all .5s ease-in-out",
+                            zIndex: this.settings.z_index
+                        },
+                        n = !1,
+                        a = this.settings;
+                    switch (t('[data-notify-position="' + this.settings.placement.from + "-" + this.settings
+                            .placement.align + '"]:not([data-closing="true"])').each(function() {
+                            e = Math.max(e, parseInt(t(this).css(a.placement.from)) + parseInt(t(this)
+                                .outerHeight()) + parseInt(a.spacing))
+                        }), this.settings.newest_on_top === !0 && (e = this.settings.offset.y), i[this
+                            .settings.placement.from] = e + "px", this.settings.placement.align) {
+                        case "left":
+                        case "right":
+                            i[this.settings.placement.align] = this.settings.offset.x + "px";
+                            break;
+                        case "center":
+                            i.left = 0, i.right = 0
+                    }
+                    this.$ele.css(i).addClass(this.settings.animate.enter), t.each(["webkit-", "moz-", "o-",
+                            "ms-", ""
+                        ], function(t, e) {
+                            s.$ele[0].style[e + "AnimationIterationCount"] = 1
+                        }), t(this.settings.element).append(this.$ele), this.settings.newest_on_top === !
+                        0 && (e = parseInt(e) + parseInt(this.settings.spacing) + this.$ele.outerHeight(),
+                            this.reposition(e)), t.isFunction(s.settings.onShow) && s.settings.onShow.call(
+                            this.$ele), this.$ele.one(this.animations.start, function() {
+                            n = !0
+                        }).one(this.animations.end, function() {
+                            t.isFunction(s.settings.onShown) && s.settings.onShown.call(this)
+                        }), setTimeout(function() {
+                            n || t.isFunction(s.settings.onShown) && s.settings.onShown.call(this)
+                        }, 600)
+                },
+                bind: function() {
+                    var s = this;
+                    if (this.$ele.find('[data-notify="dismiss"]').on("click", function() {
+                            s.close()
+                        }), this.$ele.mouseover(function() {
+                            t(this).data("data-hover", "true")
+                        }).mouseout(function() {
+                            t(this).data("data-hover", "false")
+                        }), this.$ele.data("data-hover", "false"), this.settings.delay > 0) {
+                        s.$ele.data("notify-delay", s.settings.delay);
+                        var e = setInterval(function() {
+                            var t = parseInt(s.$ele.data("notify-delay")) - s.settings.timer;
+                            if ("false" === s.$ele.data("data-hover") && "pause" === s.settings
+                                .mouse_over || "pause" != s.settings.mouse_over) {
+                                var i = (s.settings.delay - t) / s.settings.delay * 100;
+                                s.$ele.data("notify-delay", t), s.$ele.find(
+                                    '[data-notify="progressbar"] > div').attr("aria-valuenow",
+                                    i).css("width", i + "%")
+                            }
+                            t > -s.settings.timer || (clearInterval(e), s.close())
+                        }, s.settings.timer)
+                    }
+                },
+                close: function() {
+                    var s = this,
+                        e = parseInt(this.$ele.css(this.settings.placement.from)),
+                        i = !1;
+                    this.$ele.data("closing", "true").addClass(this.settings.animate.exit), s.reposition(e),
+                        t.isFunction(s.settings.onClose) && s.settings.onClose.call(this.$ele), this.$ele
+                        .one(this.animations.start, function() {
+                            i = !0
+                        }).one(this.animations.end, function() {
+                            t(this).remove(), t.isFunction(s.settings.onClosed) && s.settings.onClosed
+                                .call(this)
+                        }), setTimeout(function() {
+                            i || (s.$ele.remove(), s.settings.onClosed && s.settings.onClosed(s.$ele))
+                        }, 600)
+                },
+                reposition: function(s) {
+                    var e = this,
+                        i = '[data-notify-position="' + this.settings.placement.from + "-" + this.settings
+                        .placement.align + '"]:not([data-closing="true"])',
+                        n = this.$ele.nextAll(i);
+                    this.settings.newest_on_top === !0 && (n = this.$ele.prevAll(i)), n.each(function() {
+                        t(this).css(e.settings.placement.from, s), s = parseInt(s) + parseInt(e
+                            .settings.spacing) + t(this).outerHeight()
+                    })
+                }
+            }), t.notify = function(t, s) {
+                var i = new e(this, t, s);
+                return i.notify
+            }, t.notifyDefaults = function(s) {
+                return i = t.extend(!0, {}, i, s)
+            }, t.notifyClose = function(s) {
+                void 0 === s || "all" === s ? t("[data-notify]").find('[data-notify="dismiss"]').trigger("click") :
+                    t('[data-notify-position="' + s + '"]').find('[data-notify="dismiss"]').trigger("click")
+            }
+        });
     </script>
     <link rel="preload" as='style' type="text/css" href="/site/css/main.scss.css?1729657650563">
     <link rel="preload" as='style' type="text/css" href="/site/css/index.scss.css?1729657650563">
@@ -19,12 +273,17 @@
     <link rel="stylesheet" href="/site/css/bootstrap-4-3-min.css?1729657650563">
     <link href="/site/css/main.scss.css?1729657650563" rel="stylesheet" type="text/css" media="all" />
     <link href="/site/css/index.scss.css?1729657650563" rel="stylesheet" type="text/css" media="all" />
-    <link href="/site/css/quickviews_popup_cart.scss.css?1729657650563" rel="stylesheet" type="text/css" media="all" />
+    <link href="/site/css/quickviews_popup_cart.scss.css?1729657650563" rel="stylesheet" type="text/css"
+        media="all" />
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
-    <link href='/site/css/onireviews.css?v=1811' rel='stylesheet' type='text/css'  media='all'  />
+    <link href='/site/css/onireviews.css?v=1811' rel='stylesheet' type='text/css' media='all' />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
 
     <script>
-        (function () {
+        (function() {
             function asyncLoad() {
                 var urls = [];
                 for (var i = 0; i < urls.length; i++) {
@@ -36,20 +295,23 @@
                     x.parentNode.insertBefore(s, x);
                 }
             };
-            window.attachEvent ? window.attachEvent('onload', asyncLoad) : window.addEventListener('load', asyncLoad, false);
+            window.attachEvent ? window.attachEvent('onload', asyncLoad) : window.addEventListener('load', asyncLoad,
+                false);
         })();
     </script>
     <script>
-        $(document).ready(function ($) {
+        $(document).ready(function($) {
             awe_lazyloadImage();
         });
+
         function awe_lazyloadImage() {
             var ll = new LazyLoad({
                 elements_selector: ".lazyload",
                 load_delay: 100,
                 threshold: 0
             });
-        } window.awe_lazyloadImage = awe_lazyloadImage;
+        }
+        window.awe_lazyloadImage = awe_lazyloadImage;
     </script>
 
     @yield('css')
@@ -58,6 +320,7 @@
             color: #dc3232;
             font-size: 14px;
         }
+
         @media (min-width: 768px) {
             /* body {
                 zoom: 0.9;
@@ -73,32 +336,36 @@
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.9/angular-sanitize.js"></script>
     <script src="{{ asset('libs/angularjs/select.js') }}"></script>
     <script src="{{ asset('js/angular.js') }}?version={{ env('APP_VERSION', '1') }}"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
     @stack('script')
     <script>
-        app.controller('AppController', function($rootScope, $scope, cartItemSync, $interval, $compile){
+        app.controller('AppController', function($rootScope, $scope, cartItemSync, $interval, $compile) {
             $scope.currentUser = @json(Auth::guard('client')->user());
             $scope.isAdminClient = @json(Auth::guard('client')->check());
-            $scope.showMenuAdminClient = localStorage.getItem('showMenuAdminClient') ? localStorage.getItem('showMenuAdminClient') : false;
+            $scope.showMenuAdminClient = localStorage.getItem('showMenuAdminClient') ? localStorage.getItem(
+                'showMenuAdminClient') : false;
 
             const currentUrl = window.location.href;
-            if (currentUrl != "{{route('front.client-account')}}" && currentUrl != "{{route('front.user-order')}}" && currentUrl != "{{route('front.user-revenue')}}" && currentUrl != "{{route('front.user-level')}}") {
+            if (currentUrl != "{{ route('front.client-account') }}" && currentUrl !=
+                "{{ route('front.user-order') }}" && currentUrl != "{{ route('front.user-revenue') }}" &&
+                currentUrl != "{{ route('front.user-level') }}") {
                 $scope.showMenuAdminClient = false;
                 localStorage.removeItem('showMenuAdminClient');
             }
 
-            $scope.changeMenuClient = function($event, url){
+            $scope.changeMenuClient = function($event, url) {
                 $event.preventDefault();
                 $scope.showMenuAdminClient = !$scope.showMenuAdminClient;
-                if(url == '{{route('front.user-order')}}' || url == '{{route('front.user-revenue')}}' || url == '{{route('front.user-level')}}') {
+                if (url == '{{ route('front.user-order') }}' || url == '{{ route('front.user-revenue') }}' ||
+                    url == '{{ route('front.user-level') }}') {
                     $scope.showMenuAdminClient = true;
                 }
 
-                if($scope.showMenuAdminClient){
+                if ($scope.showMenuAdminClient) {
                     localStorage.setItem('showMenuAdminClient', $scope.showMenuAdminClient);
                     window.location.href = url;
-                }else{
+                } else {
                     localStorage.removeItem('showMenuAdminClient');
                     window.location.href = '{{ route('front.home-page') }}';
                 }
@@ -121,22 +388,22 @@
             $scope.quantity_quickview = 1;
             $scope.noti_product = {};
 
-            $scope.addToCart = function (productId, quantity = 1) {
-                url = "{{route('cart.add.item', ['productId' => 'productId'])}}";
+            $scope.addToCart = function(productId, quantity = 1) {
+                url = "{{ route('cart.add.item', ['productId' => 'productId']) }}";
                 url = url.replace('productId', productId);
                 let item_qty = quantity;
 
-                if($scope.isAdminClient) {
+                if ($scope.isAdminClient) {
                     jQuery.ajax({
                         type: 'POST',
                         url: url,
                         headers: {
-                            'X-CSRF-TOKEN': "{{csrf_token()}}"
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
                         },
                         data: {
                             'qty': parseInt(item_qty)
                         },
-                        success: function (response) {
+                        success: function(response) {
                             if (response.success) {
                                 if (response.count > 0) {
                                     $scope.hasItemInCart = true;
@@ -144,7 +411,7 @@
 
                                 $interval.cancel($rootScope.promise);
 
-                                $rootScope.promise = $interval(function () {
+                                $rootScope.promise = $interval(function() {
                                     cartItemSync.items = response.items;
                                     cartItemSync.total = response.total;
                                     cartItemSync.count = response.count;
@@ -159,49 +426,49 @@
                                 $('#quick-view-product.quickview-product').hide();
                             }
                         },
-                        error: function () {
+                        error: function() {
                             toastr.error('Thao tác thất bại !')
                         },
-                        complete: function () {
+                        complete: function() {
                             $scope.$applyAsync();
                         }
                     });
                 } else {
-                    window.location.href = "{{route('front.login-client')}}";
+                    window.location.href = "{{ route('front.login-client') }}";
                 }
             }
 
-            $scope.changeQty = function (qty, product_id) {
+            $scope.changeQty = function(qty, product_id) {
                 updateCart(qty, product_id)
             }
 
-            $scope.incrementQuantity = function (product) {
+            $scope.incrementQuantity = function(product) {
                 product.quantity = Math.min(product.quantity + 1, 9999);
             };
 
-            $scope.decrementQuantity = function (product) {
+            $scope.decrementQuantity = function(product) {
                 product.quantity = Math.max(product.quantity - 1, 0);
             };
 
             function updateCart(qty, product_id) {
                 jQuery.ajax({
                     type: 'POST',
-                    url: "{{route('cart.update.item')}}",
+                    url: "{{ route('cart.update.item') }}",
                     headers: {
-                        'X-CSRF-TOKEN': "{{csrf_token()}}"
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     data: {
                         product_id: product_id,
                         qty: qty
                     },
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success) {
                             $scope.items = response.items;
                             $scope.total = response.total;
                             $scope.total_qty = response.count;
                             $interval.cancel($rootScope.promise);
 
-                            $rootScope.promise = $interval(function(){
+                            $rootScope.promise = $interval(function() {
                                 cartItemSync.items = response.items;
                                 cartItemSync.total = response.total;
                                 cartItemSync.count = response.count;
@@ -210,24 +477,24 @@
                             $scope.$applyAsync();
                         }
                     },
-                    error: function (e) {
+                    error: function(e) {
                         toastr.error('Đã có lỗi xảy ra');
                     },
-                    complete: function () {
+                    complete: function() {
                         $scope.$applyAsync();
                     }
                 });
             }
 
             // xóa item trong giỏ
-            $scope.removeItem = function (product_id) {
+            $scope.removeItem = function(product_id) {
                 jQuery.ajax({
                     type: 'GET',
-                    url: "{{route('cart.remove.item')}}",
+                    url: "{{ route('cart.remove.item') }}",
                     data: {
                         product_id: product_id
                     },
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success) {
                             $scope.cart.items = response.items;
                             $scope.cart.count = Object.keys($scope.cart.items).length;
@@ -235,7 +502,7 @@
 
                             $interval.cancel($rootScope.promise);
 
-                            $rootScope.promise = $interval(function(){
+                            $rootScope.promise = $interval(function() {
                                 cartItemSync.items = response.items;
                                 cartItemSync.total = response.total;
                                 cartItemSync.count = response.count;
@@ -247,10 +514,10 @@
                             $scope.$applyAsync();
                         }
                     },
-                    error: function (e) {
+                    error: function(e) {
                         jQuery.toast.error('Đã có lỗi xảy ra');
                     },
-                    complete: function () {
+                    complete: function() {
                         $scope.$applyAsync();
                     }
                 });
@@ -258,26 +525,27 @@
 
             // Xem nhanh
             $scope.quickViewProduct = {};
-            $scope.showQuickView = function (productId) {
+            $scope.showQuickView = function(productId) {
                 $.ajax({
-                    url: "{{route('front.get-product-quick-view')}}",
+                    url: "{{ route('front.get-product-quick-view') }}",
                     type: 'GET',
                     headers: {
-                        'X-CSRF-TOKEN': "{{csrf_token()}}"
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     },
                     data: {
                         product_id: productId
                     },
-                    success: function (response) {
+                    success: function(response) {
                         $('#quick-view-product .quick-view-product').html(response.html);
-                        var quickView = angular.element(document.getElementById('quick-view-product'));
+                        var quickView = angular.element(document.getElementById(
+                            'quick-view-product'));
                         $compile(quickView.contents())($scope);
                         $scope.$applyAsync();
                     },
-                    error: function (e) {
+                    error: function(e) {
                         toastr.error('Đã có lỗi xảy ra');
                     },
-                    complete: function () {
+                    complete: function() {
                         $scope.$applyAsync();
                     }
                 });
@@ -288,9 +556,13 @@
                 var keyword = jQuery(this).val();
                 jQuery.ajax({
                     type: 'post',
-                    url: '{{route("front.auto-search-complete")}}',
-                    headers: {'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')},
-                    data: {keyword: keyword},
+                    url: '{{ route('front.auto-search-complete') }}',
+                    headers: {
+                        'X-CSRF-TOKEN': jQuery('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        keyword: keyword
+                    },
                     success: function(data) {
                         jQuery('.live-search-results').html(data.html);
                     }
@@ -298,30 +570,33 @@
             });
         })
 
-        app.factory('cartItemSync', function ($interval) {
-            var cart = {items: null, total: null};
+        app.factory('cartItemSync', function($interval) {
+            var cart = {
+                items: null,
+                total: null
+            };
 
             cart.items = @json($cartItems);
-            cart.count = {{$cartItems->sum('quantity')}};
-            cart.total = {{$totalPriceCart}};
+            cart.count = {{ $cartItems->sum('quantity') }};
+            cart.total = {{ $totalPriceCart }};
 
             return cart;
         });
 
-        @if(Session::has('token'))
-        localStorage.setItem('{{ env("prefix") }}-token', "{{Session::get('token')}}")
+        @if (Session::has('token'))
+            localStorage.setItem('{{ env('prefix') }}-token', "{{ Session::get('token') }}")
         @endif
-        @if(Session::has('logout'))
-        localStorage.removeItem('{{ env("prefix") }}-token');
+        @if (Session::has('logout'))
+            localStorage.removeItem('{{ env('prefix') }}-token');
         @endif
         var CSRF_TOKEN = "{{ csrf_token() }}";
         @if (Auth::guard('client')->check())
-        const DEFAULT_CLIENT_USER = {
-            id: "{{ Auth::guard('client')->user()->id }}",
-            fullname: "{{ Auth::guard('client')->user()->name }}"
-        };
+            const DEFAULT_CLIENT_USER = {
+                id: "{{ Auth::guard('client')->user()->id }}",
+                fullname: "{{ Auth::guard('client')->user()->name }}"
+            };
         @else
-        const DEFAULT_CLIENT_USER = null;
+            const DEFAULT_CLIENT_USER = null;
         @endif
     </script>
 </head>
@@ -349,12 +624,13 @@
         var wW = $(window).width();
         var timeout;
 
-        $('.img_hover_cart').click(function () {
+        $('.img_hover_cart').click(function() {
             $('.cart-sidebar, .backdrop__body-backdrop___1rvky').addClass('active');
         });
 
-        $(document).on('click', '.backdrop__body-backdrop___1rvky, .cart_btn-close', function () {
-            $('.backdrop__body-backdrop___1rvky, .cart-sidebar, #popup-cart-desktop, .popup-cart-mobile').removeClass('active');
+        $(document).on('click', '.backdrop__body-backdrop___1rvky, .cart_btn-close', function() {
+            $('.backdrop__body-backdrop___1rvky, .cart-sidebar, #popup-cart-desktop, .popup-cart-mobile')
+                .removeClass('active');
             return false;
         })
     </script>
@@ -379,18 +655,18 @@
                     <div class="product-new-price"><b><% noti_product.product_price | number %>₫</b><span></span></div>
                 </div>
             </div>
-            <a class="noti-cart-count" href="{{ route('cart.index') }}" title="Giỏ hàng"> Giỏ hàng của bạn hiện có <span
-                    class="count_item_pr"><% cart.count %></span> sản phẩm </a>
+            <a class="noti-cart-count" href="{{ route('cart.index') }}" title="Giỏ hàng"> Giỏ hàng của bạn hiện có
+                <span class="count_item_pr"><% cart.count %></span> sản phẩm </a>
             <a title="Đóng" class="cart_btn-close iconclose">
-                <img width="50" height="50"
-                    src="/site/images/icon-filter-close-bg.png?1729657650563"
+                <img width="50" height="50" src="/site/images/icon-filter-close-bg.png?1729657650563"
                     alt="Đóng" />
             </a>
             <div class="bottom-action">
                 <div class="cart_btn-close tocontinued" onclick="location.href='{{ route('cart.index') }}'">
                     Xem giỏ hàng
                 </div>
-                <a href="javascript:void(0)" class="checkout" title="Thanh toán ngay" onclick="location.href='{{ route('cart.index') }}'">
+                <a href="javascript:void(0)" class="checkout" title="Thanh toán ngay"
+                    onclick="location.href='{{ route('cart.index') }}'">
                     Thanh toán ngay
                 </a>
             </div>
@@ -407,11 +683,13 @@
         <div class="add-to-cart-login-modal-content">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: #0974ba; justify-content: center;">
-                    <h5 class="modal-title" style="color: #fff; text-align: center;"><i class="fa fa-info-circle"></i> Đăng nhập để thêm vào giỏ hàng</h5>
+                    <h5 class="modal-title" style="color: #fff; text-align: center;"><i
+                            class="fa fa-info-circle"></i> Đăng nhập để thêm vào giỏ hàng</h5>
                 </div>
                 <div class="modal-body" style="padding-top: 25px; padding-bottom: 25px; text-align: center;">
                     <div style="margin-bottom: 15px; font-weight: 700;">Quý khách chưa đăng nhập tài khoản</div>
-                    <div style="font-size: 16px;">Vui lòng đăng nhập tài khoản để nhận vô vàn ưu đãi từ <a href="{{ route('front.home-page') }}">globalmarket.vn</a></div>
+                    <div style="font-size: 16px;">Vui lòng đăng nhập tài khoản để nhận vô vàn ưu đãi từ <a
+                            href="{{ route('front.home-page') }}">globalmarket.vn</a></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-close">Đóng</button>
@@ -426,6 +704,7 @@
             src = src.replace("_compact", "");
             $(selector).attr("src", src);
         }
+
         function validate(evt) {
             var theEvent = evt || window.event;
             var key = theEvent.keyCode || theEvent.which;
@@ -436,7 +715,6 @@
                 if (theEvent.preventDefault) theEvent.preventDefault();
             }
         }
-
     </script>
     <link rel="preload" as="script" href="/site/js/quickview.js?1729657650563" />
     <script type="text/javascript" defer src="/site/js/quickview.js?1729657650563"></script>
