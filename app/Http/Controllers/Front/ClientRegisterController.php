@@ -67,8 +67,8 @@ class ClientRegisterController extends Controller
             'type'     => 10
         ];
 
-        // Thêm điều kiện email_verified_at nếu sau ngày 25/05/2025
-        if (now()->greaterThan(Carbon::create(2025, 5, 25, 0, 0, 0))) { // 25/05/2025 00:00:00
+        // Thêm điều kiện email_verified_at nếu sau ngày 15/06/2025
+        if (now()->greaterThan(Carbon::create(2025, 6, 15, 0, 0, 0))) { // 15/06/2025 00:00:00
             $user = User::where($field, $request->account_name)
                 ->where('status', 1)
                 ->where('type', 10)
