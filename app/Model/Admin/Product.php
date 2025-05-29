@@ -288,6 +288,10 @@ class Product extends BaseModel
 
             $deleted = ProductGallery::where('product_id', $this->id)->whereNotIn('id', $exist_ids)->get();
             foreach ($deleted as $item) {
+                if ($item->image) {
+                    FileHelper::forceDeleteFiles($item->image->id, $item->id, ProductGallery::class, 'image');
+                    $item->image->removeFromDB();
+                }
                 $item->removeFromDB();
             }
 
@@ -307,6 +311,15 @@ class Product extends BaseModel
                     FileHelper::uploadFile($file, 'product_gallery', $gallery->id, ProductGallery::class, null, 1);
                 }
             }
+        } else {
+            $galleries = $this->galleries;
+            foreach ($galleries as $gallery) {
+                if ($gallery->image) {
+                    FileHelper::forceDeleteFiles($gallery->image->id, $gallery->id, ProductGallery::class, 'image');
+                    $gallery->image->removeFromDB();
+                }
+            }
+            $this->galleries()->delete();
         }
     }
 
