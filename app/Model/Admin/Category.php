@@ -60,10 +60,10 @@ class Category extends BaseModel
         return self::where('id', $this->parent_id)->first() ? self::with(['image'])->where('id', $this->parent_id)->first() : null;
     }
 
-    // public function parent()
-    // {
-    //     return $this->belongsTo(self::class, 'parent_id');
-    // }
+    public function category_parent()
+    {
+        return $this->belongsTo(self::class, 'parent_id');
+    }
 
     public function childs()
     {

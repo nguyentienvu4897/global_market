@@ -95,16 +95,15 @@
                             <tbody>
                             <tr ng-repeat="detail in form.details track by $index">
                                 <td class="text-center"><% $index + 1 %></td>
-                                <td class="text-center"><% detail.product.name %></td>
+                                <td class="text-center"><% detail.product.name || detail.product_name %></td>
                                 <td class="text-center">
                                     <div ng-repeat="attribute in detail.attributes">
                                         <% attribute.name %> : <span style="font-weight: 600; font-size: 14px;"><% attribute.value %></span>
                                     </div>
                                 </td>
-                                <td class="text-center"><% detail.product.price | number %></td>
+                                <td class="text-center"><% (detail.product.price || detail.price) | number %></td>
                                 <td class="text-center"><% detail.qty | number %></td>
-                                <td class="text-right"><% (detail.qty * detail.price) | number %></td>
-
+                                <td class="text-right"><% (detail.qty * detail.product.price || detail.price) | number %></td>
                             </tr>
                             <tr>
                                 <td colspan="5" class="text-right"><b>Tổng thành tiền: </b></td>

@@ -75,7 +75,7 @@
         <div class="header">Yêu cầu rút tiền</div>
         <div class="note">
             <span style="color: red;">*</span> Lưu ý: <br>
-            - Số tiền rút tối thiểu là 100.000 VNĐ <br>
+            - Số tiền rút tối thiểu là 50.000 VNĐ <br>
             - Nếu chưa có thông tin chuyển khoản, vui lòng quay lại trang thông tin tài khoản để cập nhật
         </div>
         <div class="info">

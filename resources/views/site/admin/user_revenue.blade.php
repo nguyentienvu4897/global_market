@@ -269,7 +269,7 @@
                                     style="display: flex; gap: 20px; font-size: 14px; font-style: italic; margin-bottom: 20px;">
                                     <div style="width: 100px;"><span style="color: red;">*</span> Lưu ý: </div>
                                     <div>
-                                        <span>- Số tiền rút tối thiểu là 100.000 VNĐ</span><br>
+                                        <span>- Số tiền rút tối thiểu là 50.000 VNĐ</span><br>
                                         <span>- Nếu chưa có thông tin chuyển khoản, vui lòng quay lại trang thông tin tài
                                             khoản để cập nhật</span>
                                     </div>
@@ -335,7 +335,7 @@
                                     <div>
                                         <span>- Chức năng này chỉ sử dụng để kiểm tra đối soát lại đơn hàng
                                             affiliate</span><br>
-                                        <span>- Vui lòng tra soát đơn hàng sau 24h kể từ khi đặt hàng</span>
+                                        <span>- Vui lòng tra soát đơn hàng sau khi nhận đơn hàng thành công</span>
                                     </div>
                                 </div>
                             </div>

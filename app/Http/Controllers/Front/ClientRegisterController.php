@@ -534,11 +534,11 @@ class ClientRegisterController extends Controller
         $config = \App\Model\Admin\Config::where('id', 1)->select('revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5')->first();
 
         if ($order) {
-            $revenue_amount_level_1 = $order->total_after_discount * $config->revenue_percent_1 / 100;
-            $revenue_amount_level_2 = $order->total_after_discount * $config->revenue_percent_2 / 100;
-            $revenue_amount_level_3 = $order->total_after_discount * $config->revenue_percent_3 / 100;
-            $revenue_amount_level_4 = $order->total_after_discount * $config->revenue_percent_4 / 100;
-            $revenue_amount_level_5 = $order->total_after_discount * $config->revenue_percent_5 / 100;
+            $revenue_amount_level_1 = $order->aff_total_revenue * $config->revenue_percent_1 / 100;
+            $revenue_amount_level_2 = $order->aff_total_revenue * $config->revenue_percent_2 / 100;
+            $revenue_amount_level_3 = $order->aff_total_revenue * $config->revenue_percent_3 / 100;
+            $revenue_amount_level_4 = $order->aff_total_revenue * $config->revenue_percent_4 / 100;
+            $revenue_amount_level_5 = $order->aff_total_revenue * $config->revenue_percent_5 / 100;
 
             $status = 0;
             if ($order->status == Order::MOI) {

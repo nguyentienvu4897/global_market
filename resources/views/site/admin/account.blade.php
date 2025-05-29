@@ -201,7 +201,7 @@
                     </div>
                     <div class="col-xs-12 col-sm-12 col-lg-9 col-right-ac">
                         <div class="notification-email" ng-if="currentUser.email && !currentUser.email_verified_at">
-                            <i class="fa fa-exclamation-triangle"></i> Tài khoản chưa xác minh email. Vui lòng xác minh trước ngày 25/05/2025 để tiếp tục sử dụng hệ thống <a href="{{ route('email.verify.form') }}">tại đây</a>.
+                            <i class="fa fa-exclamation-triangle"></i> Tài khoản chưa xác minh email. Vui lòng xác minh trước ngày 15/06/2025 để tiếp tục sử dụng hệ thống <a href="{{ route('email.verify.form') }}">tại đây</a>.
                         </div>
                         <h1 class="title-head margin-top-0 d-flex" style="align-items: center; justify-content: flex-end; flex-wrap: wrap; padding-top: 25px;">
                             <div style="font-size: 19px; font-weight: 500; flex: 1 1 50%;" ng-if="!showChangePassword">Thông tin tài khoản</div>

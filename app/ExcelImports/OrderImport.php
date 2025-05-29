@@ -6,6 +6,7 @@ use App\Model\Admin\OrderDetail;
 use App\Model\Admin\Product;
 use DateTime;
 use Carbon\Carbon;
+use PhpOffice\PhpSpreadsheet\Shared\Date;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
@@ -22,12 +23,16 @@ class OrderImport implements ToCollection, WithStartRow, WithMultipleSheets
         foreach ($rows as $index => $row)
         {
             $errors = [];
-            if (empty($row[0]) || empty($row[1]) || empty($row[2]) || empty($row[3]) || empty($row[4])) {
+            if (empty($row[0]) || empty($row[1]) || empty($row[2])) {
                 $this->skip_rows++;
                 continue;
             }
             $code = trim($row[0]);
             $order_at = trim($row[1]);
+            if (is_numeric($order_at)) {
+                $order_at = Carbon::instance(Date::excelToDateTimeObject($order_at));
+                $order_at = $order_at->format('d/m/Y H:i:s');
+            }
             $product_name = trim($row[2]);
             $total_price = trim($row[3]);
             $total_revenue = trim($row[4]);
@@ -56,6 +61,10 @@ class OrderImport implements ToCollection, WithStartRow, WithMultipleSheets
             // }
             $order = Order::query()->with('details')->where('code', $code)->first();
             $product = Product::where('name', $product_name)->first();
+            if($order && !$order->created_at->greaterThan(Carbon::now()->subMinutes(2))) {
+                $this->skip_rows++;
+                continue;
+            }
 
             if($order && $order->created_at->greaterThan(Carbon::now()->subMinutes(2))) {
                 $order->total_before_discount += $total_price;

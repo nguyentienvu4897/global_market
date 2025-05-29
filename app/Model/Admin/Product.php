@@ -289,7 +289,7 @@ class Product extends BaseModel
             $deleted = ProductGallery::where('product_id', $this->id)->whereNotIn('id', $exist_ids)->get();
             foreach ($deleted as $item) {
                 if ($item->image) {
-                    FileHelper::forceDeleteFiles($item->image->id, $item->id, ProductGallery::class, 'image');
+                    FileHelper::forceDeleteFiles($item->image->id, $item->id, ProductGallery::class, null);
                     $item->image->removeFromDB();
                 }
                 $item->removeFromDB();
@@ -315,7 +315,7 @@ class Product extends BaseModel
             $galleries = $this->galleries;
             foreach ($galleries as $gallery) {
                 if ($gallery->image) {
-                    FileHelper::forceDeleteFiles($gallery->image->id, $gallery->id, ProductGallery::class, 'image');
+                    FileHelper::forceDeleteFiles($gallery->image->id, $gallery->id, ProductGallery::class, null);
                     $gallery->image->removeFromDB();
                 }
             }
@@ -508,5 +508,73 @@ class Product extends BaseModel
         }
 
         return $query;
+    }
+
+    public static function getTableList($products)
+    {
+        $rows = '';
+
+        foreach ($products as $index => $item) {
+            $category = $item->category;
+            $cate_parent = $category->category_parent ?? $category;
+            $cate_grandparent = $cate_parent->category_parent ?? $cate_parent;
+            $level = 0;
+            if(isset($cate_grandparent)) {
+                $level = 3;
+            } else if(isset($cate_parent) && !isset($cate_grandparent)) {
+                $level = 2;
+            } else if(isset($category) && !isset($cate_parent) && !isset($cate_grandparent)) {
+                $level = 1;
+            }
+            $images = [$item->image->path];
+            foreach($item->galleries as $gallery) {
+                $images[] = $gallery->image->path;
+            }
+            $images = array_map(function($image) {
+                return asset(trim($image));
+            }, $images);
+            $rows .= '<tr style="font-size: 16px;">';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; text-align: center" ><b>' . ($index + 1) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->name) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->origin) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $level == 3 ? $cate_grandparent->name : ($level == 2 ? $cate_parent->name : $category->name)) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $level == 3 ? $cate_parent->name : ($level == 2 ? $category->name : '')) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $level == 3 ? $category->name : '') . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->intro) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->body) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . join(', ', $images) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->aff_product_code) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->origin_link) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . str_replace('&', ' &amp; ', $item->aff_link) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . formatCurrency($item->price) . '</b></td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" ><b>' . formatCurrency($item->revenue_price) . '</b></td>';
+            $rows .= '</tr>';
+        }
+
+        $table = '<table style="width: 100%">
+            <thead>
+                <tr style="">
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 70px"><b>STT</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 400px"><b>Tên hàng hóa</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 70px"><b>Sản phẩm thuộc sàn</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 120px"><b>Danh mục lớn</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 120px"><b>Danh mục con</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 120px"><b>Danh mục con cấp 2</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 280px"><b>Mô tả sản phẩm</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 280px"><b>Chi tiết sản phẩm</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 280px"><b>Hình ảnh sản phẩm</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 120px"><b>Mã sản phẩn trên sàn</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 120px"><b>Link gốc</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 120px"><b>Link giới thiệu</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 120px"><b>Giá sản phẩm</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 120px"><b>Hoa hồng sản phẩm</b></td>
+                </tr>
+            </thead>
+            <tbody>'
+            . $rows .
+            '</tbody>
+        </table>';
+
+        return $table;
     }
 }

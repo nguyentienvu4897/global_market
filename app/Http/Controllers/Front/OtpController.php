@@ -24,7 +24,7 @@ class OtpController extends Controller
     public function sendOtp(Request $request)
     {
         $rule = [
-			'withdrawAmount' => 'required|numeric|min:100000|max:'.$request->waitingQuyetToanAmount,
+			'withdrawAmount' => 'required|numeric|min:50000|max:'.$request->waitingQuyetToanAmount,
 		];
 
 		$validate = Validator::make(
@@ -33,7 +33,7 @@ class OtpController extends Controller
             [
                 'withdrawAmount.required' => 'Số tiền cần rút không được để trống',
                 'withdrawAmount.numeric' => 'Số tiền cần rút không được để trống',
-                'withdrawAmount.min' => 'Số tiền rút tối thiểu là 100.000 VNĐ',
+                'withdrawAmount.min' => 'Số tiền rút tối thiểu là 50.000 VNĐ',
             ]
 		);
 

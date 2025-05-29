@@ -2,7 +2,7 @@
 
 @section('css')
     <link type="text/css" href="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/css/dataTables.checkboxes.css"
-          rel="stylesheet"/>
+        rel="stylesheet" />
 @endsection
 
 @section('page_title')
@@ -14,7 +14,8 @@
 @endsection
 
 @section('buttons')
-    @if(Auth::guard('admin')->user()->type == App\Model\Common\User::QUAN_TRI_VIEN || Auth::guard('admin')->user()->type == App\Model\Common\User::SUPER_ADMIN)
+    @if (Auth::guard('admin')->user()->type == App\Model\Common\User::QUAN_TRI_VIEN ||
+            Auth::guard('admin')->user()->type == App\Model\Common\User::SUPER_ADMIN)
         <a href="{{ route('Product.create') }}" class="btn btn-outline-success btn-sm" class="btn btn-info"><i
                 class="fa fa-plus"></i> Thêm mới</a>
         {{-- <a href="javascript:void(0)" target="_blank" data-href="{{ route('Product.exportExcel') }}" class="btn btn-info export-button btn-sm"><i class="fas fa-file-excel"></i> Xuất file excel</a>
@@ -50,7 +51,8 @@
                                             <div class="form-group custom-group" ng-cloak>
                                                 <label class="form-label required-label">Danh mục đặc biệt</label>
 
-                                                <ui-select remove-selected="false" multiple ng-model="product.category_special_ids">
+                                                <ui-select remove-selected="false" multiple
+                                                    ng-model="product.category_special_ids">
                                                     <ui-select-match placeholder="Chọn danh mục đặc biệt">
                                                         <% $item.name %>
                                                     </ui-select-match>
@@ -69,7 +71,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-success btn-cons" ng-click="submit()"
-                                    ng-disabled="loading.submit">
+                                ng-disabled="loading.submit">
                                 <i ng-if="!loading.submit" class="fa fa-save"></i>
                                 <i ng-if="loading.submit" class="fa fa-spin fa-spinner"></i>
                                 Lưu
@@ -87,54 +89,78 @@
         </div>
     </div>
 
-
+    @include('partial.modal.importExcel')
     @include('common.units.createUnit')
 @endsection
 
 @section('script')
     <script type="text/javascript"
-            src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
+        src="//gyrocode.github.io/jquery-datatables-checkboxes/1.2.12/js/dataTables.checkboxes.min.js"></script>
 
     @include('admin.products.Product')
     <script>
         let datatable = new DATATABLE('table-list', {
             ajax: {
                 url: '/admin/products/searchData',
-                data: function (d, context) {
+                data: function(d, context) {
                     DATATABLE.mergeSearch(d, context);
                 }
             },
             stateSave: true,
-            columnDefs: [
-                {
-                    'targets': 0,
-                    'checkboxes': {
-                        'selectRow': true
-                    }
+            columnDefs: [{
+                'targets': 0,
+                'checkboxes': {
+                    'selectRow': true
                 }
-            ],
+            }],
             select: {
                 'style': 'multi'
             },
-            columns: [
-                {data: 'id', orderable: false},
-                {data: 'DT_RowIndex', orderable: false, title: "STT", className: "text-center"},
-                {data: 'type', title: "Loại sản phẩm", className: "text-center"},
+            columns: [{
+                    data: 'id',
+                    orderable: false
+                },
                 {
-                    data: 'image', title: "Hình ảnh", orderable: false, className: "text-center",
-                    render: function (data) {
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    title: "STT",
+                    className: "text-center"
+                },
+                {
+                    data: 'type',
+                    title: "Loại sản phẩm",
+                    className: "text-center"
+                },
+                {
+                    data: 'image',
+                    title: "Hình ảnh",
+                    orderable: false,
+                    className: "text-center",
+                    render: function(data) {
                         return `<img src="${data.path}" style="max-width: 55px !important">`;
                     }
                 },
-                {data: 'name', title: 'Tên'},
+                {
+                    data: 'name',
+                    title: 'Tên'
+                },
                 // {data: 'base_price', title: "Đơn giá chưa giảm"},
-                {data: 'price', title: "Đơn giá bán"},
-                {data: 'cate_id', title: 'Danh mục'},
-                {data: 'category_special', title: 'Danh mục đặc biệt'},
+                {
+                    data: 'price',
+                    title: "Đơn giá bán"
+                },
+                {
+                    data: 'cate_id',
+                    title: 'Danh mục'
+                },
+                {
+                    data: 'category_special',
+                    title: 'Danh mục đặc biệt'
+                },
                 {
                     data: 'status',
                     title: "Trạng thái",
-                    render: function (data) {
+                    render: function(data) {
                         if (data == 0) {
                             return `<span class="badge badge-danger">Nháp</span>`;
                         } else {
@@ -146,7 +172,7 @@
                 {
                     data: 'state',
                     title: "Tình trạng",
-                    render: function (data) {
+                    render: function(data) {
                         if (data == 1) {
                             return `<span class="badge badge-success">Còn hàng</span>`;
                         } else {
@@ -155,55 +181,88 @@
                     },
                     className: "text-center"
                 },
-                {data: 'action', orderable: false, title: "Hành động"}
+                {
+                    data: 'action',
+                    orderable: false,
+                    title: "Hành động"
+                }
             ],
-            search_columns: [
-                {data: 'name', search_type: "text", placeholder: "Tên hàng hóa"},
-                {
-                    data: 'status', search_type: "select", placeholder: "Trạng thái",
-                    column_data: [{id: 1, name: "Xuất bản"}, {id: 0, name: "Nháp"}]
+            search_columns: [{
+                    data: 'name',
+                    search_type: "text",
+                    placeholder: "Tên hàng hóa"
                 },
                 {
-                    data: 'state', search_type: "select", placeholder: "Tình trạng",
-                    column_data: [{id: 1, name: "Còn hàng"}, {id: 2, name: "Hết hàng"}]
+                    data: 'status',
+                    search_type: "select",
+                    placeholder: "Trạng thái",
+                    column_data: [{
+                        id: 1,
+                        name: "Xuất bản"
+                    }, {
+                        id: 0,
+                        name: "Nháp"
+                    }]
                 },
                 {
-                    data: 'cate_id', search_type: "select", placeholder: "Danh mục",
+                    data: 'state',
+                    search_type: "select",
+                    placeholder: "Tình trạng",
+                    column_data: [{
+                        id: 1,
+                        name: "Còn hàng"
+                    }, {
+                        id: 2,
+                        name: "Hết hàng"
+                    }]
+                },
+                {
+                    data: 'cate_id',
+                    search_type: "select",
+                    placeholder: "Danh mục",
                     column_data: @json(App\Model\Admin\Category::getForSelect())
                 },
                 {
-                    data: 'cate_special_id', search_type: "select", placeholder: "Danh mục đặc biệt",
+                    data: 'cate_special_id',
+                    search_type: "select",
+                    placeholder: "Danh mục đặc biệt",
                     column_data: @json(App\Model\Admin\CategorySpecial::getForSelectForProduct())
                 }
             ],
             act: true,
+            export_link: "{!! route('Product.exportExcel') !!}",
+            import_link_with_params: true,
         }).datatable;
 
-        app.controller('Product', function ($scope, $rootScope, $http) {
+        app.controller('Product', function($scope, $rootScope, $http) {
             $scope.units = @json(App\Model\Common\Unit::all());
             $scope.categories = @json(App\Model\Common\ProductCategory::all());
             $scope.categorieSpeicals = @json(\App\Model\Admin\CategorySpecial::getForSelectForProduct());
             $scope.loading = {};
             $scope.arrayInclude = arrayInclude;
 
-            $rootScope.$on("createdProductCategory", function (event, data) {
+            $rootScope.$on("createdProductCategory", function(event, data) {
                 $scope.formEdit.all_categories.push(data);
                 $scope.formEdit.product_category_id = data.id;
                 $scope.$applyAsync();
             });
 
             // Show hàng hóa
-            $('#table-list').on('click', '.show-product', function () {
+            $('#table-list').on('click', '.show-product', function() {
                 $scope.data = datatable.row($(this).parents('tr')).data();
-                $scope.formEdit = new Product($scope.data, {scope: $scope});
+                $scope.formEdit = new Product($scope.data, {
+                    scope: $scope
+                });
                 $scope.$apply();
                 $('#show-modal').modal('show');
             });
 
             // Sửa hàng hóa
-            $('#table-list').on('click', '.edit', function () {
+            $('#table-list').on('click', '.edit', function() {
                 $scope.data = datatable.row($(this).parents('tr')).data();
-                $scope.formEdit = new Product($scope.data, {scope: $scope});
+                $scope.formEdit = new Product($scope.data, {
+                    scope: $scope
+                });
 
                 createUnitCallback = (response) => {
                     $scope.formEdit.all_units.push(response);
@@ -216,7 +275,7 @@
             });
 
             // Submit mode mới
-            $scope.submit = function () {
+            $scope.submit = function() {
                 $scope.loading.submit = false;
                 $.ajax({
                     type: 'POST',
@@ -227,7 +286,7 @@
                     processData: false,
                     contentType: false,
                     data: $scope.formEdit.submit_data,
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success) {
                             $('#edit-modal').modal('hide');
                             toastr.success(response.message);
@@ -238,17 +297,17 @@
                             $scope.errors = response.errors;
                         }
                     },
-                    error: function (e) {
+                    error: function(e) {
                         toastr.error('Đã có lỗi xảy ra');
                     },
-                    complete: function () {
+                    complete: function() {
                         $scope.loading.submit = false;
                         $scope.$applyAsync();
                     }
                 });
             }
 
-            $('#table-list').on('click', '.add-category-special', function () {
+            $('#table-list').on('click', '.add-category-special', function() {
                 event.preventDefault();
                 $scope.data = datatable.row($(this).parents('tr')).data();
                 $.ajax({
@@ -259,7 +318,7 @@
                     },
                     data: $scope.data.id,
 
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success) {
                             $scope.product = response.data;
                             console.log($scope.product);
@@ -268,10 +327,10 @@
                         }
                         $scope.$applyAsync();
                     },
-                    error: function (e) {
+                    error: function(e) {
                         toastr.error('Đã có lỗi xảy ra');
                     },
-                    complete: function () {
+                    complete: function() {
                         $scope.loading.submit = false;
                         $scope.$applyAsync();
                     }
@@ -280,7 +339,7 @@
                 $('#add-to-category-special').modal('show');
             })
 
-            $scope.submit = function () {
+            $scope.submit = function() {
                 let url = "/admin/products/add-category-special";
                 $scope.loading.submit = true;
                 console.log($scope.product.category_special_ids);
@@ -294,7 +353,7 @@
                         product_id: $scope.product.id,
                         category_special_ids: $scope.product.category_special_ids
                     },
-                    success: function (response) {
+                    success: function(response) {
                         if (response.success) {
                             $('#add-to-category-special').modal('hide');
                             toastr.success(response.message);
@@ -304,10 +363,10 @@
                             toastr.warning(response.message);
                         }
                     },
-                    error: function () {
+                    error: function() {
                         toastr.error('Đã có lỗi xảy ra');
                     },
-                    complete: function () {
+                    complete: function() {
                         $scope.loading.submit = false;
                         $scope.$applyAsync();
                     },
@@ -320,11 +379,11 @@
             var product_remove_ids = [];
             var rows_selected = datatable.column(0).checkboxes.selected();
 
-            $.each(rows_selected, function (index, rowId) {
+            $.each(rows_selected, function(index, rowId) {
                 product_remove_ids.push(rowId);
             });
 
-            if(product_remove_ids.length == 0) {
+            if (product_remove_ids.length == 0) {
                 toastr.warning("Chưa có sản phẩm nào được chọn");
                 return;
             }
@@ -332,7 +391,7 @@
             var product_ids = product_remove_ids.join(',');
             swal({
                 title: "Xác nhận xóa!",
-                text: "Bạn chắc chắn muốn xóa "+product_remove_ids.length+" sản phẩm",
+                text: "Bạn chắc chắn muốn xóa " + product_remove_ids.length + " sản phẩm",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonClass: "btn-danger",
@@ -341,18 +400,67 @@
                 closeOnConfirm: false
             }, function(isConfirm) {
                 if (isConfirm) {
-                    window.location.href = "{{route('products.delete.multi')}}?product_ids="+product_ids;
+                    window.location.href = "{{ route('products.delete.multi') }}?product_ids=" + product_ids;
                 }
             })
         }
 
-        $(document).on('click', '.export-button', function (event) {
+        $(document).on('click', '.export-button', function(event) {
             event.preventDefault();
             let data = {};
-            mergeSearch(data, datatable.context[0]);
-            window.location.href = $(this).data('href') + "?" + $.param(data);
+            mergeSearchV2(data);
+            window.location.href = $(this).attr('href') + "?" + $.param(data);
         })
 
+        app.controller('ImportExcel', function($scope) {
+            $scope.sample = "";
+            $scope.note = "";
+            $scope.loading = false;
+            $scope.import = function() {
+                var url = "{!! route('products.importExcel') !!}";
+                var data = new FormData(document.getElementById('import-excel-form'));
+                $scope.loading = true;
+                $scope.errors = null;
+                $scope.import_details = null;
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    processData: false,
+                    contentType: false,
+                    headers: {
+                        'X-CSRF-TOKEN': CSRF_TOKEN
+                    },
+                    data: data,
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success(response.message);
+                            $scope.import_details = response.details;
+                            datatable.ajax.reload();
+                            $scope.loading = false;
+                            // $('#import-excel').modal('hide');
+                        } else {
+                            toastr.warning(response.message);
+                            $scope.errors = response.errors;
+                            $scope.loading = false;
+                        }
+                    },
+                    error: function(error) {
+                        toastr.error('Đã có lỗi xảy ra');
+                    },
+                    complete: function() {
+                        $scope.loading = false;
+                        $scope.$applyAsync();
+                    }
+                });
+            }
+
+            $('#import-excel').on('hidden.bs.modal', function(e) {
+                document.getElementById('import-excel-form').reset();
+                $scope.errors = null;
+                $scope.import_details = null;
+                $scope.$applyAsync();
+            })
+        });
     </script>
     @include('partial.confirm')
 @endsection

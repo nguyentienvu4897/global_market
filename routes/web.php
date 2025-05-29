@@ -58,6 +58,9 @@ Route::group(['prefix' => 'admin'], function () {
 
             Route::get('/act-delete', 'Admin\ProductController@actDelete')->name('products.delete.multi');
             Route::post('/{id}/deleteFile', 'Admin\ProductController@deleteFile')->name('products.deleteFile');
+
+            // Import Excel
+            Route::post('/importExcel', 'Admin\ProductController@importExcel')->name('products.importExcel');
         });
 
         // Đánh giá sản phẩm
