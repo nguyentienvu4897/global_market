@@ -584,12 +584,12 @@ class Product extends BaseModel
                     <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 12px"><b>Danh mục lớn</b></td>
                     <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 12px"><b>Danh mục con</b></td>
                     <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 12px"><b>Danh mục con cấp 2</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 28px"><b>Mô tả sản phẩm</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 28px"><b>Chi tiết sản phẩm</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 40px"><b>Mô tả sản phẩm</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 40px"><b>Chi tiết sản phẩm</b></td>
                     <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 28px"><b>Hình ảnh sản phẩm</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 12px"><b>Mã sản phẩn trên sàn</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 12px"><b>Link gốc</b></td>
-                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 12px"><b>Link giới thiệu</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 18px"><b>Mã sản phẩn trên sàn</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 28px"><b>Link gốc</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 28px"><b>Link giới thiệu</b></td>
                     <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 12px"><b>Giá sản phẩm</b></td>
                     <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 12px"><b>Hoa hồng sản phẩm</b></td>
                 </tr>
