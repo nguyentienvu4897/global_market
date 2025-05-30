@@ -545,7 +545,7 @@ class Product extends BaseModel
                 }, $images);
                 $rows .= '<tr style="font-size: 16px;">';
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; text-align: center" >' . ($index + 1) . '</td>';
-                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->name) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($item->name) . '</td>';
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->origin) . '</td>';
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $level == 3 ? $cate_grandparent->name : ($level == 2 ? $cate_parent->name : $category->name)) . '</td>';
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $level == 3 ? $cate_parent->name : ($level == 2 ? $category->name : '')) . '</td>';
