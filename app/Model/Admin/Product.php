@@ -525,9 +525,9 @@ class Product extends BaseModel
         \Log::info('start loop');
         foreach ($products as $index => $item) {
             try {
-                if ($item->id == 1210) {
-                    dd($item);
-                }
+                // if ($item->id == 1210) {
+                //     dd($item);
+                // }
                 $category = $item->category;
                 $cate_parent = $category->category_parent ?? $category;
                 $cate_grandparent = $cate_parent->category_parent ?? $cate_parent;
@@ -558,7 +558,9 @@ class Product extends BaseModel
                 $body = str_replace(['<br>', '<br/>', '<br />'], "\n", $item->body);
 
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($intro) . '</td>';
+                dd(1);
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($body) . '</td>';
+                dd(2);
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . join(', ', $images) . '</td>';
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->aff_product_code) . '</td>';
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->origin_link) . '</td>';
