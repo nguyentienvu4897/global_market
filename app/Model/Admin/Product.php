@@ -160,7 +160,15 @@ class Product extends BaseModel
         }
 
         if (!empty($request->cate_id)) {
-            $result = $result->where('cate_id', $request->cate_id);
+            $category = Category::query()->where('id', $request->cate_id)->first();
+            $category_parent_id = $category->parent ? $category->parent->id : null;
+            $arr_category_id = array_merge($category->childs->pluck('id')->toArray(), [$category->id, $category_parent_id]);
+            if ($category->childs) {
+                foreach ($category->childs as $child) {
+                    $arr_category_id = array_merge($arr_category_id, $child->childs->pluck('id')->toArray());
+                }
+            }
+            $result = $result->whereIn('cate_id', $arr_category_id);
         }
 
         if (!empty($request->cate_special_id)) {
