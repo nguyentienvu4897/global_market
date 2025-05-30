@@ -547,14 +547,14 @@ class Product extends BaseModel
             $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $level == 3 ? $cate_grandparent->name : ($level == 2 ? $cate_parent->name : $category->name)) . '</td>';
             $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $level == 3 ? $cate_parent->name : ($level == 2 ? $category->name : '')) . '</td>';
             $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $level == 3 ? $category->name : '') . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace(['&lt;br&gt;', '&lt;br /&gt;', '&lt;br/&gt;'], "\n", htmlspecialchars($item->intro)) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace(['&lt;br&gt;', '&lt;br /&gt;', '&lt;br/&gt;'], "\n", htmlspecialchars($item->body)) . '</td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace(['<br>', '<br/>', '<br />'], "\n", htmlspecialchars($item->intro)) . '</td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace(['<br>', '<br/>', '<br />'], "\n", htmlspecialchars($item->body)) . '</td>';
             $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . join(', ', $images) . '</td>';
             $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->aff_product_code) . '</td>';
             $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->origin_link) . '</td>';
             $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->aff_link) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . formatCurrency($item->price) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . formatCurrency($item->revenue_price) . '</td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . $item->price . '</td>';
+            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . $item->revenue_price . '</td>';
             $rows .= '</tr>';
         }
 
