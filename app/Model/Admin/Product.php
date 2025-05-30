@@ -33,8 +33,10 @@ class Product extends BaseModel
         2 => 'Hết hàng'
     ];
 
-    protected $fillable = ['name', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at',
-        'price', 'cate_id', 'base_price', 'body', 'intro', 'slug', 'short_des', 'manufacturer_id', 'origin_id'];
+    protected $fillable = [
+        'name', 'status', 'created_by', 'updated_by', 'created_at', 'updated_at',
+        'price', 'cate_id', 'base_price', 'body', 'intro', 'slug', 'short_des', 'manufacturer_id', 'origin_id'
+    ];
 
     use Sluggable;
     use SluggableScopeHelpers;
@@ -142,7 +144,7 @@ class Product extends BaseModel
 
     public function getPercentDiscountAttribute()
     {
-        $percentDiscount = round((($this->base_price - $this->price) / $this->base_price) * 100 );
+        $percentDiscount = round((($this->base_price - $this->price) / $this->base_price) * 100);
 
         return $percentDiscount;
     }
@@ -336,7 +338,7 @@ class Product extends BaseModel
         $attachments = [$this->attachments];
 
         if ($documents) {
-            foreach ($documents as $document)  {
+            foreach ($documents as $document) {
                 $filename = $document->getClientOriginalName();
                 $name = Str::slug(str_replace("/", "", $filename));
                 $extension = pathinfo($filename, PATHINFO_EXTENSION);
@@ -416,7 +418,7 @@ class Product extends BaseModel
                         ->orWhereHas('manufacturer', function ($q) use ($keyword) {
                             $q->where('manufacturers.name', 'like', '%' . $keyword . '%');
                         });
-                })->orWhereHas('tags', function ($q) use ($keyword){
+                })->orWhereHas('tags', function ($q) use ($keyword) {
                     $q->where('tags.name', 'like', '%' . $keyword . '%');
                 });
             });
@@ -427,7 +429,7 @@ class Product extends BaseModel
                         ->orWhereHas('manufacturer', function ($q) use ($keyword) {
                             $q->where('manufacturers.name', 'like', '%' . $keyword . '%');
                         });
-                })->orWhereHas('tags', function ($q) use ($keyword){
+                })->orWhereHas('tags', function ($q) use ($keyword) {
                     $q->where('tags.name', 'like', '%' . $keyword . '%');
                 });
             });
@@ -438,11 +440,10 @@ class Product extends BaseModel
                         ->orWhereHas('manufacturer', function ($q) use ($keyword) {
                             $q->where('manufacturers.name', 'like', '%' . $keyword . '%');
                         });
-                })->orWhereHas('tags', function ($q) use ($keyword){
+                })->orWhereHas('tags', function ($q) use ($keyword) {
                     $q->where('tags.name', 'like', '%' . $keyword . '%');
                 });
             });
-
         }
 
         if ($request->get('minPrice')) {
@@ -522,40 +523,54 @@ class Product extends BaseModel
         $rows = '';
 
         foreach ($products as $index => $item) {
-            $category = $item->category;
-            $cate_parent = $category->category_parent ?? $category;
-            $cate_grandparent = $cate_parent->category_parent ?? $cate_parent;
-            $level = 0;
-            if(isset($cate_grandparent)) {
-                $level = 3;
-            } else if(isset($cate_parent) && !isset($cate_grandparent)) {
-                $level = 2;
-            } else if(isset($category) && !isset($cate_parent) && !isset($cate_grandparent)) {
-                $level = 1;
+            try {
+                $category = $item->category;
+                $cate_parent = $category->category_parent ?? $category;
+                $cate_grandparent = $cate_parent->category_parent ?? $cate_parent;
+                $level = 0;
+                if (isset($cate_grandparent)) {
+                    $level = 3;
+                } else if (isset($cate_parent) && !isset($cate_grandparent)) {
+                    $level = 2;
+                } else if (isset($category) && !isset($cate_parent) && !isset($cate_grandparent)) {
+                    $level = 1;
+                }
+                $images = [$item->image->path];
+                foreach ($item->galleries as $gallery) {
+                    $images[] = $gallery->image->path;
+                }
+                $images = array_map(function ($image) {
+                    return asset(trim($image));
+                }, $images);
+                $rows .= '<tr style="font-size: 16px;">';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; text-align: center" >' . ($index + 1) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->name) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->origin) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $level == 3 ? $cate_grandparent->name : ($level == 2 ? $cate_parent->name : $category->name)) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $level == 3 ? $cate_parent->name : ($level == 2 ? $category->name : '')) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $level == 3 ? $category->name : '') . '</td>';
+                // Xử lý intro & body
+                $intro = str_replace(['<br>', '<br/>', '<br />'], "\n", $item->intro);
+                $body = str_replace(['<br>', '<br/>', '<br />'], "\n", $item->body);
+
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($intro) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($body) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . join(', ', $images) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->aff_product_code) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->origin_link) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->aff_link) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . $item->price . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . $item->revenue_price . '</td>';
+                $rows .= '</tr>';
+            } catch (\Throwable $e) {
+                Log::error('Error in getTableList at item #' . $index, [
+                    'item_id' => $item->id ?? 'N/A',
+                    'name' => $item->name ?? '',
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
             }
-            $images = [$item->image->path];
-            foreach($item->galleries as $gallery) {
-                $images[] = $gallery->image->path;
-            }
-            $images = array_map(function($image) {
-                return asset(trim($image));
-            }, $images);
-            $rows .= '<tr style="font-size: 16px;">';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; text-align: center" >' . ($index + 1) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->name) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->origin) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $level == 3 ? $cate_grandparent->name : ($level == 2 ? $cate_parent->name : $category->name)) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $level == 3 ? $cate_parent->name : ($level == 2 ? $category->name : '')) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $level == 3 ? $category->name : '') . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace(['<br>', '<br/>', '<br />'], "\n", htmlspecialchars($item->intro)) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace(['<br>', '<br/>', '<br />'], "\n", htmlspecialchars($item->body)) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . join(', ', $images) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->aff_product_code) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->origin_link) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->aff_link) . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . $item->price . '</td>';
-            $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . $item->revenue_price . '</td>';
-            $rows .= '</tr>';
+
         }
 
         $table = '<table style="width: 100%">
