@@ -522,8 +522,12 @@ class Product extends BaseModel
     {
         $rows = '';
 
+        \Log::info('start loop');
         foreach ($products as $index => $item) {
             try {
+                if ($item->id == 1210) {
+                    dd($item);
+                }
                 $category = $item->category;
                 $cate_parent = $category->category_parent ?? $category;
                 $cate_grandparent = $cate_parent->category_parent ?? $cate_parent;
