@@ -79,8 +79,8 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $product->origin_link = $origin_link;
                 $product->aff_link = $aff_link;
                 $product->short_link = $aff_link;
-                $product->price = $price;
-                $product->revenue_price = $revenue_price;
+                $product->price = $price ?? 0;
+                $product->revenue_price = $revenue_price ?? 0;
                 $product->status = Product::STATUS_SUCCESS;
                 $product->state = Product::CON_HANG;
                 $product->type = Product::TYPE_AFFILIATE;
@@ -98,8 +98,8 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $product->origin_link = $origin_link;
                 $product->aff_link = $aff_link;
                 $product->short_link = $aff_link;
-                $product->price = $price;
-                $product->revenue_price = $revenue_price;
+                $product->price = $price ?? 0;
+                $product->revenue_price = $revenue_price ?? 0;
                 $product->status = Product::STATUS_SUCCESS;
                 $product->state = Product::CON_HANG;
                 $product->type = Product::TYPE_AFFILIATE;

@@ -4,25 +4,27 @@ use \Carbon\Carbon;
 use \App\Model\Uptek\G7Info;
 
 if (!function_exists('getPrintHeader')) {
-    function printBlock($id) {
+    function printBlock($id)
+    {
         $block = \App\Model\Admin\Block::where('id', $id)->first();
-        if(isset($block)) {
+        if (isset($block)) {
             return $block->body;
         }
         return '';
-
     }
 }
 
 if (!function_exists('randomString')) {
-    function randomString($length = 8) {
+    function randomString($length = 8)
+    {
         $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         return substr(str_shuffle(str_repeat($pool, 5)), 0, $length);
     }
 }
 
 if (!function_exists('array_find_index')) {
-    function array_find_index($arr, $func) {
+    function array_find_index($arr, $func)
+    {
         for ($i = 0; $i < count($arr); $i++) {
             if ($func($arr[$i])) return $i;
         }
@@ -31,13 +33,15 @@ if (!function_exists('array_find_index')) {
 }
 
 if (!function_exists('formatDate')) {
-    function formatDate($date) {
+    function formatDate($date)
+    {
         return \Carbon\Carbon::parse($date)->format('d/m/Y H:i');
     }
 }
 
 if (!function_exists('array_find_el')) {
-    function array_find_el($arr, $func) {
+    function array_find_el($arr, $func)
+    {
         $index = array_find_index($arr, $func);
         if ($index != -1) return $arr[$index];
         return null;
@@ -45,8 +49,9 @@ if (!function_exists('array_find_el')) {
 }
 
 if (!function_exists('withUnits')) {
-    function withUnits() {
-        return function($q) {
+    function withUnits()
+    {
+        return function ($q) {
             $q->leftJoin('units', 'product_units.unit_id', '=', 'units.id')
                 ->orderBy('product_units.is_base', 'DESC')
                 ->orderBy('product_units.unit_coefficient', 'ASC')
@@ -56,30 +61,34 @@ if (!function_exists('withUnits')) {
 }
 
 if (!function_exists('getStatus')) {
-    function getStatus($status, $statuses) {
-        $obj = array_find_el($statuses, function($el) use ($status) {
+    function getStatus($status, $statuses)
+    {
+        $obj = array_find_el($statuses, function ($el) use ($status) {
             return $el['id'] == $status;
         });
         if (!$obj) return '';
-        return '<span class="badge badge-'.$obj['type'].'">'.$obj['name'].'</span>';
+        return '<span class="badge badge-' . $obj['type'] . '">' . $obj['name'] . '</span>';
     }
 }
 if (!function_exists('generateCode')) {
-    function generateCode($length, $value) {
+    function generateCode($length, $value)
+    {
         $value = (string) $value;
         $cur_length = strlen($value);
         if ($length <= $cur_length) return $value;
-        return str_repeat("0", $length - $cur_length).$value;
+        return str_repeat("0", $length - $cur_length) . $value;
     }
 }
 if (!function_exists('formatCurrent')) {
-    function formatCurrent($value) {
+    function formatCurrent($value)
+    {
         return number_format($value, 0, '', ',');
     }
 }
 
 if (!function_exists('formatCurrency')) {
-    function formatCurrency($number, $precision = 0) {
+    function formatCurrency($number, $precision = 0)
+    {
         if (!$number) return '0';
         if ($precision != 0) {
             $result = number_format($number, $precision, '.', ',');
@@ -92,13 +101,15 @@ if (!function_exists('formatCurrency')) {
     }
 }
 if (!function_exists('setDefault')) {
-    function setDefault($obj, $field, $default = null) {
+    function setDefault($obj, $field, $default = null)
+    {
         return $obj[$field] ?? $default;
     }
 }
 
 if (!function_exists('messageFromNotification')) {
-    function messageFromNotification($notification) {
+    function messageFromNotification($notification)
+    {
         $message = [
             'id' => $notification->id,
             'url' => $notification->url,
@@ -113,13 +124,15 @@ if (!function_exists('messageFromNotification')) {
 }
 
 if (!function_exists('getId')) {
-    function getId($obj) {
+    function getId($obj)
+    {
         return isset($obj['id']) ? $obj['id'] : null;
     }
 }
 
 if (!function_exists('addDay')) {
-    function addDay($date) {
+    function addDay($date)
+    {
         $day = new \Carbon\Carbon($date);
         $day->addDay();
         return $day;
@@ -127,22 +140,24 @@ if (!function_exists('addDay')) {
 }
 
 if (!function_exists('addDays')) {
-    function addDays($date, $day) {
+    function addDays($date, $day)
+    {
         $result = new \Carbon\Carbon($date);
         $result->addDays($day);
         return $result;
     }
 }
 
-function time_since($since) {
+function time_since($since)
+{
     $chunks = array(
-        array(60 * 60 * 24 * 365 , 'năm'),
-        array(60 * 60 * 24 * 30 , 'tháng'),
+        array(60 * 60 * 24 * 365, 'năm'),
+        array(60 * 60 * 24 * 30, 'tháng'),
         array(60 * 60 * 24 * 7, 'tuần'),
-        array(60 * 60 * 24 , 'ngày'),
-        array(60 * 60 , 'giờ'),
-        array(60 , 'phút'),
-        array(1 , 'giây')
+        array(60 * 60 * 24, 'ngày'),
+        array(60 * 60, 'giờ'),
+        array(60, 'phút'),
+        array(1, 'giây')
     );
 
     for ($i = 0, $j = count($chunks); $i < $j; $i++) {
@@ -153,11 +168,12 @@ function time_since($since) {
         }
     }
 
-    $print = ($count == 1) ? '1 '.$name : "$count {$name} trước";
+    $print = ($count == 1) ? '1 ' . $name : "$count {$name} trước";
     return $print;
 }
 
-function successResponse($message = "", $data = [], $other_data = []) {
+function successResponse($message = "", $data = [], $other_data = [])
+{
     return response()->json(array_merge([
         'success' => true,
         'message' => $message ?: "Thao tác thành công",
@@ -165,7 +181,8 @@ function successResponse($message = "", $data = [], $other_data = []) {
     ], $other_data));
 }
 
-function errorResponse($message = "", $errors = null) {
+function errorResponse($message = "", $errors = null)
+{
     return response()->json([
         'success' => false,
         'message' => $message ?: "Thao tác thất bại",
@@ -173,7 +190,7 @@ function errorResponse($message = "", $errors = null) {
     ]);
 }
 
-if (! function_exists('pct_change')) {
+if (!function_exists('pct_change')) {
     /**
      * Generate percentage change between two numbers.
      *
@@ -196,20 +213,23 @@ if (! function_exists('pct_change')) {
     }
 }
 
-function fillReport($template, $data) {
-	foreach ($data as $key => $value) {
-		$template = preg_replace("/\{\{".$key."\}\}/", $value, $template);
-	}
-	return $template;
+function fillReport($template, $data)
+{
+    foreach ($data as $key => $value) {
+        $template = preg_replace("/\{\{" . $key . "\}\}/", $value, $template);
+    }
+    return $template;
 }
 
-function clearNull($template) {
-	$template = preg_replace("/\{\{.*?\}\}/", "", $template);
-	return $template;
+function clearNull($template)
+{
+    $template = preg_replace("/\{\{.*?\}\}/", "", $template);
+    return $template;
 }
 
 if (!function_exists('checkDiff')) {
-    function checkDiff($val1, $val2) {
+    function checkDiff($val1, $val2)
+    {
         if ($val1 == $val2) return false;
         if ($val1 == 0 && $val2 != 0) return true;
         if ($val1 != 0 && $val2 == 0) return true;
@@ -219,12 +239,13 @@ if (!function_exists('checkDiff')) {
 }
 
 if (!function_exists('getVersions')) {
-    function getVersions($id, $class) {
+    function getVersions($id, $class)
+    {
         return \App\Model\Common\Version::where('model_id', $id)->where('model_type', $class)
             ->select(['id', 'created_at as time', 'model_id', 'created_by'])
             ->with([
                 'histories',
-                'user' => function($q) {
+                'user' => function ($q) {
                     $q->select(['id', 'name', 'avatar']);
                 }
             ])
@@ -234,27 +255,66 @@ if (!function_exists('getVersions')) {
 }
 
 if (!function_exists('getHost')) {
-    function getHost($url) {
+    function getHost($url)
+    {
         $parse = parse_url($url);
         return $parse['host'];
     }
 }
 
 if (!function_exists('cleanURL')) {
-    function cleanURL($string) {
-        $string = strtolower(preg_replace( array('/[^a-z0-9\- ]/i', '/[ \-]+/'), array('', '-'), $string));
+    function cleanURL($string)
+    {
+        $string = strtolower(preg_replace(array('/[^a-z0-9\- ]/i', '/[ \-]+/'), array('', '-'), $string));
         return $string;
     }
 }
 
 if (!function_exists('getBanner')) {
-    function getBanner($category) {
-        if($category->banner) {
+    function getBanner($category)
+    {
+        if ($category->banner) {
             return $category->banner ? url(str_replace("\\", "/", $category->banner->path)) : '';
         }
-        if($category->image) {
+        if ($category->image) {
             return $category->image ? url(str_replace("\\", "/", $category->image->path)) : '';
         }
         return '';
+    }
+}
+
+if (!function_exists('sanitizeHtmlForExcel')) {
+    function sanitizeHtmlForExcel($html, $allowedTags = ['p', 'br', 'b', 'strong', 'i', 'em', 'ul', 'ol', 'li'])
+    {
+        libxml_use_internal_errors(true);
+
+        $doc = new DOMDocument();
+        $doc->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+
+        $xpath = new DOMXPath($doc);
+
+        // Loại bỏ các thẻ không nằm trong danh sách cho phép
+        foreach ($xpath->query('//*') as $node) {
+            if (!in_array($node->nodeName, $allowedTags)) {
+                // Thay thế thẻ không hợp lệ bằng nội dung của nó
+                $fragment = $doc->createDocumentFragment();
+                while ($node->childNodes->length > 0) {
+                    $fragment->appendChild($node->childNodes->item(0));
+                }
+                $node->parentNode->replaceChild($fragment, $node);
+            } else {
+                // Xoá tất cả thuộc tính (style, class, v.v.)
+                while ($node->attributes->length) {
+                    $node->removeAttributeNode($node->attributes->item(0));
+                }
+            }
+        }
+
+        // Trích xuất phần <body> sạch
+        $cleaned = $doc->saveHTML($doc->getElementsByTagName('body')->item(0));
+        libxml_clear_errors();
+
+        // Loại bỏ <body> bao ngoài
+        return trim(str_replace(['<body>', '</body>'], '', $cleaned));
     }
 }
