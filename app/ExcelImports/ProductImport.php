@@ -68,7 +68,10 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $this->skip_rows++;
                 continue;
             }
-            $product = Product::where('aff_product_code', $aff_product_code)->first();
+            $product = Product::query()->where(function ($query) use ($aff_product_code, $product_name) {
+                $query->where('aff_product_code', $aff_product_code)
+                    ->orWhere('name', $product_name);
+            })->first();
             if($product) {
                 $product->name = $product_name;
                 $product->origin_id = $origin->id;
@@ -76,6 +79,7 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $product->cate_id = $cate_child_child ? $cate_child_child->id : ($cate_child ? $cate_child->id : $category->id);
                 $product->intro = $intro;
                 $product->body = $body;
+                $product->aff_product_code = $aff_product_code;
                 $product->origin_link = $origin_link;
                 $product->aff_link = $aff_link;
                 $product->short_link = $aff_link;
