@@ -558,7 +558,6 @@ class Product extends BaseModel
                 $body = str_replace(['<br>', '<br/>', '<br />'], "\n", $item->body);
 
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($intro) . '</td>';
-                dd(1);
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($body) . '</td>';
                 dd(2);
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . join(', ', $images) . '</td>';
