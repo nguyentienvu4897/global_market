@@ -563,12 +563,13 @@ class Product extends BaseModel
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . $item->revenue_price . '</td>';
                 $rows .= '</tr>';
             } catch (\Throwable $e) {
-                Log::error('Error in getTableList at item #' . $index, [
+                \Log::error('Error in getTableList at item #' . $index, [
                     'item_id' => $item->id ?? 'N/A',
                     'name' => $item->name ?? '',
                     'message' => $e->getMessage(),
                     'trace' => $e->getTraceAsString()
                 ]);
+                \Log::info(var_export($item, true));
             }
 
         }
