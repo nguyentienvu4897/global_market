@@ -10,7 +10,7 @@
         }
 
         get to_date() {
-            return this._to_date ? moment(this._to_date).format('DD/MM/YYYY') : '';
+            return this._to_date ? moment(this._to_date).toDate() : '';
         }
 
         set to_date(value) {
@@ -18,7 +18,7 @@
         }
 
         get from_date() {
-            return this._from_date ? moment(this._from_date).format('DD/MM/YYYY') : '';
+            return this._from_date ? moment(this._from_date).toDate() : '';
         }
 
         set from_date(value) {
