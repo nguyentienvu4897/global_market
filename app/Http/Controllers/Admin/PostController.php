@@ -60,10 +60,11 @@ class PostController extends Controller
                 <i class = "fa fa-cog"></i>
                 </button>
                 <div class="dropdown-menu">';
-                $result = $result . ' <a href="'. route($this->route.'.edit', $object->id) .'" title="sửa" class="dropdown-item"><i class="fa fa-angle-right"></i>Sửa</a>';
+                if ($object->canEdit()) {
+                    $result = $result . ' <a href="'. route($this->route.'.edit', $object->id) .'" title="sửa" class="dropdown-item"><i class="fa fa-angle-right"></i>Sửa</a>';
+                }
                 if ($object->canDelete()) {
                     $result = $result . ' <a href="' . route($this->route.'.delete', $object->id) . '" title="xóa" class="dropdown-item confirm"><i class="fa fa-angle-right"></i>Xóa</a>';
-
                 }
 
                 $result = $result . ' <a href="" title="thêm vào danh mục đặc biệt" class="dropdown-item add-category-special"><i class="fa fa-angle-right"></i>Thêm vào danh mục đặc biệt</a>';
@@ -130,6 +131,7 @@ class PostController extends Controller
 	public function edit(Request $request,$id)
 	{
 		$object = ThisModel::getDataForEdit($id);
+        if (!$object->canEdit()) return view('not_found');
 		return view($this->view.'.edit', compact('object'));
 	}
 
@@ -169,6 +171,7 @@ class PostController extends Controller
 		DB::beginTransaction();
 		try {
 			$object = ThisModel::findOrFail($id);
+            if (!$object->canEdit()) return response()->json(['success' => false, 'message' => 'Không có quyền!']);
 
 			$object->cate_id = $request->cate_id;
 			$object->name = $request->name;
@@ -202,7 +205,7 @@ class PostController extends Controller
 		$object = ThisModel::findOrFail($id);
 		if (!$object->canDelete()) {
 			$message = array(
-				"message" => "Không thể xóa!",
+				"message" => "Không có quyền!",
 				"alert-type" => "warning"
 			);
 		} else {

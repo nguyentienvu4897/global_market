@@ -113,8 +113,12 @@ Quản lý đơn hàng
             {data: 'type', search_type: "select", placeholder: "Loại đơn hàng", column_data: @json(\App\Model\Admin\Order::TYPES)},
         ],
         search_by_time: true,
-        export_link: "{!! route('orders.exportList') !!}",
-        import_link_with_params: true,
+        @if (Auth::guard('admin')->user()->canDo('Xuất excel đơn hàng'))
+            export_link: "{!! route('orders.exportList') !!}",
+        @endif
+        @if (Auth::guard('admin')->user()->canDo('Import excel đơn hàng'))
+            import_link_with_params: true,
+        @endif
     }).datatable;
 
     createReviewCallback = (response) => {

@@ -49,12 +49,16 @@ class PolicyController extends Controller
             })
             ->addColumn('action', function ($object) {
                 $result = '';
-                $result .= '<a href="' . route($this->route . '.edit', $object->id) . '" title="Sửa" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></a> ';
-                $result .= '<a href="' . route($this->route . '.delete', $object->id) . '" title="Xóa" class="btn btn-sm btn-danger confirm"><i class="fas fa-times"></i></a>';
+                if ($object->canEdit()) {
+                    $result .= '<a href="' . route($this->route . '.edit', $object->id) . '" title="Sửa" class="btn btn-sm btn-primary"><i class="fas fa-pencil-alt"></i></a> ';
+                }
+                if ($object->canDelete()) {
+                    $result .= '<a href="' . route($this->route . '.delete', $object->id) . '" title="Xóa" class="btn btn-sm btn-danger confirm"><i class="fas fa-times"></i></a>';
+                }
                 return $result;
             })
             ->addIndexColumn()
-            ->rawColumns(['link', 'action', 'image'])
+            ->rawColumns(['action'])
             ->make(true);
     }
 
@@ -114,7 +118,7 @@ class PolicyController extends Controller
     public function edit(Request $request, $id)
     {
         $object = ThisModel::getDataForEdit($id);
-
+        if (!$object->canEdit()) return view('not_found');
         return view($this->view . '.edit', compact('object'));
     }
 
@@ -140,6 +144,7 @@ class PolicyController extends Controller
         DB::beginTransaction();
         try {
             $object = ThisModel::findOrFail($id);
+            if (!$object->canEdit()) return response()->json(['success' => false, 'message' => 'Không có quyền!']);
             $object->title = $request->title;
             $object->content = $request->content;
             $object->status = $request->status;
@@ -162,7 +167,7 @@ class PolicyController extends Controller
         $object = ThisModel::findOrFail($id);
         if (!$object->canDelete()) {
             $message = array(
-                "message" => "Không thể xóa!",
+                "message" => "Không có quyền!",
                 "alert-type" => "warning"
             );
         } else {

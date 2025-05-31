@@ -14,13 +14,12 @@
 @endsection
 
 @section('buttons')
-    @if (Auth::guard('admin')->user()->type == App\Model\Common\User::QUAN_TRI_VIEN ||
-            Auth::guard('admin')->user()->type == App\Model\Common\User::SUPER_ADMIN)
+    {{-- @if (Auth::guard('admin')->user()->type == App\Model\Common\User::QUAN_TRI_VIEN || Auth::guard('admin')->user()->type == App\Model\Common\User::SUPER_ADMIN)
         <a href="{{ route('Product.create') }}" class="btn btn-outline-success btn-sm" class="btn btn-info"><i
-                class="fa fa-plus"></i> Thêm mới</a>
-        {{-- <a href="javascript:void(0)" target="_blank" data-href="{{ route('Product.exportExcel') }}" class="btn btn-info export-button btn-sm"><i class="fas fa-file-excel"></i> Xuất file excel</a>
+                class="fa fa-plus"></i> Thêm mới</a> --}}
+    {{-- <a href="javascript:void(0)" target="_blank" data-href="{{ route('Product.exportExcel') }}" class="btn btn-info export-button btn-sm"><i class="fas fa-file-excel"></i> Xuất file excel</a>
         <a href="javascript:void(0)" target="_blank" data-href="{{ route('Product.exportPDF') }}" class="btn btn-warning export-button btn-sm"><i class="far fa-file-pdf"></i> Xuất file pdf</a> --}}
-    @endif
+    {{-- @endif --}}
 @endsection
 
 @section('content')
@@ -229,9 +228,12 @@
                     column_data: @json(App\Model\Admin\CategorySpecial::getForSelectForProduct())
                 }
             ],
-            act: true,
             export_link: "{!! route('Product.exportExcel') !!}",
             import_link_with_params: true,
+            act: {
+                remove: true,
+            },
+            create_link: '{{ route('Product.create') }}'
         }).datatable;
 
         app.controller('Product', function($scope, $rootScope, $http) {

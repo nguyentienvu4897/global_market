@@ -15,6 +15,11 @@ class Config extends BaseModel
     protected $table = 'configs';
     protected $fillable = [];
 
+    public function canEdit()
+    {
+        return Auth::guard('admin')->user()->canDo('Cập nhật cấu hình');
+    }
+
     public function image()
     {
         return $this->morphOne(File::class, 'model')->where('custom_field', 'image');

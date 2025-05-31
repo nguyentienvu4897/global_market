@@ -51,11 +51,13 @@ class Tag extends Model
 
     public function canDelete()
     {
-        if ($this->products()->count() > 0 || $this->posts()->count() > 0) {
-            return false;
-        }
-
-        return true;
+        if (Auth::guard('admin')->user()->canDo('Xóa danh mục tag') && $this->products()->count() == 0 && $this->posts()->count() == 0) return true;
+        return false;
     }
 
+    public function canEdit()
+    {
+        if (Auth::guard('admin')->user()->canDo('Sửa danh mục tag')) return true;
+        return false;
+    }
 }

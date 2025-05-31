@@ -77,17 +77,20 @@ class PostCategory extends BaseModel
 
     public function canEdit()
     {
-        return $this->created_by == Auth::guard('admin')->user()->id;
+        if (Auth::guard('admin')->user()->canDo('Sửa danh mục bài viết') && $this->created_by == Auth::guard('admin')->user()->id) return true;
+        return false;
     }
 
     public function canView()
     {
+        if (Auth::guard('admin')->user()->is_super_admin) return true;
         return $this->status == 1 || $this->created_by == Auth::guard('admin')->user()->id;
     }
 
     public function canDelete ()
     {
-        return Auth::guard('admin')->user()->id == $this->created_by && $this->posts->count() == 0 && $this->getChilds()->isEmpty();
+        if (Auth::guard('admin')->user()->canDo('Xóa danh mục bài viết') && $this->created_by == Auth::guard('admin')->user()->id) return true;
+        return false;
     }
 
     public static function getForSelect() {

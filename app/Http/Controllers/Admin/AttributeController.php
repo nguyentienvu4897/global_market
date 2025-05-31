@@ -46,8 +46,12 @@ class AttributeController extends Controller
             })
             ->addColumn('action', function ($object) {
                 $result = '';
-                $result .= '<a href="javascript:void(0)" title="Sửa" class="btn btn-sm btn-primary edit"><i class="fas fa-pencil-alt"></i></a> ';
-                $result .= '<a href="'.route('attributes.delete', $object->id).'" title="Xóa" class="btn btn-sm btn-danger remove-att"><i class="fas fa-times"></i></a>';
+                if ($object->canEdit()) {
+                    $result .= '<a href="javascript:void(0)" title="Sửa" class="btn btn-sm btn-primary edit"><i class="fas fa-pencil-alt"></i></a> ';
+                }
+                if ($object->canDelete()) {
+                    $result .= '<a href="'.route('attributes.delete', $object->id).'" title="Xóa" class="btn btn-sm btn-danger remove-att"><i class="fas fa-times"></i></a>';
+                }
                 return $result;
             })
             ->addIndexColumn()
@@ -124,6 +128,8 @@ class AttributeController extends Controller
         DB::beginTransaction();
         try {
             $object = ThisModel::findOrFail($id);
+            if (!$object->canEdit()) return response()->json(['success' => false, 'message' => 'Không có quyền!']);
+
             $object->name = $request->name;
 
             $object->save();
@@ -144,7 +150,7 @@ class AttributeController extends Controller
         $object = ThisModel::findOrFail($id);
         if (!$object->canDelete()) {
             $message = array(
-                "message" => "Không thể xóa!",
+                "message" => "Không có quyền!",
                 "alert-type" => "warring"
             );
         } else {
@@ -160,9 +166,12 @@ class AttributeController extends Controller
     }
 
     public function getDataForEdit($id) {
+        $data = ThisModel::getDataForEdit($id);
+        if (!$data->canEdit()) return response()->json(['success' => false, 'message' => 'Không có quyền!']);
+
         $json = new stdclass();
         $json->success = true;
-        $json->data = ThisModel::getDataForEdit($id);
+        $json->data = $data;
         return Response::json($json);
     }
 

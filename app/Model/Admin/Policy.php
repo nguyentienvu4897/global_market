@@ -39,4 +39,16 @@ class Policy extends BaseModel
     {
         return self::where('id', $id)->firstOrFail();
     }
+
+    public function canEdit()
+    {
+        if (Auth::guard('admin')->user()->canDo('Sửa danh mục chính sách')) return true;
+        return false;
+    }
+
+    public function canDelete()
+    {
+        if (Auth::guard('admin')->user()->canDo('Xóa danh mục chính sách')) return true;
+        return false;
+    }
 }

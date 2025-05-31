@@ -10,12 +10,16 @@ class Attribute extends Model
 {
     public function canEdit()
     {
-        return Auth::guard('admin')->user()->id = $this->create_by;
+        if (Auth::guard('admin')->user()->is_super_admin) return true;
+        if (Auth::guard('admin')->user()->canDo('Sửa thuộc tính hàng hóa') && Auth::guard('admin')->user()->id == $this->create_by) return true;
+        return false;
     }
 
     public function canDelete()
     {
-        return true;
+        if (Auth::guard('admin')->user()->is_super_admin) return true;
+        if (Auth::guard('admin')->user()->canDo('Xóa thuộc tính hàng hóa') && Auth::guard('admin')->user()->id == $this->create_by) return true;
+        return false;
     }
 
     public static function searchByFilter($request)

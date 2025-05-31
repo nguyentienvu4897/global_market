@@ -1,7 +1,8 @@
 const USER_TYPES = [
-    { id: 2, name: "Nhân viên Uptek" },
-    { id: 3, name: "G7" },
-    { id: 4, name: "Nhóm G7" }
+    { id: 1, name: "Super Admin" },
+    { id: 2, name: "Quản trị viên" },
+    { id: 10, name: "Khách hàng" },
+    { id: 20, name: "Người bán hàng" }
 ];
 
 const i18nDataTable = {

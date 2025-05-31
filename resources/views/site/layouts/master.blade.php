@@ -348,10 +348,10 @@
             $scope.showMenuAdminClient = localStorage.getItem('showMenuAdminClient') ? localStorage.getItem(
                 'showMenuAdminClient') : false;
 
-            const currentUrl = window.location.pathname;
-            if (currentUrl != "{{ route('front.client-account', [], false) }}" && currentUrl !=
-                "{{ route('front.user-order', [], false) }}" && currentUrl != "{{ route('front.user-revenue', [], false) }}" &&
-                currentUrl != "{{ route('front.user-level', [], false) }}") {
+            const currentUrl = window.location.href;
+            if (currentUrl != "{{ route('front.client-account') }}" && currentUrl !=
+                "{{ route('front.user-order') }}" && currentUrl != "{{ route('front.user-revenue') }}" &&
+                currentUrl != "{{ route('front.user-level') }}") {
                 $scope.showMenuAdminClient = false;
                 localStorage.removeItem('showMenuAdminClient');
             }
@@ -359,8 +359,8 @@
             $scope.changeMenuClient = function($event, url) {
                 $event.preventDefault();
                 $scope.showMenuAdminClient = !$scope.showMenuAdminClient;
-                if (url == '{{ route('front.user-order', [], false) }}' || url == '{{ route('front.user-revenue', [], false) }}' ||
-                    url == '{{ route('front.user-level', [], false) }}') {
+                if (url == '{{ route('front.user-order') }}' || url == '{{ route('front.user-revenue') }}' ||
+                    url == '{{ route('front.user-level') }}') {
                     $scope.showMenuAdminClient = true;
                 }
 

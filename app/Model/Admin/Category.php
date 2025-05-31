@@ -100,16 +100,19 @@ class Category extends BaseModel
     }
     public function canEdit()
     {
+        if (Auth::guard('admin')->user()->canDo('Sửa danh mục hàng hóa')) return true;
         return $this->created_by == Auth::guard('admin')->user()->id;
     }
 
     public function canView()
     {
+        if (Auth::guard('admin')->user()->is_super_admin) return true;
         return $this->status == 1 || $this->created_by == Auth::guard('admin')->user()->id;
     }
 
     public function canDelete()
     {
+        if (Auth::guard('admin')->user()->canDo('Xóa danh mục hàng hóa') && $this->products->count() == 0 && $this->getChilds()->isEmpty()) return true;
         return Auth::guard('admin')->user()->id == $this->created_by && $this->products->count() == 0 && $this->getChilds()->isEmpty();
     }
 

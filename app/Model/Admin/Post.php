@@ -46,12 +46,14 @@ class Post extends BaseModel
 
     public function canEdit()
     {
-        return Auth::guard('admin')->user()->id = $this->create_by;
+        if (Auth::guard('admin')->user()->canDo('Sửa bài viết') && Auth::guard('admin')->user()->id == $this->created_by) return true;
+        return false;
     }
 
     public function canDelete()
     {
-        return true;
+        if (Auth::guard('admin')->user()->canDo('Xóa bài viết') && Auth::guard('admin')->user()->id == $this->created_by) return true;
+        return false;
     }
 
     public function users()
@@ -140,6 +142,7 @@ class Post extends BaseModel
 
     public function canView()
     {
+        if (Auth::guard('admin')->user()->is_super_admin) return true;
         return $this->status == 1 || $this->created_by == Auth::guard('admin')->user()->id;
     }
 

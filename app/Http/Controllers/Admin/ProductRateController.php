@@ -34,7 +34,7 @@ class ProductRateController extends Controller
                 return $object->name . ' - ' . $object->phone . ' - ' . $object->email;
             })
             ->editColumn('product_name', function ($object) {
-                return $object->product->name;
+                return $object->product ? $object->product->name : '';
             })
             ->editColumn('status', function ($object) {
                 return getStatus($object->status, ThisModel::STATUSES);

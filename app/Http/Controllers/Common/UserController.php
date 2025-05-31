@@ -47,7 +47,20 @@ class UserController extends Controller
             ->editColumn('status', function ($object) {
                 return getStatus($object->status, ThisModel::STATUSES);
             })
-            ->editColumn('created_by', function ($object) {
+			->editColumn('account_type', function ($object) {
+                return $object->getTypeUser($object->type);
+            })
+            ->editColumn('role', function ($object) {
+                $roles = $object->getRoleNames();
+                $result = '';
+                if (!$roles->isEmpty()) {
+                    foreach ($roles as $role) {
+                        $result .= '<span class="badge badge-secondary">' . $role . '</span> ';
+                    }
+                }
+                return $result;
+            })
+			->editColumn('created_by', function ($object) {
                 return $object->user_create ? $object->user_create->name : '';
             })
             ->addColumn('action', function ($object) {
@@ -60,7 +73,7 @@ class UserController extends Controller
                 }
                 return $result;
             })
-            ->rawColumns(['image', 'status', 'action'])
+			->rawColumns(['image', 'status', 'action', 'role'])
             ->addIndexColumn()
             ->make(true);
     }
@@ -70,11 +83,12 @@ class UserController extends Controller
         return view($this->view . '.create', compact([]));
     }
 
-    public function edit($id)
-    {
-        $object = ThisModel::getDataForEdit($id);
-        return view($this->view . '.edit', compact(['object']));
-    }
+	public function edit($id)
+	{
+		$object = ThisModel::getDataForEdit($id);
+		if (!$object->canEdit()) return view('not_found');
+		return view($this->view.'.edit', compact(['object']));
+	}
 
     public function store(Request $request)
     {
@@ -126,74 +140,74 @@ class UserController extends Controller
         }
     }
 
-    public function update(Request $request, $id)
-    {
-        $object = ThisModel::findOrFail($id);
-
-        $rule = [
-            'name' => 'required',
-            'email' => 'required|email|unique:users,email,' . $id,
-            'account_name' => 'required||unique:users,account_name,' . $id,
+	public function update(Request $request, $id)
+	{
+		$object = ThisModel::findOrFail($id);
+		if (!$object->canEdit()) return response()->json(['success' => false, 'message' => 'Không có quyền!']);
+		$rule = [
+			'name' => 'required',
+			'email' => 'required|email|unique:users,email,'.$id,
+            'account_name' => 'required||unique:users,account_name,'.$id,
             'password' => 'nullable|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
-            'password_confirm' => 'required_with:password|same:password',
-            'status' => 'required|in:0,1',
-            //			'roles' => 'required|array|min:1',
-            //			'roles.*' => 'required|exists:roles,id'
-        ];
+			'password_confirm' => 'required_with:password|same:password',
+			'status' => 'required|in:0,1',
+//			'roles' => 'required|array|min:1',
+//			'roles.*' => 'required|exists:roles,id'
+		];
 
-        $validate = Validator::make(
-            $request->all(),
-            $rule,
-            []
-        );
+		$validate = Validator::make(
+			$request->all(),
+			$rule,
+			[]
+		);
 
-        if ($validate->fails()) {
-            return $this->responseErrors("", $validate->errors());
-        }
+		if ($validate->fails()) {
+			return $this->responseErrors("", $validate->errors());
+		}
 
-        DB::beginTransaction();
-        try {
-            $object->name = $request->name;
-            $object->email = $request->email;
-            $object->account_name = $request->account_name;
-            if ($request->password != null) $object->password = bcrypt($request->password);
-            $object->status = $request->status;
-            $object->phone_number = $request->phone_number;
-            $object->save();
+		DB::beginTransaction();
+		try {
+			$object->name = $request->name;
+			$object->email = $request->email;
+			$object->account_name = $request->account_name;
+			if ($request->password != null) $object->password = bcrypt($request->password);
+			$object->status = $request->status;
+			$object->phone_number = $request->phone_number;
+			$object->save();
 
-            $object->roles()->sync([3]);
+			$object->roles()->sync([3]);
 
-            if ($request->image) {
-                FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
-                FileHelper::uploadFile($request->image, 'users', $object->id, ThisModel::class, 'image');
-            }
+			if($request->image) {
+				FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+				FileHelper::uploadFile($request->image, 'users', $object->id, ThisModel::class, 'image');
+			}
 
-            DB::commit();
-            return $this->responseSuccess();
-        } catch (Exception $e) {
+			DB::commit();
+			return $this->responseSuccess();
+		} catch (Exception $e) {
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
-    }
+	}
 
-    public function delete($id)
+	public function delete($id)
     {
-        $object = ThisModel::findOrFail($id);
-        if (!$object->canDelete()) {
-            $message = array(
-                "message" => "Không thể khóa!",
-                "alert-type" => "warning"
-            );
-        } else {
-            $object->status = 0;
-            $object->save();
-            $message = array(
-                "message" => "Thao tác thành công!",
-                "alert-type" => "success"
-            );
-        }
-        return redirect()->route($this->route . '.index')->with($message);
-    }
+		$object = ThisModel::findOrFail($id);
+		if (!$object->canDelete()) {
+			$message = array(
+				"message" => "Không có quyền!",
+				"alert-type" => "warning"
+			);
+		} else {
+			$object->status = 0;
+			$object->save();
+			$message = array(
+				"message" => "Thao tác thành công!",
+				"alert-type" => "success"
+			);
+		}
+        return redirect()->route($this->route.'.index')->with($message);
+	}
 
 
     // Xuất Excel
