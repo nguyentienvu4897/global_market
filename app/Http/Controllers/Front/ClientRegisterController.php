@@ -457,7 +457,7 @@ class ClientRegisterController extends Controller
     public function withdrawMoney(Request $request)
     {
         $rule = [
-            'withdrawAmount' => 'required|numeric|min:100000|max:' . $request->waitingQuyetToanAmount,
+            'withdrawAmount' => 'required|numeric|min:50000|max:' . $request->waitingQuyetToanAmount,
         ];
 
         $validate = Validator::make(
@@ -466,7 +466,7 @@ class ClientRegisterController extends Controller
             [
                 'withdrawAmount.required' => 'Số tiền cần rút không được để trống',
                 'withdrawAmount.numeric' => 'Số tiền cần rút không được để trống',
-                'withdrawAmount.min' => 'Số tiền cần rút không được nhỏ hơn 100.000',
+                'withdrawAmount.min' => 'Số tiền cần rút không được nhỏ hơn 50.000',
             ]
         );
 
