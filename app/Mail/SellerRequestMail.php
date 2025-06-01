@@ -30,7 +30,7 @@ class SellerRequestMail extends Mailable
      */
     public function build()
     {
-        $title = 'Thông báo yêu cầu đăng ký bán hàng #';
+        $title = 'Thông báo yêu cầu đăng ký cộng tác viên #';
         $url = URL::signedRoute('front.seller-approve', ['id' => $this->data->id]);
 
         return $this->subject($title . $this->data->email)->view('site.mails.seller-request', ['data' => $this->data, 'url' => $url]);

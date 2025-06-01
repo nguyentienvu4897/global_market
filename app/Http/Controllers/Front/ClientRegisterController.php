@@ -660,7 +660,7 @@ class ClientRegisterController extends Controller
 
     public function sellerRegisterSubmit(Request $request) {
         $rule = [
-			// 'shop_name' => 'required',
+			'shop_name' => 'required',
 			'email' => 'required|email|unique:users,email',
 			'account_name' => 'required|unique:users,account_name',
 			'password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
@@ -687,7 +687,7 @@ class ClientRegisterController extends Controller
                 'account_name.unique' => 'Tên đăng nhập đã được sử dụng',
                 'email.exists' => 'Email không chính xác',
                 'account_name.exists' => 'Tên đăng nhập không chính xác',
-                'shop_name.required' => 'Tên shop không được để trống',
+                'shop_name.required' => 'Vui lòng chọn sàn TMĐT',
                 'agree_terms.required' => 'Bạn phải đồng ý với các điều khoản và điều kiện',
                 'agree_terms.in' => 'Bạn phải đồng ý với các điều khoản và điều kiện',
             ]
@@ -712,14 +712,14 @@ class ClientRegisterController extends Controller
 
 			DB::commit();
 
-            // Mail::to('nguyentienvu4897@gmail.com')->send(new SellerRequestMail($object));
-            $users = User::query()->where('type', 1)->where('status', 1)->get();
+            Mail::to('nguyentienvu4897@gmail.com')->send(new SellerRequestMail($object));
+            // $users = User::query()->where('type', 1)->where('status', 1)->get();
 
-            if($users->count()) {
-                foreach ($users as $user) {
-                    Mail::to($user->email)->send(new SellerRequestMail($object));
-                }
-            }
+            // if($users->count()) {
+            //     foreach ($users as $user) {
+            //         Mail::to($user->email)->send(new SellerRequestMail($object));
+            //     }
+            // }
             return $this->responseSuccess('Gửi đăng ký thành công!');
 		} catch (Exception $e) {
             DB::rollBack();

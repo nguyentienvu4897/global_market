@@ -247,6 +247,15 @@
                     </p>
                 </a>
             </li>
+            <li class="nav-item has-treeview">
+                <a href="{{route('seller_requests.index')}}" class="nav-link {{ request()->is('seller_requests') || request()->is('seller_requests/*') ? 'active' : '' }}">
+                    <i class="nav-icon fa fa-user-plus"></i>
+
+                    <p>
+                        Yêu cầu đăng ký cộng tác viên
+                    </p>
+                </a>
+            </li>
 
             {{-- <li class="nav-item has-treeview  {{ request()->is('admin/blocks') || request()->is('admin/blocks/*') ? 'menu-open' : '' }} ">
                 <a href="#" class="nav-link">

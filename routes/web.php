@@ -94,6 +94,14 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/{id}/delete', 'Admin\ContactController@delete')->name('contacts.delete')->middleware('checkPermission:Quản lý danh mục khách hàng liên hệ');
         });
 
+        // Cộng tác viên
+        Route::group(['prefix' => 'seller_requests'], function () {
+            Route::get('/', 'Admin\SellerRequestController@index')->name('seller_requests.index');
+            Route::get('/searchData', 'Admin\SellerRequestController@searchData')->name('seller_requests.searchData');
+            Route::get('/{id}/approve', 'Admin\SellerRequestController@approve')->name('seller_requests.approve');
+            Route::get('/{id}/reject', 'Admin\SellerRequestController@reject')->name('seller_requests.reject');
+        });
+
         Route::group(['prefix' => 'apply-recruitments'], function () {
             Route::get('/', 'Admin\ApplyRecruitmentsController@index')->name('apply-recruitments.index');
             Route::get('/searchData', 'Admin\ApplyRecruitmentsController@searchData')->name('apply-recruitments.searchData');

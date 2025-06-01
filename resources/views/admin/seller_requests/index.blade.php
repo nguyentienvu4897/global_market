@@ -52,6 +52,11 @@ Quản lý yêu cầu đăng kí bán hàng
         search_columns: [
             {data: 'shop_name', search_type: "text", placeholder: "nhập tên shop"},
             {data: 'email', search_type: "text", placeholder: "nhập email"},
+            {data: 'status', search_type: "select", placeholder: "chọn trạng thái", options: {
+                '0': 'Chưa duyệt',
+                '1': 'Đã duyệt',
+                '2': 'Từ chối',
+            }},
         ],
     }).datatable;
 

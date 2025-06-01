@@ -62,13 +62,13 @@
 
 <body>
     <div class="container">
-        <div class="header">Yêu cầu đăng ký bán hàng trên website</div>
+        <div class="header">Yêu cầu đăng ký cộng tác viên trên website</div>
         <div class="note">
             <span style="color: red;">*</span> Lưu ý: <br>
-            - Vui lòng kiểm tra thông tin đăng ký bán hàng trên website để xác nhận thông tin
+            - Vui lòng kiểm tra thông tin đăng ký cộng tác viên trên website để xác nhận thông tin
         </div>
         <div class="info">
-            <div><span>Tên cửa hàng:</span> {{ $data->shop_name }}</div>
+            <div><span>Sàn TMĐT:</span> {{ $data->shop_name }}</div>
             <div><span>Email đăng ký:</span> {{ $data->email }}</div>
         </div>
         <div style="text-align: center;">
