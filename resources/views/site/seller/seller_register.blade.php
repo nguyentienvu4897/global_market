@@ -2,9 +2,9 @@
 
 <head>
     @if ($display == 'register')
-        <title>Đăng kí bán hàng</title>
+        <title>Đăng kí cộng tác viên</title>
     @else
-        <title>Đăng nhập kênh bán hàng</title>
+        <title>Đăng nhập cộng tác viên</title>
     @endif
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
@@ -285,6 +285,14 @@
             color: red;
             font-weight: 400;
         }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            /* border-radius: 5px; */
+            background-color: #eee;
+            border: 1px solid #eee;
+        }
     </style>
 </head>
 
@@ -292,17 +300,22 @@
     <div class="container" id="container" ng-controller="SellerRegisterController">
         <div class="form-container sign-up-container" id="sign-up">
             <form id="form-sign-up">
-                <h1>Đăng kí</h1>
-                <span>Đăng kí bán hàng để bắt đầu bán hàng trên website</span>
+                <h1>Đăng ký</h1>
+                <span>Đăng ký cộng tác viên để bắt đầu tăng thu nhập</span>
                 <div class="form-group" style="margin-bottom: 12px;">
                     <input type="checkbox" id="use-account" style="width: 12px; height: 12px;"
                         ng-model="use_account_client" ng-change="changeUseAccountClient()" />
                     <label for="use-account" style="font-size: 13px;">Sử dụng
-                        tài khoản mua hàng để đăng kí</label>
+                        tài khoản mua hàng để đăng ký</label>
                 </div>
 
                 <div class="form-group">
-                    <input type="text" placeholder="Tên cửa hàng" ng-model="shop_name" />
+                    <select class="form-control" ng-model="shop_name" ng-change="changeShopName()">
+                        <option value="">Chọn sàn TMĐT</option>
+                        <option value="shopee">Shopee</option>
+                        <option value="lazada">Lazada</option>
+                        <option value="tiktok">Tiktok</option>
+                    </select>
                     <span class="invalid-feedback d-block error" style="text-align: left;" role="alert"
                         ng-if="errors && errors['shop_name']">
                         <% errors['shop_name'][0] %>
@@ -342,13 +355,13 @@
                         </span>
                     </div>
                 </div>
-                <button ng-click="registerSeller()">Đăng kí</button>
+                <button ng-click="registerSeller()">Đăng ký</button>
             </form>
         </div>
         <div class="form-container sign-in-container" id="sign-in">
             <form id="form-sign-in">
                 <h1>Đăng nhập</h1>
-                <span>Đăng nhập để tiếp tục bán hàng trên website</span>
+                <span>Đăng nhập để tiếp tục tăng thu nhập</span>
                 <div class="form-group">
                     <input type="text" placeholder="Email hoặc tên đăng nhập" ng-model="login_email" />
                     <span class="invalid-feedback d-block error" style="text-align: left;" role="alert"
@@ -370,14 +383,14 @@
         <div class="overlay-container">
             <div class="overlay">
                 <div class="overlay-panel overlay-left">
-                    <h1>Trở thành người bán hàng ngay hôm nay</h1>
-                    <p>Để tiếp tục bán hàng trên website, vui lòng đăng nhập bằng thông tin cá nhân của bạn</p>
+                    <h1>Trở thành cộng tác viên ngay hôm nay</h1>
+                    <p>Để tiếp tục tăng thu nhập, vui lòng đăng nhập bằng thông tin cá nhân của bạn</p>
                     <button class="ghost" id="signIn">Đăng nhập</button>
                 </div>
                 <div class="overlay-panel overlay-right">
                     <h1>Chào mừng bạn!</h1>
                     <p>Nhập thông tin cá nhân của bạn và bắt đầu hành trình với chúng tôi</p>
-                    <button class="ghost" id="signUp">Đăng kí</button>
+                    <button class="ghost" id="signUp">Đăng ký</button>
                 </div>
             </div>
         </div>

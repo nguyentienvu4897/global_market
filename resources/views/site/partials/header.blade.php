@@ -44,7 +44,11 @@
             </div>
             <div class="col-xl-6 col-xlcus-6 col-lg-12 col-md-12 col-sm-12 col-xs-12 col-12 header-logo">
                 <div class="float-right" ng-if="!isAdminClient">
-                    <a href="{{ route('front.login-client') }}"><i class="fa fa-user" width="16" height="16"></i> Đăng nhập</a> <span style="color: #fff; margin-left: 10px; margin-right: 10px;">|</span> <a href="{{ route('front.login-client') }}?register=true"><i class="fa fa-user-plus" width="16" height="16"></i> Đăng ký</a>
+                    <a href="{{route('front.seller-login')}}">Cộng tác viên</a>
+                    <span style="color: #fff; margin-left: 10px; margin-right: 10px;">|</span>
+                    <a href="{{ route('front.login-client') }}"><i class="fa fa-user" width="16" height="16"></i> Đăng nhập</a>
+                    <span style="color: #fff; margin-left: 10px; margin-right: 10px;">|</span>
+                    <a href="{{ route('front.login-client') }}?register=true"><i class="fa fa-user-plus" width="16" height="16"></i> Đăng ký</a>
                 </div>
                 <div class="float-right" ng-if="isAdminClient">
                     {{-- <span style="color: #fff; margin-left: 10px; margin-right: 10px;">|</span>
@@ -73,6 +77,8 @@
                         </svg>
                     </a>
                     <span style="color: #fff; margin-left: 10px; margin-right: 10px;">|</span> --}}
+                    <a href="{{route('front.seller-login')}}">Cộng tác viên</a>
+                    <span style="color: #fff; margin-left: 10px; margin-right: 10px;">|</span>
                     <a href="{{ route('front.logout-client') }}"><i class="fa fa-sign-out-alt" width="16" height="16"></i> Đăng xuất</a>
                 </div>
             </div>

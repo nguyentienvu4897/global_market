@@ -660,7 +660,7 @@ class ClientRegisterController extends Controller
 
     public function sellerRegisterSubmit(Request $request) {
         $rule = [
-			'shop_name' => 'required',
+			// 'shop_name' => 'required',
 			'email' => 'required|email|unique:users,email',
 			'account_name' => 'required|unique:users,account_name',
 			'password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
