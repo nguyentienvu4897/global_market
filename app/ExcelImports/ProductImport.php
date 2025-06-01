@@ -57,8 +57,6 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
             if(!$category) {
                 $errors[] = 'Danh mục lớn không tồn tại';
             }
-            $cate_child = Category::where('name', $cate_2)->where('parent_id', $category->id)->where('level', 1)->first();
-            $cate_child_child = Category::where('name', $cate_3)->where('parent_id', $cate_child->id)->where('level', 2)->first();
             if(count($errors)) {
                 $this->invalid_rows[] = [
                     'detail' => implode("\n", $errors),
@@ -68,6 +66,8 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $this->skip_rows++;
                 continue;
             }
+            $cate_child = Category::where('name', $cate_2)->where('parent_id', $category ? $category->id : null)->where('level', 1)->first();
+            $cate_child_child = Category::where('name', $cate_3)->where('parent_id', $cate_child ? $cate_child->id : null)->where('level', 2)->first();
             $product = Product::query()->where(function ($query) use ($aff_product_code, $product_name) {
                 $query->where('aff_product_code', $aff_product_code)
                     ->orWhere('name', $product_name);
@@ -83,8 +83,8 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $product->origin_link = $origin_link;
                 $product->aff_link = $aff_link;
                 $product->short_link = $aff_link;
-                $product->price = $price ?? 0;
-                $product->revenue_price = $revenue_price ?? 0;
+                $product->price = intval($price) ?? 0;
+                $product->revenue_price = intval($revenue_price) ?? 0;
                 $product->status = Product::STATUS_SUCCESS;
                 $product->state = Product::CON_HANG;
                 $product->type = Product::TYPE_AFFILIATE;
@@ -102,8 +102,8 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $product->origin_link = $origin_link;
                 $product->aff_link = $aff_link;
                 $product->short_link = $aff_link;
-                $product->price = $price ?? 0;
-                $product->revenue_price = $revenue_price ?? 0;
+                $product->price = intval($price) ?? 0;
+                $product->revenue_price = intval($revenue_price) ?? 0;
                 $product->status = Product::STATUS_SUCCESS;
                 $product->state = Product::CON_HANG;
                 $product->type = Product::TYPE_AFFILIATE;
