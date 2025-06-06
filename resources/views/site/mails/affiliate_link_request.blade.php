@@ -55,7 +55,7 @@
     <div class="container">
         <div class="info">
             <div class="header">Các link gốc affiliate cần được xử lý.</div>
-            <div>Khách hàng: <strong>{{ $user->name }}</strong> - SĐT: <strong>{{ $user->phone_number }}</strong></div>
+            <div>Khách hàng: <strong>{{ $user->name }}</strong> - SĐT: <strong>{{ $user->phone_number }} </strong> - Email: <strong>{{ $user->email }} </strong></div>
             <div>
                 <table style="width: 100%; border-collapse: collapse; table-layout: fixed;">
                     <thead>
