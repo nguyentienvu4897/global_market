@@ -159,7 +159,7 @@ class Product extends BaseModel
             'image',
         ]);
 
-        if (!Auth::guard('admin')->user()->is_seller) {
+        if (!Auth::guard('admin')->user()->is_seller && !Auth::guard('admin')->user()->is_ctv) {
         } else {
             $result = $result->where('created_by', Auth::guard('admin')->user()->id);
         }

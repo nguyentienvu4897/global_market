@@ -41,7 +41,7 @@ class CartController extends Controller
     {
         $product = Product::query()->find($productId);
         $arr_index = [];
-        if(isset($request['attributes'])) {
+        if (isset($request['attributes'])) {
             foreach ($request['attributes'] as $attribute) {
                 $arr_index[] = [
                     'index' => intval($attribute['index']),
@@ -56,7 +56,7 @@ class CartController extends Controller
             'id' => $uniqueId,
             'name' => $product->name,
             'price' => $product->price,
-            'quantity' => $request->qty ? (int)$request->qty : 1,
+            'quantity' => $request->qty ? (int) $request->qty : 1,
             'attributes' => [
                 'image' => $product->image->path ?? '',
                 'slug' => $product->slug,
@@ -70,11 +70,13 @@ class CartController extends Controller
             'product_name' => $product->name,
             'product_image' => $product->image->path ?? '',
             'product_price' => $product->price,
-            'product_qty' => $request->qty ? (int)$request->qty : 1,
+            'product_qty' => $request->qty ? (int) $request->qty : 1,
         ];
 
-        return \Response::json(['success' => true, 'items' => \Cart::getContent(), 'total' => \Cart::getTotal(),
-            'count' => \Cart::getContent()->sum('quantity'), 'noti_product' => $noti_product]);
+        return \Response::json([
+            'success' => true, 'items' => \Cart::getContent(), 'total' => \Cart::getTotal(),
+            'count' => \Cart::getContent()->sum('quantity'), 'noti_product' => $noti_product
+        ]);
     }
 
     public function updateItem(Request $request)
@@ -86,21 +88,25 @@ class CartController extends Controller
             ),
         ));
 
-        return \Response::json(['success' => true, 'items' => \Cart::getContent(), 'total' => \Cart::getTotal(),
-            'count' => \Cart::getContent()->sum('quantity')]);
-
+        return \Response::json([
+            'success' => true, 'items' => \Cart::getContent(), 'total' => \Cart::getTotal(),
+            'count' => \Cart::getContent()->sum('quantity')
+        ]);
     }
 
     public function removeItem(Request $request)
     {
         \Cart::remove($request->product_id);
 
-        return \Response::json(['success' => true, 'items' => \Cart::getContent(), 'total' => \Cart::getTotal(),
-            'count' => \Cart::getContent()->sum('quantity')]);
+        return \Response::json([
+            'success' => true, 'items' => \Cart::getContent(), 'total' => \Cart::getTotal(),
+            'count' => \Cart::getContent()->sum('quantity')
+        ]);
     }
 
     // trang thanh toán
-    public function checkout(Request $request) {
+    public function checkout(Request $request)
+    {
         $cartCollection = \Cart::getContent();
         $total = \Cart::getTotal();
         $vouchers = Voucher::query()->where('status', 1)->where('quantity', '>', 0)->where('to_date', '>=', now())->orderBy('created_at', 'desc')->get();
@@ -112,9 +118,10 @@ class CartController extends Controller
     }
 
     // áp dụng mã giảm giá (boolean)
-    public function applyVoucher(Request $request) {
+    public function applyVoucher(Request $request)
+    {
         $voucher = Voucher::query()->where('code', $request->code)->first();
-        if(isset($voucher) && (($request->total >= $voucher->limit_bill_value && $voucher->limit_bill_value > 0) || ($voucher->limit_product_qty > 0 && $request->qty >= $voucher->limit_product_qty))) {
+        if (isset($voucher) && (($request->total >= $voucher->limit_bill_value && $voucher->limit_bill_value > 0) || ($voucher->limit_product_qty > 0 && $request->qty >= $voucher->limit_product_qty))) {
             return Response::json(['success' => true, 'voucher' => $voucher, 'message' => 'Áp dụng mã giảm giá thành công']);
         }
         return Response::json(['success' => false, 'message' => 'Không đủ điều kiện áp mã giảm giá']);
@@ -204,13 +211,13 @@ class CartController extends Controller
             }
 
             $current_user = User::query()->with([
-                'parent' => function($q) {
+                'parent' => function ($q) {
                     $q->with([
-                        'parent' => function($q) {
+                        'parent' => function ($q) {
                             $q->with([
-                                'parent' => function($q) {
+                                'parent' => function ($q) {
                                     $q->with([
-                                        'parent' => function($q) {
+                                        'parent' => function ($q) {
                                             $q->where('status', 1)->where('type', 10);
                                         }
                                     ])->where('status', 1)->where('type', 10);
@@ -221,7 +228,7 @@ class CartController extends Controller
                 }
             ])->where('id', auth()->guard('client')->user()->id)->where('email', $request->customer_email)->where('status', 1)->where('type', 10)->first();
 
-            if($current_user) {
+            if ($current_user) {
                 $order_revenue_detail = new OrderRevenueDetail();
                 $order_revenue_detail->order_id = $order->id;
                 $order_revenue_detail->order_code = $order->code;
@@ -234,7 +241,7 @@ class CartController extends Controller
                 $order_revenue_detail->save();
             }
 
-            if(isset($current_user->parent)) {
+            if (isset($current_user->parent)) {
                 $order_revenue_detail = new OrderRevenueDetail();
                 $order_revenue_detail->order_id = $order->id;
                 $order_revenue_detail->order_code = $order->code;
@@ -247,7 +254,7 @@ class CartController extends Controller
                 $order_revenue_detail->save();
             }
 
-            if(isset($current_user->parent) && isset($current_user->parent->parent)) {
+            if (isset($current_user->parent) && isset($current_user->parent->parent)) {
                 $order_revenue_detail = new OrderRevenueDetail();
                 $order_revenue_detail->order_id = $order->id;
                 $order_revenue_detail->order_code = $order->code;
@@ -260,7 +267,7 @@ class CartController extends Controller
                 $order_revenue_detail->save();
             }
 
-            if(isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent)) {
+            if (isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent)) {
                 $order_revenue_detail = new OrderRevenueDetail();
                 $order_revenue_detail->order_id = $order->id;
                 $order_revenue_detail->order_code = $order->code;
@@ -273,7 +280,7 @@ class CartController extends Controller
                 $order_revenue_detail->save();
             }
 
-            if(isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent) && isset($current_user->parent->parent->parent->parent)) {
+            if (isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent) && isset($current_user->parent->parent->parent->parent)) {
                 $order_revenue_detail = new OrderRevenueDetail();
                 $order_revenue_detail->order_id = $order->id;
                 $order_revenue_detail->order_code = $order->code;
@@ -286,7 +293,7 @@ class CartController extends Controller
                 $order_revenue_detail->save();
             }
 
-            if(\Cart::getContent()->sum('quantity') == 0) {
+            if (\Cart::getContent()->sum('quantity') == 0) {
                 \Cart::clear();
             }
 
@@ -302,10 +309,10 @@ class CartController extends Controller
 
             // gửi mail thông báo có đơn hàng mới cho admin
             $users = User::query()->where('type', 1)->where('status', 1)->get();
-            // Mail::to('nguyentienvu4897@gmail.com')->send(new NewOrder($order, $config, 'admin'));
+            // Mail::to('vudev4897@gmail.com')->send(new NewOrder($order, $config, 'admin'));
 
 
-            if($users->count()) {
+            if ($users->count()) {
                 foreach ($users as $user) {
                     Mail::to($user->email)->send(new NewOrder($order, $config, 'admin'));
                 }
@@ -317,7 +324,6 @@ class CartController extends Controller
             DB::rollBack();
             dd($exception->getMessage());
         }
-
     }
 
     // trả về trang đặt hàng thành công
@@ -333,5 +339,4 @@ class CartController extends Controller
         session()->forget('order_id');
         return view('site.orders.checkout_success', compact('order'));
     }
-
 }

@@ -39,6 +39,7 @@ class SellerRequest extends Model
         'status',
         'approved_by',
         'approved_at',
+        'campaign_id',
     ];
 
     public function user()
@@ -54,8 +55,8 @@ class SellerRequest extends Model
     public static function searchByFilter($request)
     {
         $query = self::query();
-        if (!empty($request->shop_name)) {
-            $query->where('shop_name', 'like', '%' . $request->shop_name . '%');
+        if (!empty($request->campaign_id)) {
+            $query->where('campaign_id', $request->campaign_id);
         }
         if (!empty($request->email)) {
             $query->where('email', 'like', '%' . $request->email . '%');
@@ -75,5 +76,12 @@ class SellerRequest extends Model
         $query->orderBy('created_at', 'desc');
 
         return $query;
+    }
+
+    public function canApprove()
+    {
+        if ($this->status == self::STATUS_PENDING && $this->approved_by == null && Auth::guard('admin')->user()->is_super_admin) return true;
+        if ($this->status == self::STATUS_PENDING && $this->approved_by == null && Auth::guard('admin')->user()->canDo('Duyệt đăng ký cộng tác viên')) return true;
+        return false;
     }
 }

@@ -62,10 +62,11 @@
 
 <body>
     <div class="container">
-        <div class="header">Yêu cầu đăng ký bán hàng trên website của bạn đã được phê duyệt</div>
+        <div class="header">Yêu cầu đăng ký cộng tác viên trên website của bạn đã được phê duyệt</div>
         <div class="info">
-            <div><span>Tên cửa hàng:</span> {{ $data->shop_name }}</div>
+            <div><span>Sàn TMĐT:</span> {{ $data->shop_name }}</div>
             <div><span>Email đăng ký:</span> {{ $data->email }}</div>
+            <div><span>Mã cộng tác viên:</span> {{ $user->ctv_code }}</div>
         </div>
         <div style="text-align: center;">
             <a href="{{ route('front.seller-login') }}" class="btn-primary">Đi tới đăng nhập</a>

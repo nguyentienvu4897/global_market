@@ -107,7 +107,7 @@
                 </strong>
             </span>
         </div>
-        <div class="form-group">
+        {{-- <div class="form-group">
             <label class="form-label">Cấu hình phần trăm hoa hồng sản phẩm</label>
             <div class="row">
                 <div class="col-md-2">
@@ -166,7 +166,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         <div class="form-group custom-group mb-4">
             <label class="form-label" ng-class="{'required-label': form.type == 1}">Link gốc sản phẩm</label>
             <input class="form-control " type="text" ng-model="form.origin_link">

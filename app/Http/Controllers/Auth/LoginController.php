@@ -58,7 +58,7 @@ class LoginController extends Controller
         // if(isset($request->remember_me)) {
         //     $remember = true;
         // }
-        $types = [ 1, 2, 20 ];
+        $types = [ 1, 2, 30 ];
 
         if (Auth::guard('admin')->attempt(['account_name' => $request->account_name, 'password' => $request->password, 'status' => 1, 'type' => $types], $remember)) {
             // Đăng nhập thành công

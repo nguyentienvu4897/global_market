@@ -11,6 +11,7 @@ use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithStartRow;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
+use Auth;
 
 class OrderImport implements ToCollection, WithStartRow, WithMultipleSheets
 {
@@ -71,6 +72,7 @@ class OrderImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $order->total_after_discount += $total_price;
                 $order->aff_total_revenue += $total_revenue;
                 $order->comment = $comment ?? null;
+                $order->updated_by = Auth::guard('admin')->user()->id;
                 $order->save();
                 $order_details = OrderDetail::where('order_id', $order->id)->where('product_name', $product_name)->first();
                 if(!$order_details) {
@@ -99,6 +101,8 @@ class OrderImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $order->aff_merchant = $merchant;
                 $order->comment = $comment ?? null;
                 $order->aff_order_at = Carbon::createFromFormat('d/m/Y H:i:s', $order_at)->format('Y-m-d H:i:s');
+                $order->created_by = Auth::guard('admin')->user()->id;
+                $order->updated_by = Auth::guard('admin')->user()->id;
                 $order->save();
 
                 $order_detail = new OrderDetail();

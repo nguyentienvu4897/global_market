@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Model\Admin\SellerStore;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Str;
+
 class ClientRegisterController extends Controller
 {
     use ResponseTrait;
@@ -159,7 +160,7 @@ class ClientRegisterController extends Controller
 
             SyncUserAccountJob::dispatch($object);
 
-			DB::commit();
+            DB::commit();
             $data = [
                 'account_name' => $request->account_name,
                 'password' => $request->password,
@@ -240,9 +241,9 @@ class ClientRegisterController extends Controller
 
             SyncUserAccountJob::dispatch($object);
 
-			DB::commit();
-			return $this->responseSuccess('Cập nhật thành công');
-		} catch (Exception $e) {
+            DB::commit();
+            return $this->responseSuccess('Cập nhật thành công');
+        } catch (Exception $e) {
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
@@ -331,7 +332,7 @@ class ClientRegisterController extends Controller
         SyncUserAccountJob::dispatch($user);
 
         Mail::to($user->email)->send(new RecoverPassword($user, $new_password));
-        // Mail::to('nguyentienvu4897@gmail.com')->send(new RecoverPassword($user, $new_password));
+        // Mail::to('vudev4897@gmail.com')->send(new RecoverPassword($user, $new_password));
 
         return $this->responseSuccess('Đã gửi thông tin lấy lại mật khẩu, vui lòng kiểm tra email');
     }
@@ -405,7 +406,8 @@ class ClientRegisterController extends Controller
             ->make(true);
     }
 
-    public function userRevenue(Request $request) {
+    public function userRevenue(Request $request)
+    {
         $user = Auth::guard('client')->user();
         $request_user = User::where('email', $request->mail)->first();
         $request_user_id = $request_user ? $request_user->id : $user->id;
@@ -481,7 +483,7 @@ class ClientRegisterController extends Controller
         $currentUser = Auth::guard('client')->user();
         // gửi mail thông báo rút tiền cho admin
         $users = User::query()->where('type', 1)->where('status', 1)->get();
-        // Mail::to('nguyentienvu4897@gmail.com')->send(new WithdrawMoney($currentUser, $request->all()));
+        // Mail::to('vudev4897@gmail.com')->send(new WithdrawMoney($currentUser, $request->all()));
 
 
         if ($users->count()) {
@@ -647,25 +649,29 @@ class ClientRegisterController extends Controller
     }
 
     // seller
-    public function seller() {
+    public function seller()
+    {
         if (\Auth::guard('admin')->check() && \Auth::guard('admin')->user()->is_seller) return redirect()->route('index');
         $display = 'login';
         return view('site.seller.seller_register', compact('display'));
     }
 
-    public function sellerRegister() {
+    public function sellerRegister()
+    {
         $display = 'register';
         return view('site.seller.seller_register', compact('display'));
     }
 
-    public function sellerRegisterSubmit(Request $request) {
+    public function sellerRegisterSubmit(Request $request)
+    {
         $rule = [
-			'shop_name' => 'required',
-			'email' => 'required|email|unique:users,email',
-			'account_name' => 'required|unique:users,account_name',
-			'password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
+            'shop_name' => 'nullable',
+            'campaign_id' => 'required',
+            'email' => 'required|email|unique:users,email',
+            'account_name' => 'required|unique:users,account_name',
+            'password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
             'agree_terms' => 'required|in:1',
-		];
+        ];
         if (isset($request->use_account_client) && $request->use_account_client) {
             $rule['email'] = [
                 'required',
@@ -678,24 +684,24 @@ class ClientRegisterController extends Controller
             $rule['password'] = 'nullable|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/';
         }
 
-		$validate = Validator::make(
-			$request->all(),
-			$rule,
+        $validate = Validator::make(
+            $request->all(),
+            $rule,
             [
                 'password.regex' => 'Mật khẩu không đúng định dạng',
                 'email.unique' => 'Email đã được sử dụng',
                 'account_name.unique' => 'Tên đăng nhập đã được sử dụng',
                 'email.exists' => 'Email không chính xác',
                 'account_name.exists' => 'Tên đăng nhập không chính xác',
-                'shop_name.required' => 'Vui lòng chọn sàn TMĐT',
+                'campaign_id.required' => 'Vui lòng chọn sàn TMĐT',
                 'agree_terms.required' => 'Bạn phải đồng ý với các điều khoản và điều kiện',
                 'agree_terms.in' => 'Bạn phải đồng ý với các điều khoản và điều kiện',
             ]
-		);
+        );
 
-		if ($validate->fails()) {
-			return $this->responseErrors("Thao tác thất bại", $validate->errors());
-		}
+        if ($validate->fails()) {
+            return $this->responseErrors("Thao tác thất bại", $validate->errors());
+        }
 
         $existing_seller = SellerRequest::where('email', $request->email)->where('status', SellerRequest::STATUS_PENDING)->first();
         if ($existing_seller) {
@@ -703,35 +709,37 @@ class ClientRegisterController extends Controller
         }
 
         DB::beginTransaction();
-		try {
+        try {
             $user = User::query()->where('email', $request->email)->first();
             $request->merge(['user_id' => $user ? $user->id : null]);
-			$object = new SellerRequest();
-			$object->fill($request->all());
-			$object->save();
+            $object = new SellerRequest();
+            $object->fill($request->all());
+            $object->save();
 
-			DB::commit();
+            DB::commit();
 
-            Mail::to('nguyentienvu4897@gmail.com')->send(new SellerRequestMail($object));
-            // $users = User::query()->where('type', 1)->where('status', 1)->get();
+            // Mail::to('vudev4897@gmail.com')->send(new SellerRequestMail($object));
+            $users = User::query()->where('type', 1)->where('status', 1)->get();
 
-            // if($users->count()) {
-            //     foreach ($users as $user) {
-            //         Mail::to($user->email)->send(new SellerRequestMail($object));
-            //     }
-            // }
+            if($users->count()) {
+                foreach ($users as $user) {
+                    Mail::to($user->email)->send(new SellerRequestMail($object));
+                }
+            }
             return $this->responseSuccess('Gửi đăng ký thành công!');
-		} catch (Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             throw new Exception($e->getMessage());
         }
     }
 
-    public function sellerRegisterNotice() {
+    public function sellerRegisterNotice()
+    {
         return view('site.seller.seller_register_notice');
     }
 
-    public function sellerApprove($id) {
+    public function sellerApprove($id)
+    {
         $object = SellerRequest::find($id);
         if (!$object) {
             return $this->responseErrors("Thao tác thất bại", "Yêu cầu đăng ký không tồn tại");
@@ -747,33 +755,42 @@ class ClientRegisterController extends Controller
 
         if (!$object->use_account_client) {
             $user = new User();
-            $user->name = $object->shop_name;
-			$user->email = $object->email;
+            $user->name = $object->account_name;
+            $user->email = $object->email;
             $user->account_name = $object->account_name;
             $user->password = bcrypt($object->password);
-            $user->type = 20;
+            $user->type = User::CONG_TAC_VIEN;
             $user->status = 1;
             $user->save();
         } else {
             $user = User::query()->where('id', $object->user_id)->first();
-            $user->type = 20;
+            $user->type = User::CONG_TAC_VIEN;
             $user->save();
         }
 
-        $seller_store = new SellerStore();
-        $seller_store->user_id = $user->id;
-        $seller_store->shop_name = $object->shop_name;
-        $seller_store->email = $object->email;
-        $seller_store->status = SellerStore::STATUS_ACTIVE;
-        $seller_store->save();
+        $user->ctv_code = '#CTV-' . generateCode(6, $user->id);
+        $user->save();
 
-        Mail::to('nguyentienvu4897@gmail.com')->send(new SellerRequestSuccessMail($object));
-        // Mail::to($user->email)->send(new SellerRequestSuccessMail($object));
+        if (empty($object->user_id)) {
+            $object->user_id = $user->id;
+            $object->save();
+        }
+
+        // $seller_store = new SellerStore();
+        // $seller_store->user_id = $user->id;
+        // $seller_store->shop_name = $object->shop_name;
+        // $seller_store->email = $object->email;
+        // $seller_store->status = SellerStore::STATUS_ACTIVE;
+        // $seller_store->save();
+
+        // Mail::to('vudev4897@gmail.com')->send(new SellerRequestSuccessMail($object, $user));
+        Mail::to($user->email)->send(new SellerRequestSuccessMail($object, $user));
 
         return $this->responseSuccess('Đã duyệt đăng ký!');
     }
 
-    public function sellerLoginSubmit(Request $request) {
+    public function sellerLoginSubmit(Request $request)
+    {
         $validate = Validator::make(
             $request->all(),
             [
@@ -796,7 +813,7 @@ class ClientRegisterController extends Controller
             $field    => $request->login_email,
             'password' => $request->login_password,
             'status'   => 1,
-            'type'     => [20]
+            'type'     => [User::CONG_TAC_VIEN]
         ];
 
         if (Auth::guard('admin')->attempt($loginConditions, $remember)) {

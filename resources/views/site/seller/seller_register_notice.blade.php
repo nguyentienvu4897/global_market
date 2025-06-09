@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Thông báo đăng kí bán hàng</title>
+    <title>Thông báo đăng ký cộng tác viên </title>
     <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
 </head>
 
@@ -13,15 +13,15 @@
                 <i class="fa fa-check-circle" style="font-size: 40px; color: #008000;"></i>
             </div>
             <h1>Thông báo</h1>
-            <span style="margin-bottom: 20px; font-size: 16px;">Gửi đăng kí thành công, vui lòng chờ duyệt để tiếp tục bán hàng trên website. Cảm ơn bạn đã đăng kí!</span>
+            <span style="margin-bottom: 20px; font-size: 16px;">Gửi đăng ký thành công, vui lòng chờ duyệt để tiếp tục cộng tác. Cảm ơn bạn đã đăng ký!</span>
             <a class="btn" href="{{route('front.home-page')}}">Trang chủ</a>
         </form>
     </div>
     <div class="overlay-container">
         <div class="overlay">
             <div class="overlay-panel overlay-right">
-                <h1>Trở thành người bán hàng ngay hôm nay</h1>
-                <p>Để tiếp tục bán hàng trên website, vui lòng đăng nhập bằng thông tin cá nhân của bạn</p>
+                <h1>Trở thành cộng tác viên ngay hôm nay</h1>
+                <p>Để tiếp tục cộng tác trên website, vui lòng đăng nhập bằng thông tin cộng tác viên của bạn</p>
                 <a class="btn ghost" href="{{route('front.seller-login')}}">Đăng nhập</a>
             </div>
         </div>

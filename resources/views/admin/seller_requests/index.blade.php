@@ -4,11 +4,11 @@
 @endsection
 
 @section('page_title')
-Quản lý yêu cầu đăng kí bán hàng
+Quản lý yêu cầu đăng ký cộng tác viên
 @endsection
 
 @section('title')
-    Quản lý yêu cầu đăng kí bán hàng
+    Quản lý yêu cầu đăng ký cộng tác viên
 @endsection
 
 @section('buttons')
@@ -41,18 +41,18 @@ Quản lý yêu cầu đăng kí bán hàng
         },
         columns: [
             {data: 'DT_RowIndex', orderable: false, title: "STT", className: "text-center"},
-            {data: 'shop_name', title: 'Tên shop'},
+            {data: 'campaign', title: 'Sàn TMĐT'},
             {data: 'email', title: 'Email'},
             {data: 'status', title: 'Trạng thái'},
-            {data: 'created_at', title: 'Ngày tạo'},
+            {data: 'created_at', title: 'Ngày yêu cầu'},
             {data: 'approved_by', title: 'Người duyệt'},
             {data: 'approved_at', title: 'Ngày duyệt'},
             {data: 'action', orderable: false, title: "Hành động"}
         ],
         search_columns: [
-            {data: 'shop_name', search_type: "text", placeholder: "nhập tên shop"},
-            {data: 'email', search_type: "text", placeholder: "nhập email"},
-            {data: 'status', search_type: "select", placeholder: "chọn trạng thái", options: {
+            {data: 'campaign_id', search_type: "select", placeholder: "Chọn sàn TMĐT", column_data: @json(App\Model\Admin\AffiliateLinkRequest::CAMPAIGNS)},
+            {data: 'email', search_type: "text", placeholder: "Nhập email"},
+            {data: 'status', search_type: "select", placeholder: "Chọn trạng thái", options: {
                 '0': 'Chưa duyệt',
                 '1': 'Đã duyệt',
                 '2': 'Từ chối',

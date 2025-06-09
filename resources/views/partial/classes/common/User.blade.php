@@ -24,6 +24,9 @@
 
         get submit_data() {
             let data = {
+                type: this.type,
+                ctv_code: this.ctv_code,
+                ctv_payment_date: this.ctv_payment_date,
                 name: this.name,
                 email: this.email,
                 account_name: this.account_name,

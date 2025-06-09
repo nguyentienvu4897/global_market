@@ -310,15 +310,13 @@
                 </div>
 
                 <div class="form-group">
-                    <select class="form-control" ng-model="shop_name" ng-change="changeShopName()">
+                    <select class="form-control" ng-model="campaign_id">
                         <option value="">Chọn sàn TMĐT</option>
-                        <option value="shopee">Shopee</option>
-                        <option value="lazada">Lazada</option>
-                        <option value="tiktok">Tiktok</option>
+                        <option ng-repeat="campaign in campaigns" value="<% campaign.id %>"><% campaign.name %></option>
                     </select>
                     <span class="invalid-feedback d-block error" style="text-align: left;" role="alert"
-                        ng-if="errors && errors['shop_name']">
-                        <% errors['shop_name'][0] %>
+                        ng-if="errors && errors['campaign_id']">
+                        <% errors['campaign_id'][0] %>
                     </span>
                 </div>
                 <div class="form-group">
@@ -430,6 +428,7 @@
 
         app.controller('SellerRegisterController', function($scope) {
             $scope.display = @json($display) ?? '';
+            $scope.campaigns =  @json(\App\Model\Admin\AffiliateLinkRequest::CAMPAIGNS);
             $scope.use_account_client = false;
             $scope.errors = {};
 
@@ -486,7 +485,8 @@
             $scope.registerSeller = function() {
                 let data = {
                     use_account_client: $scope.use_account_client ? 1 : 0,
-                    shop_name: $scope.shop_name,
+                    shop_name: $scope.campaigns.find(campaign => campaign.id == $scope.campaign_id).name,
+                    campaign_id: $scope.campaign_id,
                     email: $scope.email,
                     account_name: $scope.account_name,
                     password: $scope.password,

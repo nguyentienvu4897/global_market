@@ -13,14 +13,16 @@ class SellerRequestSuccessMail extends Mailable
     use Queueable, SerializesModels;
 
     protected $data;
+    protected $user;
 
     /**
      * @param $user
      * @param $data
      */
-    public function __construct($data)
+    public function __construct($data, $user)
     {
         $this->data = $data;
+        $this->user = $user;
     }
 
     /**
@@ -30,8 +32,8 @@ class SellerRequestSuccessMail extends Mailable
      */
     public function build()
     {
-        $title = 'Thông báo đăng ký bán hàng thành công';
+        $title = 'Thông báo đăng ký cộng tác viên thành công';
 
-        return $this->subject($title)->view('site.mails.seller-request-success', ['data' => $this->data]);
+        return $this->subject($title)->view('site.mails.seller-request-success', ['data' => $this->data, 'user' => $this->user]);
     }
 }

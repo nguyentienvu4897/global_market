@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Services;
 
 use Illuminate\Support\Facades\Cache;
@@ -6,6 +7,7 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\OtpMail;
 use Carbon\Carbon;
 use App\Http\Traits\ResponseTrait;
+
 class OtpService
 {
     use ResponseTrait;
@@ -34,7 +36,7 @@ class OtpService
 
         // Gửi email OTP
         Mail::to($user->email)->send(new OtpMail($otp));
-        // Mail::to('nguyentienvu4897@gmail.com')->send(new OtpMail($otp));
+        // Mail::to('vudev4897@gmail.com')->send(new OtpMail($otp));
 
         return $this->responseSuccess('OTP đã được gửi qua email!');
     }

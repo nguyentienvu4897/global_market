@@ -219,7 +219,7 @@
                 <div class="col-md-10">
                     <div class="create-user-link-section-list">
                         <div class="create-user-link-section-item" ng-repeat="(index, item) in arrGenerateLink">
-                            {{-- <div class="marchant-name">
+                            <div class="marchant-name">
                                 <select class="form-control" ng-model="item.campaign_id"
                                     ng-options="campaign.id as campaign.name for campaign in campaigns">
                                     <option value="">Chọn chiến dịch</option>
@@ -229,7 +229,7 @@
                                         <% errors['arrGenerateLink.' + index + '.campaign_id'][0] %>
                                     </span>
                                 </div>
-                            </div> --}}
+                            </div>
                             <div class="form-group">
                                 <input type="text" class="form-control" id="name" name="name"
                                     placeholder="Gắn link sản phẩm ở đây" ng-model="item.url_origin">
@@ -495,23 +495,7 @@
         $scope.loading = false;
         $scope.errors = {};
         $scope.canGenerateLink = @json(Auth::guard('client')->check());
-        $scope.campaigns = [{
-                id: 1,
-                name: 'Shopee'
-            },
-            {
-                id: 2,
-                name: 'Tiki'
-            },
-            {
-                id: 3,
-                name: 'Lazada'
-            },
-            {
-                id: 4,
-                name: 'Sendo'
-            }
-        ];
+        $scope.campaigns = @json(App\Model\Admin\AffiliateLinkRequest::CAMPAIGNS);
         $scope.arrGenerateLink = [
             {
                 campaign_id: 1,

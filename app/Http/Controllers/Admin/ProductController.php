@@ -450,4 +450,30 @@ class ProductController extends Controller
             return Response::json($json);
         }
     }
+
+    public function searchProductAjax(Request $request)
+    {
+        $ids = $request->input('ids');
+        if (is_string($ids)) {
+            $ids = json_decode($ids, true);
+        }
+        $products = Product::query()->where('status', 1)->select('id', 'name');
+        if (!Auth::guard('admin')->user()->is_ctv) {
+
+        } else {
+            $products = $products->where('created_by', Auth::guard('admin')->user()->id);
+        }
+        if (!empty($request->keyword)) {
+            $products = $products->where('name', 'like', '%' . $request->keyword . '%');
+        }
+        if (!empty($ids)) {
+            $products = $products->whereIn('id', $ids);
+        }
+        if (empty($ids) && empty($request->keyword)) {
+            $products = $products->limit(10);
+        }
+        return $products->get()->map(function ($item) {
+            return ['id' => $item->id, 'name' => $item->name];
+        });
+    }
 }

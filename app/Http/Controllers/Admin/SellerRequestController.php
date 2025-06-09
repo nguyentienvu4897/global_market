@@ -11,6 +11,7 @@ use App\Model\Common\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SellerRequestSuccessMail;
+use App\Model\Admin\AffiliateLinkRequest;
 
 class SellerRequestController extends Controller
 {
@@ -38,6 +39,12 @@ class SellerRequestController extends Controller
             ->editColumn('approved_at', function ($object) {
                 return formatDate($object->approved_at);
             })
+            ->editColumn('campaign', function ($object) {
+                $obj = array_find_el(AffiliateLinkRequest::CAMPAIGNS, function ($el) use ($object) {
+                    return $el['id'] == $object->campaign_id;
+                });
+                return $obj ? $obj['name'] : '';
+            })
             ->addColumn('action', function ($object) {
                 $result = '<div class="btn-group btn-action">
                 <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -46,8 +53,6 @@ class SellerRequestController extends Controller
                 <div class="dropdown-menu">';
                 if ($object->canApprove()) {
                     $result = $result . ' <a href="'. route($this->route.'.approve', $object->id) .'" title="Duyệt" class="dropdown-item approve"><i class="fa fa-angle-right"></i>Duyệt</a>';
-                }
-                if ($object->canReject()) {
                     $result = $result . ' <a href="'. route($this->route.'.reject', $object->id) .'" title="Từ chối" class="dropdown-item reject"><i class="fa fa-angle-right"></i>Từ chối</a>';
                 }
 
@@ -55,7 +60,7 @@ class SellerRequestController extends Controller
                 return $result;
             })
             ->addIndexColumn()
-            ->rawColumns(['action'])
+            ->rawColumns(['action', 'status'])
             ->make(true);
     }
 
@@ -73,6 +78,10 @@ class SellerRequestController extends Controller
     public function approve(Request $request)
     {
         $sellerRequest = SellerRequest::find($request->id);
+        if (!$sellerRequest->canApprove()) {
+            return redirect()->route($this->route . '.index')->with('error', 'Bạn không có quyền duyệt yêu cầu này');
+        }
+
         $sellerRequest->status = SellerRequest::STATUS_APPROVED;
         $sellerRequest->approved_by = Auth::guard('admin')->user()->id;
         $sellerRequest->approved_at = now();
@@ -80,27 +89,35 @@ class SellerRequestController extends Controller
 
         if (!$sellerRequest->use_account_client) {
             $user = new User();
-            $user->name = $sellerRequest->shop_name;
+            $user->name = $sellerRequest->account_name;
 			$user->email = $sellerRequest->email;
             $user->account_name = $sellerRequest->account_name;
             $user->password = bcrypt($sellerRequest->password);
-            $user->type = 20;
+            $user->type = User::CONG_TAC_VIEN;
             $user->status = 1;
             $user->save();
         } else {
             $user = User::query()->where('id', $sellerRequest->user_id)->first();
-            $user->type = 20;
+            $user->type = User::CONG_TAC_VIEN;
             $user->save();
         }
 
-        $seller_store = new SellerStore();
-        $seller_store->user_id = $user->id;
-        $seller_store->shop_name = $sellerRequest->shop_name;
-        $seller_store->email = $sellerRequest->email;
-        $seller_store->status = SellerStore::STATUS_ACTIVE;
-        $seller_store->save();
+        $user->ctv_code = '#CTV-' . generateCode(6, $user->id);
+        $user->save();
 
-        Mail::to($user->email)->send(new SellerRequestSuccessMail($sellerRequest));
+        if (empty($sellerRequest->user_id)) {
+            $sellerRequest->user_id = $user->id;
+            $sellerRequest->save();
+        }
+
+        // $seller_store = new SellerStore();
+        // $seller_store->user_id = $user->id;
+        // $seller_store->shop_name = $sellerRequest->shop_name;
+        // $seller_store->email = $sellerRequest->email;
+        // $seller_store->status = SellerStore::STATUS_ACTIVE;
+        // $seller_store->save();
+
+        Mail::to($user->email)->send(new SellerRequestSuccessMail($sellerRequest, $user));
 
         $message = array(
             "message" => "Duyệt yêu cầu thành công!",
@@ -113,6 +130,10 @@ class SellerRequestController extends Controller
     public function reject(Request $request)
     {
         $sellerRequest = SellerRequest::find($request->id);
+        if (!$sellerRequest->canApprove()) {
+            return redirect()->route($this->route . '.index')->with('error', 'Bạn không có quyền từ chối yêu cầu này');
+        }
+
         $sellerRequest->status = SellerRequest::STATUS_REJECTED;
         $sellerRequest->approved_by = Auth::guard('admin')->user()->id;
         $sellerRequest->approved_at = now();

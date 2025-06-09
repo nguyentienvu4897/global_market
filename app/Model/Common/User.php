@@ -3,6 +3,7 @@
 namespace App\Model\Common;
 
 use App\Model\Admin\OrderRevenueDetail;
+use App\Model\Admin\SellerRequest;
 use App\Model\G7\ReceiptVoucher;
 use App\Model\Uptek\G7Info;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -22,6 +23,7 @@ class User extends Authenticatable implements JWTSubject
     public const QUAN_TRI_VIEN = 2;
     public const KHACH_HANG = 10;
     public const NGUOI_BAN_HANG = 20;
+    public const CONG_TAC_VIEN = 30;
 
     public const USER_TYPES = [
         [
@@ -39,6 +41,10 @@ class User extends Authenticatable implements JWTSubject
         [
             'id' => 20,
             'name' => 'Người bán hàng',
+        ],
+        [
+            'id' => 30,
+            'name' => 'Cộng tác viên',
         ],
     ];
 
@@ -164,6 +170,11 @@ class User extends Authenticatable implements JWTSubject
         return $this->belongsTo('App\Model\Common\User', 'parent_id', 'id');
     }
 
+    public function sellerRequests()
+    {
+        return $this->hasMany(SellerRequest::class, 'user_id', 'id');
+    }
+
     public function image()
     {
         return $this->morphOne(File::class, 'model');
@@ -195,6 +206,10 @@ class User extends Authenticatable implements JWTSubject
 
     public function getIsSellerAttribute() {
         return $this->type == self::NGUOI_BAN_HANG;
+    }
+
+    public function getIsCtvAttribute() {
+        return $this->type == self::CONG_TAC_VIEN;
     }
 
     public function getAccessTypes() {

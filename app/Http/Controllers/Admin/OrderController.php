@@ -42,6 +42,9 @@ class OrderController extends Controller
             ->addColumn('total_price', function ($object) {
                 return number_format($object->total_price);
             })
+            ->addColumn('aff_total_revenue', function ($object) {
+                return number_format($object->aff_total_revenue);
+            })
             ->editColumn('code', function ($object) {
                 return '<a href = "'.route('orders.show', $object->id).'" title = "Xem chi tiết">' . $object->code . '</a>';
             })

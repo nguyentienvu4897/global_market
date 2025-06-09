@@ -4,6 +4,7 @@ namespace App\Model\Admin;
 
 use App\Model\Common\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class AffiliateLinkRequest extends Model
 {
@@ -61,8 +62,20 @@ class AffiliateLinkRequest extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    public function approvedBy() {
+        return $this->belongsTo(User::class, 'approved_by');
+    }
+
     public static function searchByFilter($request) {
         $objects = AffiliateLinkRequest::query();
+        if (!Auth::guard('admin')->user()->is_ctv && !Auth::guard('admin')->user()->is_seller) {
+        } else {
+            if (Auth::guard('admin')->user()->is_ctv) {
+                $user = User::where('id', Auth::guard('admin')->user()->id)->first();
+                $campaign_ids = $user->sellerRequests->pluck('campaign_id')->toArray();
+                $objects->whereIn('campaign_id', $campaign_ids);
+            }
+        }
         if (!empty($request->status)) {
             $objects->where('status', $request->status);
         }
@@ -74,5 +87,19 @@ class AffiliateLinkRequest extends Model
         }
         $objects->orderBy('created_at', 'desc');
         return $objects;
+    }
+
+    public function canChangeStatus() {
+        if (Auth::guard('admin')->user()->is_super_admin) return true;
+        if ($this->status == self::STATUS_NEW && Auth::guard('admin')->user()->is_admin) return true;
+        if ($this->status == self::STATUS_NEW && Auth::guard('admin')->user()->canDo('Cập nhật trạng thái yêu cầu affiliate link')) return true;
+        return false;
+    }
+
+    public function canSendEmail() {
+        if (Auth::guard('admin')->user()->is_super_admin) return true;
+        if ($this->status == self::STATUS_NEW && Auth::guard('admin')->user()->is_admin) return true;
+        if ($this->status == self::STATUS_NEW && Auth::guard('admin')->user()->canDo('Gửi email xác nhận yêu cầu affiliate link')) return true;
+        return false;
     }
 }

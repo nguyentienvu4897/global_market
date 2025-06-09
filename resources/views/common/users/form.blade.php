@@ -6,6 +6,30 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    <div class="col-md-6" ng-if="form.type == 30">
+                        <div class="form-group">
+                            <label class="form-label">ID CTV</label>
+                            <span class="text-danger">(*)</span>
+                            <input class="form-control" type="text" ng-model="form.ctv_code" disabled>
+                            <span class="invalid-feedback d-block" role="alert">
+                                <strong><% errors.ctv_code[0] %></strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-md-6" ng-if="form.type == 30">
+                        <div class="form-group">
+                            <label class="form-label">Ngày thanh toán cho sàn (hàng tháng)</label>
+                            <span class="text-danger">(*)</span>
+                            <select class="form-control" ng-model="form.ctv_payment_date">
+                                @for ($i = 1; $i <= 28; $i++)
+                                    <option value="{{ $i }}" ng-selected="form.ctv_payment_date == {{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                            <span class="invalid-feedback d-block" role="alert">
+                                <strong><% errors.ctv_payment_date[0] %></strong>
+                            </span>
+                        </div>
+                    </div>
                     <div class="col-md-6">
                         <div class="form-group">
                             <label class="form-label">Tên</label>
@@ -73,7 +97,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label class="form-label">Mật khẩu</label>
+                            <label class="form-label">Đổi mật khẩu</label>
                             <span class="text-danger">(*)</span>
                             <div class="input-group mb-0">
                                 <input class="form-control" type="password" ng-model="form.password">
@@ -107,7 +131,7 @@
             </div>
         </div>
 
-        @if (!Auth::guard('admin')->user()->is_seller)
+        @if (!Auth::guard('admin')->user()->is_seller && !Auth::guard('admin')->user()->is_ctv)
             <div class="card">
                 <div class="card-header d-flex align-items-center">
                     <h6 class="mb-0">Chọn chức vụ</h6>
@@ -153,7 +177,7 @@
                 </span>
             </div>
         </div>
-        @if (!Auth::guard('admin')->user()->is_seller)
+        @if (!Auth::guard('admin')->user()->is_seller && !Auth::guard('admin')->user()->is_ctv)
             <div class="card">
                 <div class="card-header">
                     <h6>Thông tin khác</h6>

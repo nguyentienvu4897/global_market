@@ -94,6 +94,7 @@ Quản lý đơn hàng
             {data: 'customer_name', title: 'Tên khách hàng'},
             {data: 'customer_phone', title: 'SĐT khách hàng'},
             {data: 'total_price', title: 'Tổng tiền'},
+            {data: 'aff_total_revenue', title: 'Tổng hoa hồng'},
             {
                 data: 'status',
                 title: "Trạng thái",

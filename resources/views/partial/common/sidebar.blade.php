@@ -19,7 +19,7 @@
             @endif
         </div>
     </div>
-    @if (!Auth::guard('admin')->user()->is_seller)
+    @if (!Auth::guard('admin')->user()->is_seller && !Auth::guard('admin')->user()->is_ctv)
     <!-- Sidebar Menu -->
     <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column nav-legacy nav-flat" data-widget="treeview" role="menu" data-accordion="false">
@@ -247,15 +247,6 @@
                     </p>
                 </a>
             </li>
-            <li class="nav-item has-treeview">
-                <a href="{{route('seller_requests.index')}}" class="nav-link {{ request()->is('seller_requests') || request()->is('seller_requests/*') ? 'active' : '' }}">
-                    <i class="nav-icon fa fa-user-plus"></i>
-
-                    <p>
-                        Yêu cầu đăng ký cộng tác viên
-                    </p>
-                </a>
-            </li>
 
             {{-- <li class="nav-item has-treeview  {{ request()->is('admin/blocks') || request()->is('admin/blocks/*') ? 'menu-open' : '' }} ">
                 <a href="#" class="nav-link">
@@ -468,7 +459,7 @@
                 </ul>
             </li>
             <li class="nav-item has-treeview">
-                <a href="#" class="nav-link">
+                <a href="#" class="nav-link {{ request()->is('admin/seller-requests') || request()->is('admin/seller-requests/*') || request()->is('admin/users') || request()->is('admin/users/*') ? 'active' : '' }}">
                     <i class="nav-icon far fa-user"></i>
                     <p>
                         Người dùng
@@ -478,7 +469,7 @@
                 <ul class="nav nav-treeview">
 
                     <li class="nav-item">
-                        <a href="{{ route('User.index') }}" class="nav-link">
+                        <a href="{{ route('User.index') }}" class="nav-link {{ Request::routeIs('User.index') ? 'active' : '' }}">
                             <i class="far fas  fa-angle-right nav-icon"></i>
                             <p>Tài khoản</p>
                         </a>
@@ -498,6 +489,12 @@
                         </a>
                     </li>
                     @endif
+                    <li class="nav-item">
+                        <a href="{{ route('seller-requests.index') }}" class="nav-link {{ Request::routeIs('seller-requests.index') ? 'active' : '' }}">
+                            <i class="far fas  fa-angle-right nav-icon"></i>
+                            <p>Yêu cầu đăng ký cộng tác viên</p>
+                        </a>
+                    </li>
                 </ul>
             </li>
 
@@ -560,30 +557,47 @@
                             <p>Thêm mới hàng hóa</p>
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a href="{{ route('product_rates.index') }}" class="nav-link {{ Request::routeIs('product_rates.index') ? 'active' : '' }}">
                             <i class="far fas  fa-angle-right nav-icon"></i>
                             <p>Đánh giá sản phẩm</p>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
 
             <li class="nav-item has-treeview">
-                <a href="{{route('vouchers.index')}}" class="nav-link {{ Request::routeIs('vouchers.index') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-tag"></i>
+                <a href="{{route('orders.index')}}" class="nav-link {{ request()->is('orders') || request()->is('orders/*') ? 'active' : '' }}">
+                    <i class="nav-icon fa fa-file-invoice-dollar"></i>
+
                     <p>
-                        Danh mục mã giảm giá
+                        Quản lý đơn hàng
                     </p>
                 </a>
             </li>
 
             <li class="nav-item has-treeview">
+                <a href="{{route('affiliate-link-requests.index')}}" class="nav-link {{ request()->is('affiliate-link-requests') || request()->is('affiliate-link-requests/*') ? 'active' : '' }}">
+                    <i class="nav-icon fa fa-link"></i>
+
+                    <p>
+                        Yêu cầu affiliate link
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->is('admin/users') ? 'active' : '' }}">
+                <a href="{{ route('User.editProfile', Auth::guard('admin')->user()->id) }}" class="nav-link {{ Request::routeIs('User.editProfile') ? 'active' : '' }}">
+                    <i class="nav-icon far fa-user"></i>
+                    <p>Thông tin cá nhân</p>
+                </a>
+            </li>
+
+            {{-- <li class="nav-item has-treeview">
                 <a href="{{ route('seller-stores.index') }}" class="nav-link {{ Request::routeIs('seller-stores.index') ? 'active' : '' }}">
                     <i class="nav-icon fas fa-store"></i>
                     <p>Shop bán hàng</p>
                 </a>
-            </li>
+            </li> --}}
         </ul>
     </nav>
     @endif

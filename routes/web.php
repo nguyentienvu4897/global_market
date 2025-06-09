@@ -56,6 +56,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/exportExcel', 'Admin\ProductController@exportExcel')->name('Product.exportExcel')->middleware('checkPermission:Xuất excel sản phẩm');
             Route::get('/exportPDF', 'Admin\ProductController@exportPDF')->name('Product.exportPDF')->middleware('checkPermission:Xuất pdf sản phẩm');
             Route::post('/add-category-special', 'Admin\ProductController@addToCategorySpecial')->name('Product.add.category.special');
+            Route::get('/search-product-ajax', 'Admin\ProductController@searchProductAjax')->name('Product.searchProductAjax');
 
             Route::get('/act-delete', 'Admin\ProductController@actDelete')->name('products.delete.multi');
             Route::post('/{id}/deleteFile', 'Admin\ProductController@deleteFile')->name('products.deleteFile');
@@ -96,10 +97,10 @@ Route::group(['prefix' => 'admin'], function () {
 
         // Cộng tác viên
         Route::group(['prefix' => 'seller_requests'], function () {
-            Route::get('/', 'Admin\SellerRequestController@index')->name('seller_requests.index');
+            Route::get('/', 'Admin\SellerRequestController@index')->name('seller_requests.index')->middleware('checkPermission:Quản lý đăng ký cộng tác viên');
             Route::get('/searchData', 'Admin\SellerRequestController@searchData')->name('seller_requests.searchData');
-            Route::get('/{id}/approve', 'Admin\SellerRequestController@approve')->name('seller_requests.approve');
-            Route::get('/{id}/reject', 'Admin\SellerRequestController@reject')->name('seller_requests.reject');
+            Route::get('/{id}/approve', 'Admin\SellerRequestController@approve')->name('seller_requests.approve')->middleware('checkPermission:Duyệt đăng ký cộng tác viên');
+            Route::get('/{id}/reject', 'Admin\SellerRequestController@reject')->name('seller_requests.reject')->middleware('checkPermission:Duyệt đăng ký cộng tác viên');
         });
 
         Route::group(['prefix' => 'apply-recruitments'], function () {
@@ -371,6 +372,7 @@ Route::group(['prefix' => 'admin'], function () {
             Route::get('/', 'Admin\AffiliateLinkRequestController@index')->name('affiliate-link-requests.index');
             Route::get('/searchData', 'Admin\AffiliateLinkRequestController@searchData')->name('affiliate-link-requests.searchData');
             Route::post('/update-status', 'Admin\AffiliateLinkRequestController@updateStatus')->name('affiliate-link-requests.update.status');
+            Route::get('/{id}/send-email', 'Admin\AffiliateLinkRequestController@sendEmail')->name('affiliate-link-requests.send-email');
         });
 
         // quản lý yêu cầu seller
@@ -419,6 +421,10 @@ Route::group(['prefix' => 'admin'], function () {
                 Route::get('/exportPdf', 'Common\UserController@exportPDF')->name('User.exportPDF');
             });
 
+            Route::group(['prefix' => 'users', 'middleware' => 'checkType:'.User::KHACH_HANG . ',' . User::CONG_TAC_VIEN], function () {
+                Route::get('/{id}/edit_profile', 'Common\UserController@editProfile')->name('User.editProfile');
+                Route::post('/{id}/update', 'Common\UserController@update')->name('User.update');
+            });
 
             Route::group(['prefix' => 'notifications'], function () {
                 Route::get('/', 'Common\NotificationsController@index')->name('Notification.index');

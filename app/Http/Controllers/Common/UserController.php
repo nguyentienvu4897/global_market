@@ -128,7 +128,9 @@ class UserController extends Controller
 
             $object->save();
 
-            $object->roles()->sync([3]);
+            if ($request->roles) {
+                $object->roles()->sync($request->roles);
+            }
 
             FileHelper::uploadFile($request->image, 'users', $object->id, ThisModel::class, 'image');
 
@@ -151,6 +153,7 @@ class UserController extends Controller
             'password' => 'nullable|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
 			'password_confirm' => 'required_with:password|same:password',
 			'status' => 'required|in:0,1',
+			'ctv_payment_date' => 'required_if:type,30|integer',
 //			'roles' => 'required|array|min:1',
 //			'roles.*' => 'required|exists:roles,id'
 		];
@@ -173,9 +176,15 @@ class UserController extends Controller
 			if ($request->password != null) $object->password = bcrypt($request->password);
 			$object->status = $request->status;
 			$object->phone_number = $request->phone_number;
+			$object->ctv_code = $request->ctv_code;
+			$object->ctv_payment_date = $request->ctv_payment_date;
 			$object->save();
 
-			$object->roles()->sync([3]);
+            if ($request->roles) {
+                $object->roles()->sync($request->roles);
+            } else {
+                $object->roles()->sync([]);
+            }
 
 			if($request->image) {
 				FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
@@ -280,4 +289,13 @@ class UserController extends Controller
             return $this->responseErrors($e->getMessage());
         }
     }
+
+    public function editProfile($id)
+	{
+        if (Auth::guard('admin')->user()->id != $id) {
+            return view('not_found');
+        }
+		$object = ThisModel::getDataForEdit($id);
+		return view($this->view.'.edit', compact(['object']));
+	}
 }
