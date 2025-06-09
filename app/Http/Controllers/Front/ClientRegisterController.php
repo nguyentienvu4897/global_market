@@ -771,6 +771,8 @@ class ClientRegisterController extends Controller
         $user->ctv_code = '#CTV-' . generateCode(6, $user->id);
         $user->save();
 
+        $user->roles()->sync([3]);
+
         if (empty($object->user_id)) {
             $object->user_id = $user->id;
             $object->save();
