@@ -25,6 +25,9 @@ class SyncUserAccountService
     public function sendSyncUserAccount($user)
     {
         try {
+            \Log::info('Sync user account: ' . $user);
+            \Log::info('Api token: ' . $this->apiToken);
+            \Log::info('Api url: ' . $this->apiUrl . '/api/sync-user-account');
             $response = $this->client->post($this->apiUrl . '/api/sync-user-account', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->apiToken,
