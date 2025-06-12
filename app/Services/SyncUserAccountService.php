@@ -24,10 +24,8 @@ class SyncUserAccountService
 
     public function sendSyncUserAccount($user)
     {
-        // try {
+        try {
             \Log::info('Sync user account: ' . $user);
-            \Log::info('Api token: ' . $this->apiToken);
-            \Log::info('Api url: ' . $this->apiUrl . '/api/sync-user-account');
             $response = $this->client->post($this->apiUrl . '/api/sync-user-account', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->apiToken,
@@ -56,10 +54,10 @@ class SyncUserAccountService
                 Notification::route('mail', 'vudev4897@gmail.com')
                     ->notify(new SyncUserAccountFailedNotification($user, $response->getBody()));
             }
-        // } catch (\Exception $e) {
-        //     \Log::error('Sync user failed: ' . $e->getMessage());
-        //     Notification::route('mail', 'vudev4897@gmail.com')
-        //         ->notify(new SyncUserAccountFailedNotification($user, $e->getMessage()));
-        // }
+        } catch (\Exception $e) {
+            \Log::error('Sync user failed: ' . $e->getMessage());
+            Notification::route('mail', 'vudev4897@gmail.com')
+                ->notify(new SyncUserAccountFailedNotification($user, $e->getMessage()));
+        }
     }
 }
