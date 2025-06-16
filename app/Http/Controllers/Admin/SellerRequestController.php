@@ -16,7 +16,7 @@ use App\Model\Admin\AffiliateLinkRequest;
 class SellerRequestController extends Controller
 {
     protected $view = 'admin.seller_requests';
-    protected $route = 'seller-requests';
+    protected $route = 'seller_requests';
 
     public function index()
     {
