@@ -68,8 +68,8 @@
 
         button {
             border-radius: 20px;
-            border: 1px solid #FF4B2B;
-            background-color: #FF4B2B;
+            border: 1px solid #0974ba;
+            background-color: #0974ba;
             color: #FFFFFF;
             font-size: 12px;
             font-weight: bold;
@@ -190,9 +190,9 @@
         }
 
         .overlay {
-            background: #FF416C;
-            background: -webkit-linear-gradient(to right, #FF4B2B, #FF416C);
-            background: linear-gradient(to right, #FF4B2B, #FF416C);
+            background: #0974ba;
+            background: -webkit-linear-gradient(to right, #0a629d, #0974ba);
+            background: linear-gradient(to right, #0a629d, #0974ba);
             background-repeat: no-repeat;
             background-size: cover;
             background-position: 0 0;
@@ -357,7 +357,7 @@
             </form>
         </div>
         <div class="form-container sign-in-container" id="sign-in">
-            <form id="form-sign-in">
+            <form id="form-sign-in" ng-show="!show_reset_password">
                 <h1>Đăng nhập</h1>
                 <span>Đăng nhập để tiếp tục tăng thu nhập</span>
                 <div class="form-group">
@@ -374,8 +374,21 @@
                         <% errors['login_password'][0] %>
                     </span>
                 </div>
-                <a href="#">Quên mật khẩu?</a>
+                <a href="javascript:void(0)" ng-click="showResetPassword()">Quên mật khẩu?</a>
                 <button ng-click="signInSeller()">Đăng nhập</button>
+            </form>
+            <form id="form-reset-password" ng-show="show_reset_password">
+                <h1>Quên mật khẩu</h1>
+                <span>Nhập email để lấy lại mật khẩu</span>
+                <div class="form-group">
+                    <input type="email" placeholder="Email" ng-model="reset_password_email" />
+                    <span class="invalid-feedback d-block error" style="text-align: left;" role="alert"
+                        ng-if="errors && errors['reset_password_email']">
+                        <% errors['reset_password_email'][0] %>
+                    </span>
+                </div>
+                <a href="javascript:void(0)" ng-click="showResetPassword()">Quay lại đăng nhập</a>
+                <button ng-click="resetPassword()">Lấy lại mật khẩu</button>
             </form>
         </div>
         <div class="overlay-container">
@@ -431,6 +444,11 @@
             $scope.campaigns =  @json(\App\Model\Admin\AffiliateLinkRequest::CAMPAIGNS);
             $scope.use_account_client = false;
             $scope.errors = {};
+            $scope.show_reset_password = false;
+
+            $scope.showResetPassword = function() {
+                $scope.show_reset_password = !$scope.show_reset_password;
+            };
 
             if ($scope.display == 'register') {
                 container.classList.add("right-panel-active");
@@ -485,7 +503,7 @@
             $scope.registerSeller = function() {
                 let data = {
                     use_account_client: $scope.use_account_client ? 1 : 0,
-                    shop_name: $scope.campaigns.find(campaign => campaign.id == $scope.campaign_id).name,
+                    shop_name: $scope.campaign_id ? $scope.campaigns.find(campaign => campaign.id == $scope.campaign_id).name : '',
                     campaign_id: $scope.campaign_id,
                     email: $scope.email,
                     account_name: $scope.account_name,
@@ -517,6 +535,34 @@
                     }
                 })
             };
+
+            $scope.resetPassword = function() {
+                $.ajax({
+                    url: '{{ route('front.recover-password-submit') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    data: {
+                        recover_email: $scope.reset_password_email
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            toastr.success(response.message);
+                            $scope.show_reset_password = false;
+                        } else {
+                            $scope.errors = response.errors;
+                            toastr.error(response.message);
+                        }
+                    },
+                    error: function(response) {
+                        console.log(response);
+                    },
+                    complete: function() {
+                        $scope.$applyAsync();
+                    }
+                })
+            }
         });
     </script>
 </body>

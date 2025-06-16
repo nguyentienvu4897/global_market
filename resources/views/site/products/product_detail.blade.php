@@ -463,18 +463,18 @@
                             </script> --}}
                             <div class="product-tab e-tabs not-dqtab">
                                 <ul class="tabs tabs-title clearfix">
-                                    <li class="tab-link active" data-tab="#tab-1">
+                                    <li class="tab-link active" data-tab="#tab-3" >
+                                        <h3>Mô tả sản phẩm</h3>
+                                    </li>
+                                    <li class="tab-link " data-tab="#tab-1">
                                         <h3>Chi tiết sản phẩm</h3>
                                     </li>
                                     {{-- <li class="tab-link" data-tab="#tab-2" >
                                         <h3>Đánh giá sản phẩm</h3>
                                     </li> --}}
-                                    <li class="tab-link" data-tab="#tab-3" >
-                                        <h3>Mô tả sản phẩm</h3>
-                                    </li>
                                 </ul>
                                 <div class="tab-float">
-                                    <div id="tab-1" class="tab-content active content_extab">
+                                    <div id="tab-1" class="tab-content content_extab">
                                         <div class="rte product_getcontent">
                                             {!! $product->body !!}
                                         </div>
@@ -484,7 +484,7 @@
                                             @include('site.partials.onireview')
                                         </div>
                                     </div> --}}
-                                    <div id="tab-3" class="tab-content content_extab">
+                                    <div id="tab-3" class="tab-content active content_extab">
                                         <div class="rte product_getcontent">
                                             {!! $product->intro !!}
                                         </div>

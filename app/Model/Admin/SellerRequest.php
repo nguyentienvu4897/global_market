@@ -4,6 +4,7 @@ namespace App\Model\Admin;
 
 use App\Model\Common\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class SellerRequest extends Model
 {

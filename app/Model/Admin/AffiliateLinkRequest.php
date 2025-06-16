@@ -54,7 +54,7 @@ class AffiliateLinkRequest extends Model
         ],
         [
             'id' => 4,
-            'name' => 'Sendo',
+            'name' => 'Tiktok',
         ],
     ];
 

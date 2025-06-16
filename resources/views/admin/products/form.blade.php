@@ -240,8 +240,8 @@
             </span>
         </div>
         <div class="form-group custom-group mb-4">
-            <label class="form-label">Hoa hồng (người mua hàng có thể nhận) / sản phẩm</label>
-            <input class="form-control " type="text" ng-model="form.revenue_price" disabled>
+            <label class="form-label">Hoa hồng (người mua hàng có thể nhận) / sản phẩm <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="top" title="Đối với CTV, đây là hoa hồng cần chi trả cho sàn khi phát sinh đơn hàng"></i></label>
+            <input class="form-control " type="text" ng-model="form.revenue_price">
             <span class="invalid-feedback d-block" role="alert">
                 <strong>
                     <% errors.revenue_price[0] %>

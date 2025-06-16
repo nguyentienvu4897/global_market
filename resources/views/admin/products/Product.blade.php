@@ -179,7 +179,11 @@
         }
 
         updateRevenuePrice() {
-            this._revenue_price = this._price * (this.revenue_percent_5 / 100);
+            if (this._price > 0) {
+                this._revenue_price = this._price * (this.revenue_percent_5 / 100);
+            } else {
+                this._revenue_price = 0;
+            }
         }
 
         changeOrigin() {

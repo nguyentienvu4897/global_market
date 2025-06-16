@@ -69,14 +69,14 @@ class ClientRegisterController extends Controller
             $field    => $request->account_name,
             'password' => $request->password,
             'status'   => 1,
-            'type'     => [10, 20]
+            'type'     => [10, 20, 30]
         ];
 
         // Thêm điều kiện email_verified_at nếu sau ngày 15/06/2025
         if (now()->greaterThan(Carbon::create(2025, 6, 15, 0, 0, 0))) { // 15/06/2025 00:00:00
             $user = User::where($field, $request->account_name)
                 ->where('status', 1)
-                ->where('type', 10)
+                ->whereIn('type', [10, 20, 30])
                 ->whereNotNull('email_verified_at')
                 ->first();
 
