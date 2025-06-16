@@ -703,6 +703,11 @@ class ClientRegisterController extends Controller
             return $this->responseErrors("Thao tác thất bại", $validate->errors());
         }
 
+        $existing_seller = SellerRequest::where('email', $request->email)->where('status', SellerRequest::STATUS_APPROVED)->first();
+        if ($existing_seller) {
+            return $this->responseErrors("Thao tác thất bại", "Email này đã trở thành cộng tác viên");
+        }
+
         $existing_seller = SellerRequest::where('email', $request->email)->where('status', SellerRequest::STATUS_PENDING)->first();
         if ($existing_seller) {
             return $this->responseErrors("Yêu cầu đăng ký trước đó chưa được duyệt", "Vui lòng chờ duyệt");
