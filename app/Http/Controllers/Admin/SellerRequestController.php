@@ -37,7 +37,7 @@ class SellerRequestController extends Controller
                 return $object->approvedBy ? $object->approvedBy->name : '';
             })
             ->editColumn('approved_at', function ($object) {
-                return formatDate($object->approved_at);
+                return $object->approved_at ? formatDate($object->approved_at) : '';
             })
             ->editColumn('campaign', function ($object) {
                 $obj = array_find_el(AffiliateLinkRequest::CAMPAIGNS, function ($el) use ($object) {
