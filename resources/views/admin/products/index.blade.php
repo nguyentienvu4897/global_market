@@ -106,7 +106,7 @@
                     DATATABLE.mergeSearch(d, context);
                 }
             },
-            // stateSave: true,
+            stateSave: true,
             columnDefs: [{
                 'targets': 0,
                 'checkboxes': {
