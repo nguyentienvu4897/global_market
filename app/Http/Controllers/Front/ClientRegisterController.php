@@ -68,22 +68,22 @@ class ClientRegisterController extends Controller
         ];
 
         // Thêm điều kiện email_verified_at nếu sau ngày 15/06/2025
-        if (now()->greaterThan(Carbon::create(2025, 6, 15, 0, 0, 0))) { // 15/06/2025 00:00:00
-            $user = User::where($field, $request->account_name)
-                ->where('status', 1)
-                ->where('type', 10)
-                ->whereNotNull('email_verified_at')
-                ->first();
+        // if (now()->greaterThan(Carbon::create(2025, 6, 15, 0, 0, 0))) { // 15/06/2025 00:00:00
+        //     $user = User::where($field, $request->account_name)
+        //         ->where('status', 1)
+        //         ->where('type', 10)
+        //         ->whereNotNull('email_verified_at')
+        //         ->first();
 
-            if (!$user || !Hash::check($request->password, $user->password)) {
-                return $this->responseErrors('Tài khoản chưa xác minh email hoặc sai thông tin đăng nhập!');
-            }
+        //     if (!$user || !Hash::check($request->password, $user->password)) {
+        //         return $this->responseErrors('Tài khoản chưa xác minh email hoặc sai thông tin đăng nhập!');
+        //     }
 
-            Auth::guard('client')->login($user, $remember);
-            $token = JWTAuth::fromUser($user);
+        //     Auth::guard('client')->login($user, $remember);
+        //     $token = JWTAuth::fromUser($user);
 
-            return $this->responseSuccess('Đăng nhập thành công!', ['token' => $token]);
-        }
+        //     return $this->responseSuccess('Đăng nhập thành công!', ['token' => $token]);
+        // }
 
         if (Auth::guard('client')->attempt($loginConditions, $remember)) {
             // Đăng nhập thành công
@@ -477,7 +477,7 @@ class ClientRegisterController extends Controller
         $currentUser = Auth::guard('client')->user();
         // gửi mail thông báo rút tiền cho admin
         $users = User::query()->where('type', 1)->where('status', 1)->get();
-        
+
         // Mail::to('nguyentienvu4897@gmail.com')->send(new WithdrawMoney($currentUser, $request->all()));
 
 

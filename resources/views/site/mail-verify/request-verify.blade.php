@@ -60,8 +60,11 @@
                                                         </span>
                                                     </fieldset>
                                                     <div class="pull-xs-left">
-                                                        <input class="btn btn-style btn_50" type="submit" value="Gửi liên kết xác minh"
-                                                            ng-click="submitRequestVerify()" />
+                                                        <button class="btn btn-style btn_50" type="submit" value="Gửi liên kết xác minh"
+                                                            ng-click="submitRequestVerify()" ng-disabled="loading">
+                                                            <i ng-if="loading" class="fa fa-spinner fa-spin"></i>
+                                                            Gửi liên kết xác minh
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -79,12 +82,14 @@
 @push('script')
     <script type="text/javascript">
         app.controller('MailVerifyController', function($scope) {
+            $scope.loading = false;
             $scope.errors = {};
             $scope.requestVerify = {
                 email: ''
             };
 
             $scope.submitRequestVerify = function() {
+                $scope.loading = true;
                 let data = {
                     email: $scope.requestVerify.email
                 };
@@ -99,13 +104,16 @@
                         if (response.success) {
                             toastr.success(response.message);
                             window.location.href = '{{ route('front.client-account') }}';
+                            $scope.loading = false;
                         } else {
                             toastr.error(response.message);
                             $scope.errors = response.errors;
+                            $scope.loading = false;
                         }
                     },
                     error: function(response) {
                         console.log(response);
+                        $scope.loading = false;
                     },
                     complete: function() {
                         $scope.$applyAsync();
