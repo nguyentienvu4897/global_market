@@ -95,6 +95,6 @@ class PermissionsTableSeeder extends Seeder
         Permission::createRecord(['id' => 9999, 'name' => 'Cập nhật cấu hình', 'display_name' => 'Cập nhật', 'group' => 'Quản lý cấu hình chung'], [User::SUPER_ADMIN, User::QUAN_TRI_VIEN]);
 
         // Báo cáo
-        Permission::createRecord(['id' => 1000, 'name' => 'Xem báo cáo thương hoa hồng', 'display_name' => 'Xem báo cáo thương hoa hồng', 'group' => 'Quản lý báo cáo thống kê'], [User::SUPER_ADMIN, User::QUAN_TRI_VIEN]);
+        Permission::createRecord(['id' => 1000, 'name' => 'Xem báo cáo thương hoa hồng', 'display_name' => 'Xem báo cáo thưởng hoa hồng', 'group' => 'Quản lý báo cáo thống kê'], [User::SUPER_ADMIN, User::QUAN_TRI_VIEN]);
     }
 }

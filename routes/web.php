@@ -432,7 +432,7 @@ Route::group(['prefix' => 'admin'], function () {
                 Route::get('/searchData', 'Common\NotificationsController@searchData')->name('Notification.searchData');
             });
 
-            Route::group(['prefix' => 'reports', 'middleware' => 'checkType:' . User::SUPER_ADMIN . ',' . User::QUAN_TRI_VIEN], function () {
+            Route::group(['prefix' => 'reports', 'middleware' => 'checkType:' . User::SUPER_ADMIN . ',' . User::QUAN_TRI_VIEN . ',' . User::CONG_TAC_VIEN], function () {
                 Route::get('/promoReport', 'Common\ReportController@promoReport')->name('Report.promoReport')->middleware('checkPermission:Xem báo cáo khuyến mãi chiết khấu');
                 Route::get('/promoReportSearchData', 'Common\ReportController@promoReportSearchData')->name('Report.promoReportSearchData');
                 Route::get('/promoReportPrint', 'Common\ReportController@promoReportPrint')->name('Report.promoReportPrint');
