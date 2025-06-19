@@ -40,7 +40,7 @@
                             height="104"
                             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
                             data-src="{{ $config->image->path }}" alt="{{ $config->web_title }}" /></a> --}}
-                    <a href="{{ route('front.home-page') }}" class="logo-footer" title="{{ $config->web_title }}" style="font-size: 20px; font-weight: bold;">{{ $config->web_title }}</a>
+                    <h4 class="title-menu clicked">{{ $config->web_title }}</h4>
                     <div class="des_foo">{{ $config->web_des }}</div>
                     <div class="list-menu toggle-mn list-info">
                         <div class="content-contact clearfix">
