@@ -36,7 +36,7 @@
 </style>
 <div class="row">
     <div class="col-sm-8">
-        <div class="form-group mb-4">
+        {{-- <div class="form-group mb-4">
             <div class="row">
                 <div class="col-md-6">
                     <input class="cursor-pointer" type="radio" ng-model="form.type" value="0" id="type_0"> <label for="type_0" class="cursor-pointer">Sản phẩm thông thường</label>
@@ -50,7 +50,7 @@
                     <% errors.type[0] %>
                 </strong>
             </span>
-        </div>
+        </div> --}}
         <div class="form-group custom-group mb-4">
             <label class="form-label" ng-class="{'required-label': form.type == 0}">Danh mục sản phẩm</label>
             <ui-select class="" remove-selected="true" ng-model="form.cate_id" theme="select2">

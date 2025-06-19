@@ -10,7 +10,7 @@
         before(form) {
             this.image = {};
             this.status = 0;
-            if (!this.type) this.type = 0;
+            if (!this.type) this.type = 1;
             this.attribute_values = form.attribute_values || [];
             this.videos = form.videos || [];
         }
