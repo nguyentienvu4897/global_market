@@ -4,7 +4,7 @@
         title="{{ $product->name }}">
         <img width="460" height="460" class="lazyload image1"
             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-            data-src="{{ $product->image->path }}" alt="{{ $product->name }}">
+            data-src="{{ $product->image ? $product->image->path : 'https://placehold.co/460x460' }}" alt="{{ $product->name }}">
     </a>
     {{-- <div class="group_action">
         <a title="Xem nhanh" href='javascript:void(0)' data-handle="{{ $product->id }}" style="font-size: 15px;"
