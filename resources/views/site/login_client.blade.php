@@ -63,7 +63,7 @@
                                                             <span class="quenmk">Quên mật khẩu?</span>
                                                             <a href="javascript:void(0)" ng-click="showFormRegister()"
                                                                 class="btn-link-style btn-register"
-                                                                style="font-size: 16px; line-height: 24px;"
+                                                                style="font-size: 14px; line-height: 24px;"
                                                                 title="Đăng ký tại đây">Đăng ký tại đây</a>
                                                         </div>
                                                     </div>
@@ -74,7 +74,7 @@
                                             <div id="recover-password" class="form-signup page-login">
                                                 <form id="recover_customer_password">
                                                     <div class="form-signup"
-                                                        style="color: red; font-size: 16px; line-height: 24px;">
+                                                        style="color: red; font-size: 14px; line-height: 24px;">
                                                         <span>Để lấy lại mật khẩu, vui lòng nhập email của bạn. Mật khẩu sẽ
                                                             được gửi đến email của bạn.</span>
                                                     </div>

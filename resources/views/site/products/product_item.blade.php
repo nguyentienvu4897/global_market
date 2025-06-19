@@ -2,7 +2,7 @@
     {{-- <a class="image_thumb scale_hover" href="{{ $product->type ? ($product->short_link ?? $product->aff_link) : route('front.show-product-detail', $product->slug) }}" --}}
     <a class="image_thumb scale_hover" href="{{ route('front.show-product-detail', $product->slug) }}"
         title="{{ $product->name }}">
-        <img width="480" height="480" class="lazyload image1"
+        <img width="460" height="460" class="lazyload image1"
             src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
             data-src="{{ $product->image->path }}" alt="{{ $product->name }}">
     </a>

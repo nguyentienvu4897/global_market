@@ -34,7 +34,7 @@ table {
 }
 
 .col-left-ac .block-account .title-account {
-    font-size: 19px;
+    font-size: 16px;
     font-weight: 500;
     color: #212B25;
     margin-bottom: 7px;
@@ -63,7 +63,7 @@ table {
 
 .col-left-ac .block-account ul .title-info {
     font-weight: 400;
-    font-size: 17px;
+    font-size: 15px;
     color: #212B25;
     /* margin-bottom: 15px; */
     display: block;
@@ -93,7 +93,8 @@ button {
 }
 
 .page_customer_account .col-right-ac .name-account {
-    margin-bottom: 40px
+    margin-bottom: 40px;
+    font-size: 14px;
 }
 
 .page_customer_account .col-right-ac .title-yorder {
@@ -1203,7 +1204,7 @@ div#social_login {
 }
 
 .page-login .title_heads {
-    font-size: 26px !important;
+    font-size: 20px !important;
     font-weight: 400;
     text-transform: uppercase;
     position: relative;
@@ -1256,7 +1257,7 @@ div#social_login {
     width: 100%;
     outline: none;
     border: initial;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .page-login .form-signup .form-group input::-webkit-input-placeholder {
@@ -1303,7 +1304,7 @@ div#social_login {
     background: #0974ba;
     color: #fff;
     border-radius: 4px;
-    font-size: 18px;
+    font-size: 14px;
     transition: .3s;
     -webkit-transition: .3s;
     -moz-transition: .3s;
@@ -1322,7 +1323,7 @@ div#social_login {
 }
 
 .page-login .form-signup .quenmk {
-    font-size: 16px;
+    font-size: 15px;
     color: #333;
     line-height: 24px
 }
@@ -1527,3 +1528,4 @@ div#social_login {
         font-size: 14px !important;
     }
 }
+    

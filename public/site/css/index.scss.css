@@ -33,7 +33,7 @@
     color: #f89427;
     text-transform: uppercase;
     font-weight: 700;
-    font-size: 28px;
+    font-size: 20px;
     line-height: 32px
 }
 
@@ -87,7 +87,7 @@
 }
 
 .more-pro-deal a {
-    font-size: 16px;
+    font-size: 15px;
     font-weight: 600;
     line-height: 22px;
     color: #000
@@ -296,7 +296,7 @@
 
 @media (max-width: 1800px) {
     .section_flash_sale .title_deal .title_fl {
-        font-size:28px
+        font-size: 20px;
     }
 }
 
@@ -1101,7 +1101,7 @@
     width: 100%;
     height: 100%;
     -o-object-fit: contain;
-    object-fit: contain
+    object-fit: cover;
 }
 
 .secttion_blogs .item-blog .block-content {
@@ -1135,9 +1135,9 @@
 
 @media (max-width: 1600px) {
     .secttion_blogs .item-blog .block-content h3 a {
-        font-size: 16px;
+        font-size: 14px;
         line-height: 22px;
-        height: 44px
+        height: 36px;
     }
 }
 
@@ -1169,7 +1169,7 @@
     color: #fff;
     font-weight: 400;
     margin-bottom: 5px;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 22px;
     word-break: break-word;
     display: -webkit-box;
@@ -1367,7 +1367,7 @@
     margin-bottom: 0px;
     margin-top: 0;
     color: #fff;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 24px
 }
 
@@ -1715,7 +1715,7 @@
 }
 
 .foo-index {
-    padding-top: 75px
+    padding-top: 30px;
 }
 
 @media (max-width: 1025px) {

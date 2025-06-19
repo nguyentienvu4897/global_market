@@ -238,10 +238,10 @@
                                                         </div>
                                                     </div> --}}
                                                     <div class="mb-break">
-                                                        <div style="font-size: 18px">
-                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 16px"> Hoa hồng trực tiếp</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency(round($product->revenue_price * ($config->revenue_percent_5 / 100))) }}₫</span></div>
-                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 16px"> Hoa hồng dành cho người giới thiệu</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency(round($product->revenue_price * ($config->revenue_percent_4 / 100))) }}₫</span></div>
-                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 16px"> Bonus cho thành viên tích cực</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency(round($product->revenue_price * ($config->revenue_percent_3 / 100) + $product->revenue_price * ($config->revenue_percent_2 / 100) + $product->revenue_price * ($config->revenue_percent_1 / 100))) }}₫</span></div>
+                                                        <div style="font-size: 16px">
+                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 14px"> Hoa hồng trực tiếp</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency(round($product->revenue_price * ($config->revenue_percent_5 / 100))) }}₫</span></div>
+                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 14px"> Hoa hồng dành cho người giới thiệu</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency(round($product->revenue_price * ($config->revenue_percent_4 / 100))) }}₫</span></div>
+                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 14px"> Bonus cho thành viên tích cực</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency(round($product->revenue_price * ($config->revenue_percent_3 / 100) + $product->revenue_price * ($config->revenue_percent_2 / 100) + $product->revenue_price * ($config->revenue_percent_1 / 100))) }}₫</span></div>
                                                         </div>
                                                     </div>
                                                     <div class="btn-mua button_actions clearfix">
@@ -463,18 +463,18 @@
                             </script> --}}
                             <div class="product-tab e-tabs not-dqtab">
                                 <ul class="tabs tabs-title clearfix">
-                                    <li class="tab-link active" data-tab="#tab-1">
+                                    <li class="tab-link active" data-tab="#tab-3" >
+                                        <h3>Mô tả sản phẩm</h3>
+                                    </li>
+                                    <li class="tab-link" data-tab="#tab-1">
                                         <h3>Chi tiết sản phẩm</h3>
                                     </li>
                                     {{-- <li class="tab-link" data-tab="#tab-2" >
                                         <h3>Đánh giá sản phẩm</h3>
                                     </li> --}}
-                                    <li class="tab-link" data-tab="#tab-3" >
-                                        <h3>Mô tả sản phẩm</h3>
-                                    </li>
                                 </ul>
                                 <div class="tab-float">
-                                    <div id="tab-1" class="tab-content active content_extab">
+                                    <div id="tab-1" class="tab-content content_extab">
                                         <div class="rte product_getcontent">
                                             {!! $product->body !!}
                                         </div>
@@ -484,7 +484,7 @@
                                             @include('site.partials.onireview')
                                         </div>
                                     </div> --}}
-                                    <div id="tab-3" class="tab-content content_extab">
+                                    <div id="tab-3" class="tab-content active content_extab">
                                         <div class="rte product_getcontent">
                                             {!! $product->intro !!}
                                         </div>
@@ -698,7 +698,7 @@
                         spaceBetween: 15
                     },
                     1024: {
-                        slidesPerView: 4,
+                        slidesPerView: 5,
                         spaceBetween: 15
                     },
                     1700: {

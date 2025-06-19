@@ -81,7 +81,7 @@
             border: 1px solid #dfdfdf !important;
             border-radius: 5px !important;
             padding: 5px 10px !important;
-            font-size: 15px !important;
+            font-size: 14px !important;
         }
         .name-account .input-group input{
             margin-bottom: 0 !important;
@@ -89,7 +89,7 @@
             border-top-right-radius: 0 !important;
             border-bottom-right-radius: 0 !important;
             padding: 5px 10px !important;
-            font-size: 15px !important;
+            font-size: 14px !important;
         }
         .name-account .input-group button{
             border: 1px solid #dfdfdf !important;
@@ -142,7 +142,7 @@
             border: 1px solid #0974ba !important;
             border-radius: 5px !important;
             padding: 5px 10px !important;
-            font-size: 18px !important;
+            font-size: 14px !important;
             height: auto !important;
         }
 
@@ -204,10 +204,10 @@
                             <i class="fa fa-exclamation-triangle"></i> Tài khoản chưa xác minh email. Vui lòng xác minh để tiếp tục sử dụng các chức năng khác của hệ thống <a href="{{ route('email.verify.form') }}">tại đây</a>.
                         </div>
                         <h1 class="title-head margin-top-0 d-flex" style="align-items: center; justify-content: flex-end; flex-wrap: wrap; padding-top: 25px;">
-                            <div style="font-size: 19px; font-weight: 500; flex: 1 1 50%;" ng-if="!showChangePassword">Thông tin tài khoản</div>
-                            <div style="font-size: 19px; font-weight: 500; flex: 1 1 50%;" ng-if="showChangePassword">Thay đổi mật khẩu</div>
+                            <div style="font-size: 16px; font-weight: 500; flex: 1 1 50%;" ng-if="!showChangePassword">Thông tin tài khoản</div>
+                            <div style="font-size: 16px; font-weight: 500; flex: 1 1 50%;" ng-if="showChangePassword">Thay đổi mật khẩu</div>
                             <div class="ml-auto group-invite-code" style="flex: 1 1 -1%;">
-                                <label style="font-weight: 600; font-size: 16px; margin-bottom: 0 !important; margin-right: 10px;">Mã giới thiệu: </label>
+                                <label style="font-weight: 600; font-size: 14px; margin-bottom: 0 !important; margin-right: 10px;">Mã giới thiệu: </label>
                                 <input class="invite-code" type="text" ng-model="currentUser.invite_code" placeholder="Mã giới thiệu" disabled>
                                 <a class="btn-copy-invite-code" href="javascript:void(0)" ng-click="copyReferralCode($event)" title="Copy mã giới thiệu" style="border-right: 1px solid #ccc;">
                                     <i class="fa fa-copy"></i>
@@ -217,7 +217,7 @@
                                 </a>
                             </div>
                             <div class="group-invite-code group-invite-link" style="margin-top: 10px; flex: 0 1 -1%;">
-                                <label style="font-weight: 600; font-size: 16px; margin-bottom: 0 !important; margin-right: 10px; width:21%" ng-if="currentUser.invite_code">Link giới thiệu: </label>
+                                <label style="font-weight: 600; font-size: 14px; margin-bottom: 0 !important; margin-right: 10px; width:21%" ng-if="currentUser.invite_code">Link giới thiệu: </label>
                                 <input class="invite-code" type="text" ng-model="link_invite_code" placeholder="Link giới thiệu" disabled ng-if="currentUser.invite_code">
                                 <a class="btn-copy-invite-code" href="javascript:void(0)" ng-click="copyReferralLink($event)" title="Copy link giới thiệu" style="border-right: 1px solid #ccc;" ng-if="currentUser.invite_code">
                                     <i class="fa fa-copy"></i>
@@ -290,13 +290,13 @@
                                             <strong><% errors.bank_name[0] %></strong>
                                         </span>
                                     </div>
-                                    <button class="btn btn-success" style="float: left; margin-bottom: 25px;" ng-click="updateUser()">Cập nhật</button>
+                                    <button class="btn btn-success" style="float: left; margin-bottom: 25px; font-size: 14px;" ng-click="updateUser()">Cập nhật</button>
 
                                 </div>
                                 <div class="col-md-5">
                                     <div class="card">
                                         <div class="card-header">
-                                            <h6 class="mb-0" style="font-size: 18px; font-weight: 600; margin-bottom: 0 !important;">Ảnh đại diện</h6>
+                                            <h6 class="mb-0" style="font-size: 14px; font-weight: 600; margin-bottom: 0 !important;">Ảnh đại diện</h6>
                                         </div>
                                         <div class="card-body">
                                             <div class="img-chooser">
@@ -312,7 +312,7 @@
                                     </div>
                                     <div class="card" ng-if="currentUser.invite_code">
                                         <div class="card-header" style="display: flex; justify-content: space-between; align-items: center;">
-                                            <h6 class="mb-0" style="font-size: 18px; font-weight: 600; margin-bottom: 0 !important;">Mã QR giới thiệu</h6>
+                                            <h6 class="mb-0" style="font-size: 14px; font-weight: 600; margin-bottom: 0 !important;">Mã QR giới thiệu</h6>
                                             <a href="javascript:void(0)" ng-click="copyQrImage()" title="Copy mã QR">
                                                 <i class="fa fa-copy"></i>
                                             </a>
