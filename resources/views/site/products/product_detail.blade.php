@@ -93,22 +93,22 @@
                                             <div class="swiper-wrapper" id="lightgallery">
                                                 @foreach ($product->galleries as $item)
                                                 <a class="swiper-slide" data-hash="0"
-                                                    href="{{ $item->image->path }}"
+                                                    href="{{ $item->image ? $item->image->path : 'https://placehold.co/480x480' }}"
                                                     title="Click để xem">
                                                     <img height="480" width="480"
-                                                        src="{{ $item->image->path }}"
+                                                        src="{{ $item->image ? $item->image->path : 'https://placehold.co/480x480' }}"
                                                         alt="{{ $product->name }}"
-                                                        data-image="{{ $item->image->path }}"
+                                                        data-image="{{ $item->image ? $item->image->path : 'https://placehold.co/480x480' }}"
                                                         class="img-responsive mx-auto d-block swiper-lazy" />
                                                 </a>
                                                 @endforeach
                                                 <a class="swiper-slide" data-hash="0"
-                                                    href="{{ $product->image->path }}"
+                                                    href="{{ $product->image ? $product->image->path : 'https://placehold.co/480x480' }}"
                                                     title="Click để xem">
                                                     <img height="480" width="480"
-                                                        src="{{ $product->image->path }}"
+                                                        src="{{ $product->image ? $product->image->path : 'https://placehold.co/480x480' }}"
                                                         alt="{{ $product->name }}"
-                                                        data-image="{{ $product->image->path }}"
+                                                        data-image="{{ $product->image ? $product->image->path : 'https://placehold.co/480x480' }}"
                                                         class="img-responsive mx-auto d-block swiper-lazy" />
                                                 </a>
                                             </div>
@@ -129,9 +129,9 @@
                                                 <div class="swiper-slide" data-hash="0">
                                                     <div class="p-100">
                                                         <img height="80" width="80"
-                                                            src="{{ $item->image->path }}"
+                                                            src="{{ $item->image ? $item->image->path : 'https://placehold.co/80x80' }}"
                                                             alt="{{ $product->name }}"
-                                                            data-image="{{ $item->image->path }}"
+                                                            data-image="{{ $item->image ? $item->image->path : 'https://placehold.co/80x80' }}"
                                                             class="swiper-lazy" />
                                                     </div>
                                                 </div>
@@ -139,9 +139,9 @@
                                                 <div class="swiper-slide" data-hash="0">
                                                     <div class="p-100">
                                                         <img height="80" width="80"
-                                                            src="{{ $product->image->path }}"
+                                                            src="{{ $product->image ? $product->image->path : 'https://placehold.co/80x80' }}"
                                                             alt="{{ $product->name }}"
-                                                            data-image="{{ $product->image->path }}"
+                                                            data-image="{{ $product->image ? $product->image->path : 'https://placehold.co/80x80' }}"
                                                             class="swiper-lazy" />
                                                     </div>
                                                 </div>
