@@ -276,7 +276,11 @@ class ProductController extends Controller
             }
             if (isset($object->galleries)) {
                 foreach ($object->galleries as $gallery) {
-                    FileHelper::forceDeleteFiles($gallery->id, $object->id, ProductGallery::class);
+                    if ($gallery->image) {
+                        FileHelper::forceDeleteFiles($gallery->image->id, $gallery->id, ProductGallery::class);
+                        $gallery->image->removeFromDB();
+                    }
+                    $gallery->removeFromDB();
                 }
             }
             $object->delete();
@@ -369,6 +373,23 @@ class ProductController extends Controller
     {
         DB::statement('SET FOREIGN_KEY_CHECKS = 0');
         $product_ids = explode(',', $request->product_ids);
+
+        $products = Product::query()->whereIn('id', $product_ids)->get();
+        
+        foreach ($products as $object) {
+            if ($object->image) {
+                FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+            }
+            if (isset($object->galleries)) {
+                foreach ($object->galleries as $gallery) {
+                    if ($gallery->image) {
+                        FileHelper::forceDeleteFiles($gallery->image->id, $gallery->id, ProductGallery::class);
+                        $gallery->image->removeFromDB();
+                    }
+                    $gallery->removeFromDB();
+                }
+            }
+        }
 
         Product::query()->whereIn('id', $product_ids)->delete();
 

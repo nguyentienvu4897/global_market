@@ -93,22 +93,22 @@
                                             <div class="swiper-wrapper" id="lightgallery">
                                                 @foreach ($product->galleries as $item)
                                                 <a class="swiper-slide" data-hash="0"
-                                                    href="{{ $item->image->path }}"
+                                                    href="{{ $item->image ? $item->image->path : 'https://placehold.co/480x480' }}"
                                                     title="Click để xem">
                                                     <img height="480" width="480"
-                                                        src="{{ $item->image->path }}"
+                                                        src="{{ $item->image ? $item->image->path : 'https://placehold.co/480x480' }}"
                                                         alt="{{ $product->name }}"
-                                                        data-image="{{ $item->image->path }}"
+                                                        data-image="{{ $item->image ? $item->image->path : 'https://placehold.co/480x480' }}"
                                                         class="img-responsive mx-auto d-block swiper-lazy" />
                                                 </a>
                                                 @endforeach
                                                 <a class="swiper-slide" data-hash="0"
-                                                    href="{{ $product->image->path }}"
+                                                    href="{{ $product->image ? $product->image->path : 'https://placehold.co/480x480' }}"
                                                     title="Click để xem">
                                                     <img height="480" width="480"
-                                                        src="{{ $product->image->path }}"
+                                                        src="{{ $product->image ? $product->image->path : 'https://placehold.co/480x480' }}"
                                                         alt="{{ $product->name }}"
-                                                        data-image="{{ $product->image->path }}"
+                                                        data-image="{{ $product->image ? $product->image->path : 'https://placehold.co/480x480' }}"
                                                         class="img-responsive mx-auto d-block swiper-lazy" />
                                                 </a>
                                             </div>
@@ -129,9 +129,9 @@
                                                 <div class="swiper-slide" data-hash="0">
                                                     <div class="p-100">
                                                         <img height="80" width="80"
-                                                            src="{{ $item->image->path }}"
+                                                            src="{{ $item->image ? $item->image->path : 'https://placehold.co/80x80' }}"
                                                             alt="{{ $product->name }}"
-                                                            data-image="{{ $item->image->path }}"
+                                                            data-image="{{ $item->image ? $item->image->path : 'https://placehold.co/80x80' }}"
                                                             class="swiper-lazy" />
                                                     </div>
                                                 </div>
@@ -139,9 +139,9 @@
                                                 <div class="swiper-slide" data-hash="0">
                                                     <div class="p-100">
                                                         <img height="80" width="80"
-                                                            src="{{ $product->image->path }}"
+                                                            src="{{ $product->image ? $product->image->path : 'https://placehold.co/80x80' }}"
                                                             alt="{{ $product->name }}"
-                                                            data-image="{{ $product->image->path }}"
+                                                            data-image="{{ $product->image ? $product->image->path : 'https://placehold.co/80x80' }}"
                                                             class="swiper-lazy" />
                                                     </div>
                                                 </div>
@@ -238,10 +238,10 @@
                                                         </div>
                                                     </div> --}}
                                                     <div class="mb-break">
-                                                        <div style="font-size: 18px">
-                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 16px"> Hoa hồng trực tiếp</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency($product->revenue_price * $config->revenue_percent_5 / 100) }}₫</span></div>
-                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 16px"> Hoa hồng dành cho người giới thiệu</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency($product->revenue_price * $config->revenue_percent_4 / 100) }}₫</span></div>
-                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 16px"> Bonus cho thành viên tích cực</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency($product->revenue_price * $config->revenue_percent_3 / 100 + $product->revenue_price * $config->revenue_percent_2 / 100 + $product->revenue_price * $config->revenue_percent_1 / 100) }}₫</span></div>
+                                                        <div style="font-size: 16px">
+                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 14px"> Hoa hồng trực tiếp</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency(round($product->revenue_price * ($config->revenue_percent_5 / 100))) }}₫</span></div>
+                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 14px"> Hoa hồng dành cho người giới thiệu</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency(round($product->revenue_price * ($config->revenue_percent_4 / 100))) }}₫</span></div>
+                                                            <div style="height: 26px;"><i class="fa fa-tag" style="color: #f69326"></i><i style="font-size: 14px"> Bonus cho thành viên tích cực</i> <span style="color: #0974ba; font-weight:bold;">{{ formatCurrency(round($product->revenue_price * ($config->revenue_percent_3 / 100) + $product->revenue_price * ($config->revenue_percent_2 / 100) + $product->revenue_price * ($config->revenue_percent_1 / 100))) }}₫</span></div>
                                                         </div>
                                                     </div>
                                                     <div class="btn-mua button_actions clearfix">
@@ -466,7 +466,7 @@
                                     <li class="tab-link active" data-tab="#tab-3" >
                                         <h3>Mô tả sản phẩm</h3>
                                     </li>
-                                    <li class="tab-link " data-tab="#tab-1">
+                                    <li class="tab-link" data-tab="#tab-1">
                                         <h3>Chi tiết sản phẩm</h3>
                                     </li>
                                     {{-- <li class="tab-link" data-tab="#tab-2" >
@@ -508,7 +508,7 @@
                                                     title="{{ $item->name }}">
                                                     <img width="370" height="480" class="lazyload"
                                                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="{{ $item->image->path }}"
+                                                        data-src="{{ $item->image ? $item->image->path : 'https://placehold.co/370x480' }}"
                                                         alt="{{ $item->name }}">
                                                 </a>
                                                 <div class="product-info">
@@ -529,7 +529,7 @@
                                 <div class="col-lg-12 col-col-md-12 col-sm-6 col-xs-12">
                                     <a class="banner_right_pro" href="javascript:void(0);" title="Banner">
                                         <img width="375" height="525"
-                                            src="{{$product->image->path}}"
+                                            src="{{$product->image ? $product->image->path : 'https://placehold.co/375x525' }}"
                                             alt="Banner" />
                                     </a>
                                 </div>
@@ -698,7 +698,7 @@
                         spaceBetween: 15
                     },
                     1024: {
-                        slidesPerView: 4,
+                        slidesPerView: 5,
                         spaceBetween: 15
                     },
                     1700: {

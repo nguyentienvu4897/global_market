@@ -1,6 +1,6 @@
 .title-bread-crumb {
     font-weight: 700;
-    font-size: 28px;
+    font-size: 20px;
     line-height: 34px;
     text-align: center;
     color: #f89427;
@@ -28,7 +28,7 @@
 }
 
 .bread-crumb {
-    padding: 36px 0px;
+    padding: 14px 0px;
     margin-bottom: 20px;
     background-size: cover !important
 }
@@ -46,7 +46,7 @@
 
 .breadcrumb {
     margin: 0;
-    font-size: 16px;
+    font-size: 14px;
     padding: 5px 0px;
     border-radius: 0;
     font-weight: 700;

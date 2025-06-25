@@ -45,6 +45,7 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
             $aff_link = trim($row[11]);
             $price = trim($row[12]);
             $revenue_price = trim($row[13]);
+            $short_des = trim($row[14]);
 
             $images = explode(',', $string_images);
 
@@ -55,10 +56,20 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
 
             $category = Category::where('name', $cate_1)->where('level', 0)->first();
             if(!$category) {
-                $errors[] = 'Danh mục lớn không tồn tại';
+                if (!empty($cate_1)) {
+                    $category = new Category();
+                    $category->name = $cate_1;
+                    $category->type = 1;
+                    $category->level = 0;
+                    $category->sort_order = 0;
+                    $category->parent_id = 0;
+                    $category->slug = Str::slug($cate_1);
+                    $category->show_home_page = 1;
+                    $category->save();
+                } else {
+                    $errors[] = 'Danh mục lớn không tồn tại';
+                }
             }
-            $cate_child = Category::where('name', $cate_2)->where('parent_id', $category->id)->where('level', 1)->first();
-            $cate_child_child = Category::where('name', $cate_3)->where('parent_id', $cate_child->id)->where('level', 2)->first();
             if(count($errors)) {
                 $this->invalid_rows[] = [
                     'detail' => implode("\n", $errors),
@@ -67,6 +78,48 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
                 ];
                 $this->skip_rows++;
                 continue;
+            }
+            $cate_child = Category::where('name', $cate_2)->where('parent_id', $category ? $category->id : null)->where('level', 1)->first();
+            if(!$cate_child) {
+                if (!empty($cate_2)) {
+                    $stt = Category::where('parent_id', $category->id)->count();
+                    $parent = Category::where('id',$category->id)->first();
+                    if($stt > 0) {
+                        $stt += $stt;
+                    } else {
+                        $stt = $parent->sort_order + 1;
+                    }
+                    $cate_child = new Category();
+                    $cate_child->name = $cate_2;
+                    $cate_child->type = 1;
+                    $cate_child->level = 1;
+                    $cate_child->sort_order = $stt;
+                    $cate_child->parent_id = $category->id;
+                    $cate_child->slug = Str::slug($cate_2);
+                    $cate_child->show_home_page = 1;
+                    $cate_child->save();
+                }
+            }
+            $cate_child_child = Category::where('name', $cate_3)->where('parent_id', $cate_child ? $cate_child->id : null)->where('level', 2)->first();
+            if(!$cate_child_child) {
+                if (!empty($cate_3)) {
+                    $stt = Category::where('parent_id', $cate_child->id)->count();
+                    $parent = Category::where('id',$cate_child->id)->first();
+                    if($stt > 0) {
+                        $stt += $stt;
+                    } else {
+                        $stt = $parent->sort_order + 1;
+                    }
+                    $cate_child_child = new Category();
+                    $cate_child_child->name = $cate_3;
+                    $cate_child_child->type = 1;
+                    $cate_child_child->level = 2;
+                    $cate_child_child->sort_order = $stt;
+                    $cate_child_child->parent_id = $cate_child->id;
+                    $cate_child_child->slug = Str::slug($cate_3);
+                    $cate_child_child->show_home_page = 1;
+                    $cate_child_child->save();
+                }
             }
             $product = Product::query()->where(function ($query) use ($aff_product_code, $product_name) {
                 $query->where('aff_product_code', $aff_product_code)
@@ -83,12 +136,13 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $product->origin_link = $origin_link;
                 $product->aff_link = $aff_link;
                 $product->short_link = $aff_link;
-                $product->price = $price ?? 0;
-                $product->revenue_price = $revenue_price ?? 0;
+                $product->price = intval($price) ?? 0;
+                $product->revenue_price = intval($revenue_price) ?? 0;
                 $product->status = Product::STATUS_SUCCESS;
                 $product->state = Product::CON_HANG;
                 $product->type = Product::TYPE_AFFILIATE;
                 $product->slug = Str::slug($product_name);
+                $product->short_des = $short_des;
                 $product->save();
             } else {
                 $product = new Product();
@@ -102,13 +156,14 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $product->origin_link = $origin_link;
                 $product->aff_link = $aff_link;
                 $product->short_link = $aff_link;
-                $product->price = $price ?? 0;
-                $product->revenue_price = $revenue_price ?? 0;
+                $product->price = intval($price) ?? 0;
+                $product->revenue_price = intval($revenue_price) ?? 0;
                 $product->status = Product::STATUS_SUCCESS;
                 $product->state = Product::CON_HANG;
                 $product->type = Product::TYPE_AFFILIATE;
                 $product->slug = Str::slug($product_name);
                 $product->button_type = 1;
+                $product->short_des = $short_des;
                 $product->save();
             }
             if(count($images)) {

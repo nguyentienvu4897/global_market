@@ -195,7 +195,7 @@ class Product extends BaseModel
         }
 
 
-        $result = $result->orderBy('created_at', 'desc')->get();
+        $result = $result->orderBy('created_at', 'desc')->select('id', 'name', 'price', 'base_price', 'cate_id', 'created_at', 'created_by', 'updated_by', 'status', 'state', 'type', 'slug');
         return $result;
     }
 

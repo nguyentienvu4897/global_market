@@ -73,22 +73,22 @@ class ClientRegisterController extends Controller
         ];
 
         // Thêm điều kiện email_verified_at nếu sau ngày 15/06/2025
-        if (now()->greaterThan(Carbon::create(2025, 6, 15, 0, 0, 0))) { // 15/06/2025 00:00:00
-            $user = User::where($field, $request->account_name)
-                ->where('status', 1)
-                ->whereIn('type', [10, 20, 30])
-                ->whereNotNull('email_verified_at')
-                ->first();
+        // if (now()->greaterThan(Carbon::create(2025, 6, 15, 0, 0, 0))) { // 15/06/2025 00:00:00
+        //     $user = User::where($field, $request->account_name)
+        //         ->where('status', 1)
+        //         ->where('type', 10)
+        //         ->whereNotNull('email_verified_at')
+        //         ->first();
 
-            if (!$user || !Hash::check($request->password, $user->password)) {
-                return $this->responseErrors('Tài khoản chưa xác minh email hoặc sai thông tin đăng nhập!');
-            }
+        //     if (!$user || !Hash::check($request->password, $user->password)) {
+        //         return $this->responseErrors('Tài khoản chưa xác minh email hoặc sai thông tin đăng nhập!');
+        //     }
 
-            Auth::guard('client')->login($user, $remember);
-            $token = JWTAuth::fromUser($user);
+        //     Auth::guard('client')->login($user, $remember);
+        //     $token = JWTAuth::fromUser($user);
 
-            return $this->responseSuccess('Đăng nhập thành công!', ['token' => $token]);
-        }
+        //     return $this->responseSuccess('Đăng nhập thành công!', ['token' => $token]);
+        // }
 
         if (Auth::guard('client')->attempt($loginConditions, $remember)) {
             // Đăng nhập thành công
@@ -463,7 +463,7 @@ class ClientRegisterController extends Controller
     public function withdrawMoney(Request $request)
     {
         $rule = [
-            'withdrawAmount' => 'required|numeric|min:100000|max:' . $request->waitingQuyetToanAmount,
+            'withdrawAmount' => 'required|numeric|min:50000|max:' . $request->waitingQuyetToanAmount,
         ];
 
         $validate = Validator::make(
@@ -472,7 +472,7 @@ class ClientRegisterController extends Controller
             [
                 'withdrawAmount.required' => 'Số tiền cần rút không được để trống',
                 'withdrawAmount.numeric' => 'Số tiền cần rút không được để trống',
-                'withdrawAmount.min' => 'Số tiền cần rút không được nhỏ hơn 100.000',
+                'withdrawAmount.min' => 'Số tiền cần rút không được nhỏ hơn 50.000',
             ]
         );
 

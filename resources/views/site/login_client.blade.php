@@ -52,15 +52,18 @@
                                                             placeholder="Mật khẩu" Required>
                                                     </fieldset>
                                                     <div class="pull-xs-left">
-                                                        <input class="btn btn-style btn_50" type="submit" value="Đăng nhập"
-                                                            ng-click="loginClient()" />
+                                                        <button class="btn btn-style btn_50" type="submit" value="Đăng nhập"
+                                                            ng-click="loginClient()" ng-disabled="loading">
+                                                            <i ng-if="loading" class="fa fa-spinner fa-spin"></i>
+                                                            Đăng nhập
+                                                        </button>
                                                     </div>
                                                     <div class="btn_boz_khac">
                                                         <div class="btn_khac">
                                                             <span class="quenmk">Quên mật khẩu?</span>
                                                             <a href="javascript:void(0)" ng-click="showFormRegister()"
                                                                 class="btn-link-style btn-register"
-                                                                style="font-size: 16px; line-height: 24px;"
+                                                                style="font-size: 14px; line-height: 24px;"
                                                                 title="Đăng ký tại đây">Đăng ký tại đây</a>
                                                         </div>
                                                     </div>
@@ -71,7 +74,7 @@
                                             <div id="recover-password" class="form-signup page-login">
                                                 <form id="recover_customer_password">
                                                     <div class="form-signup"
-                                                        style="color: red; font-size: 16px; line-height: 24px;">
+                                                        style="color: red; font-size: 14px; line-height: 24px;">
                                                         <span>Để lấy lại mật khẩu, vui lòng nhập email của bạn. Mật khẩu sẽ
                                                             được gửi đến email của bạn.</span>
                                                     </div>
@@ -90,9 +93,12 @@
                                                         </fieldset>
                                                     </div>
                                                     <div class="action_bottom">
-                                                        <input class="btn btn-style btn_50" style="margin-top: 0px;"
+                                                        <button class="btn btn-style btn_50" style="margin-top: 0px;"
                                                             type="submit" value="Lấy lại mật khẩu"
-                                                            ng-click="recoverPassword()" />
+                                                            ng-click="recoverPassword()" ng-disabled="loading">
+                                                            <i ng-if="loading" class="fa fa-spinner fa-spin"></i>
+                                                            Lấy lại mật khẩu
+                                                        </button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -199,8 +205,10 @@
                                                     </div>
                                                     <div class="section">
                                                         <button type="submit" value="Đăng ký"
-                                                            ng-click="registerClient()" class="btn  btn-style btn_50">Đăng
-                                                            ký</button>
+                                                            ng-click="registerClient()" class="btn  btn-style btn_50" ng-disabled="loading">
+                                                            <i ng-if="loading" class="fa fa-spinner fa-spin"></i>
+                                                            Đăng ký
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -225,6 +233,7 @@
 @push('script')
     <script type="text/javascript">
         app.controller('LoginClientController', function($scope) {
+            $scope.loading = false;
             $scope.formLogin = true;
             $scope.formRegister = false;
             $scope.formRecoverPassword = false;
@@ -260,6 +269,7 @@
             $scope.errors = {};
 
             $scope.registerClient = function() {
+                $scope.loading = true;
                 let data = $('#customer_register').serialize();
                 $.ajax({
                     url: '{{ route('front.register-client-submit') }}',
@@ -274,13 +284,16 @@
                             $scope.account_name = response.data.account_name;
                             $scope.password = response.data.password;
                             $scope.showFormLogin();
+                            $scope.loading = false;
                         } else {
                             toastr.error(response.message);
                             $scope.errors = response.errors;
+                            $scope.loading = false;
                         }
                     },
                     error: function(response) {
                         console.log(response);
+                        $scope.loading = false;
                     },
                     complete: function() {
                         $scope.$applyAsync();
@@ -289,6 +302,7 @@
             }
 
             $scope.loginClient = function() {
+                $scope.loading = true;
                 let data = {
                     account_name: $scope.account_name,
                     password: $scope.password
@@ -306,12 +320,15 @@
                             window.location.href = '{{ route('front.client-account') }}';
                             localStorage.setItem('{{ env('prefix') }}-token', response.data.token);
                             localStorage.setItem('showMenuAdminClient', true);
+                            $scope.loading = false;
                         } else {
                             toastr.error(response.message);
+                            $scope.loading = false;
                         }
                     },
                     error: function(response) {
                         console.log(response);
+                        $scope.loading = false;
                     },
                     complete: function() {
                         $scope.$applyAsync();
@@ -320,6 +337,7 @@
             }
 
             $scope.recoverPassword = function() {
+                $scope.loading = true;
                 $.ajax({
                     url: '{{ route('front.recover-password-submit') }}',
                     type: 'POST',
@@ -333,13 +351,16 @@
                         if (response.success) {
                             toastr.success(response.message);
                             $('.h_recover').hide();
+                            $scope.loading = false;
                         } else {
                             $scope.errors = response.errors;
                             toastr.error(response.message);
+                            $scope.loading = false;
                         }
                     },
                     error: function(response) {
                         console.log(response);
+                        $scope.loading = false;
                     },
                     complete: function() {
                         $scope.$applyAsync();

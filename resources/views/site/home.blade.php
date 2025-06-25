@@ -19,13 +19,13 @@
         }
 
         .create-user-link-section-title {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 600;
             /* margin-bottom: 20px; */
         }
 
         .create-user-link-section-note {
-            font-size: 15px;
+            font-size: 14px;
             color: #000;
             margin-bottom: 20px;
         }
@@ -91,7 +91,7 @@
             background-color: #fff;
             box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
             height: 40px;
-            font-size: 17px;
+            font-size: 15px;
             color: #0974ba;
             font-weight: 600;
         }
@@ -108,7 +108,7 @@
             background-color: #fff;
             box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
             height: 40px;
-            font-size: 17px;
+            font-size: 15px;
             font-weight: 600;
             color: #fff;
             background-color: #0974ba;
@@ -122,7 +122,7 @@
         }
 
         .create-user-link-section-request-note {
-            font-size: 15px;
+            font-size: 14px;
             color: #000;
         }
 

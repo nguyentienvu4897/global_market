@@ -2308,7 +2308,7 @@ label {
 }
 
 .item_product_main .product-info .product-name a {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 400;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -3699,7 +3699,7 @@ header .menu_mega .ul_menu .nav_item a {
 
 @media (min-width: 1400px) {
     header .menu_mega .ul_menu .nav_item a {
-        font-size: 16px;
+        font-size: 14px;
     }
 }
 
@@ -3758,7 +3758,7 @@ header .menu_mega .ul_menu .ul_content_right_1 .nav_item {
 
 header .menu_mega .ul_menu .ul_content_right_1 .nav_item>a {
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
     line-height: 24px;
     display: block;
     padding: 0px 0px 0px 10px;
@@ -3809,7 +3809,7 @@ header .menu_mega .ul_menu .ul_content_right_1 .nav_item .ul_content_right_2 .na
 
 header .menu_mega .ul_menu .ul_content_right_1 .nav_item .ul_content_right_2 .nav_item a {
     font-weight: 400;
-    font-size: 15px;
+    font-size: 13px;
     line-height: 22px;
     display: block;
     padding: 0px 0px 0px 15px;
@@ -3959,9 +3959,9 @@ header .menu_mega .ul_menu .ul_content_right_1 .nav_item .ul_content_right_2 .na
 
     .header-mid .navigation-horizontal .header_hotline .txt_hotline a {
         display: block;
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 600;
-        line-height: 28px;
+        line-height: 24px;
         color: #f89427
     }
 
@@ -4027,7 +4027,7 @@ header .menu_mega .ul_menu .ul_content_right_1 .nav_item .ul_content_right_2 .na
 
     .header-mid #nav .nav-item>a {
         color: #ffffff;
-        font-size: 16px;
+        font-size: 14px;
         padding: 9px 30px 9px 0px;
         text-align: center;
         position: relative;
@@ -4383,9 +4383,9 @@ header .menu_mega .ul_menu .ul_content_right_1 .nav_item .ul_content_right_2 .na
 
 @media (min-width: 1441px) {
     .header-menu .title_menu {
-        padding: 4px 2px 4px;
+        padding: 8px 2px 8px;
         padding-left: 50px;
-        font-size: 16px;
+        font-size: 14px;
     }
 }
 
@@ -4410,16 +4410,16 @@ header .menu_mega .ul_menu .ul_content_right_1 .nav_item .ul_content_right_2 .na
 
 @media (min-width: 1441px) {
     .header-menu .title_menu .menu {
-        top: 17px;
+        top: 18px;
     }
 }
 
 .header-menu .title_menu .menu::before {
-    top: -6px
+    top: -6px;
 }
 
 .header-menu .title_menu .menu::after {
-    top: 6px
+    top: 6px;
 }
 
 .header-menu .title_menu span {
@@ -4492,7 +4492,7 @@ footer.footer .logo-footer img {
 footer.footer .social-footer {
     position: relative;
     display: block;
-    margin-top: 25px
+    margin-top: 15px;
 }
 
 @media (max-width: 992px) {
@@ -4508,10 +4508,10 @@ footer.footer .social-footer .social {
 
 footer.footer .social-footer .social a {
     display: inline-block;
-    width: 46px;
+    width: 36px;
     font-size: 14px;
-    margin-right: 25px;
-    height: 46px;
+    margin-right: 10px;
+    height: 36px;
     line-height: 46px;
     border-radius: 5px;
     text-align: center;
@@ -5397,7 +5397,7 @@ header .menu_mega:hover .title_menu {
 
 .top-header-wrapper a {
     color: #fff;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 400;
 }
 
