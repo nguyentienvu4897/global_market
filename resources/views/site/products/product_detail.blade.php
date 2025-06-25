@@ -508,7 +508,7 @@
                                                     title="{{ $item->name }}">
                                                     <img width="370" height="480" class="lazyload"
                                                         src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAAANSURBVBhXYzh8+PB/AAffA0nNPuCLAAAAAElFTkSuQmCC"
-                                                        data-src="{{ $item->image->path }}"
+                                                        data-src="{{ $item->image ? $item->image->path : 'https://placehold.co/370x480' }}"
                                                         alt="{{ $item->name }}">
                                                 </a>
                                                 <div class="product-info">
@@ -529,7 +529,7 @@
                                 <div class="col-lg-12 col-col-md-12 col-sm-6 col-xs-12">
                                     <a class="banner_right_pro" href="javascript:void(0);" title="Banner">
                                         <img width="375" height="525"
-                                            src="{{$product->image->path}}"
+                                            src="{{$product->image ? $product->image->path : 'https://placehold.co/375x525' }}"
                                             alt="Banner" />
                                     </a>
                                 </div>
