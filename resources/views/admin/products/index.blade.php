@@ -136,7 +136,7 @@
                     orderable: false,
                     className: "text-center",
                     render: function(data) {
-                        return `<img src="${data ? data.path : 'https://via.placeholder.com/150'}" style="max-width: 55px !important">`;
+                        return `<img src="${data ? data.path : 'https://placeholder.co/55x55'}" style="max-width: 55px !important">`;
                     }
                 },
                 {
