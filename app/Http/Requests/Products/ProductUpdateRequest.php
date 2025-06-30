@@ -24,7 +24,12 @@ class ProductUpdateRequest extends BaseRequest
     {
         $rules =[
             'type' => 'required|in:0,1',
-            'name' => 'required|unique:products,name,'.$this->route('id').",id",
+            'name' => [
+                'required',
+                Rule::unique('products', 'name')->where(function ($query) {
+                    return $query->where('created_by', Auth::guard('admin')->user()->id);
+                })->ignore($this->route('id'))
+            ],
             // 'cate_id' => 'required_if:type,0|exists:categories,id',
             'manufacturer_id' => 'nullable|exists:manufacturers,id',
             'origin_id' => 'nullable|exists:origins,id',
