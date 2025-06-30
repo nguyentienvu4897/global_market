@@ -81,7 +81,7 @@ class LoginController extends Controller
     }
 
     public function logout() {
-        if (Auth::guard('admin')->user()->is_seller) {
+        if (Auth::guard('admin')->user()->is_ctv) {
             Auth::guard('admin')->logout();
             $message = array(
                 "logout" => "logout"
