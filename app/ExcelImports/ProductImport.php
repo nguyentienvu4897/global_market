@@ -16,6 +16,7 @@ use Maatwebsite\Excel\Concerns\WithMultipleSheets;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 use App\Model\Common\File as FileModel;
+use Illuminate\Support\Facades\Auth;
 
 class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
 {
@@ -124,7 +125,7 @@ class ProductImport implements ToCollection, WithStartRow, WithMultipleSheets
             $product = Product::query()->where(function ($query) use ($aff_product_code, $product_name) {
                 $query->where('aff_product_code', $aff_product_code)
                     ->orWhere('name', $product_name);
-            })->first();
+            })->where('created_by', Auth::guard('admin')->user()->id)->first();
             if($product) {
                 $product->name = $product_name;
                 $product->origin_id = $origin->id;
