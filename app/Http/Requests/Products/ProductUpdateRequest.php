@@ -4,6 +4,7 @@ namespace App\Http\Requests\Products;
 
 use App\Http\Requests\BaseRequest;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Auth;
 
 class ProductUpdateRequest extends BaseRequest
 {
