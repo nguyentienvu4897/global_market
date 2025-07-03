@@ -15,7 +15,7 @@ Danh sách người dùng
 
 
 @section('content')
-<div class="row">
+<div class="row" ng-controller="User">
 	<div class="col-12">
 		<div class="card">
 			<div class="card-body">
@@ -64,8 +64,20 @@ Danh sách người dùng
 		],
 		@if(Auth::guard('admin')->user()->type == App\Model\Common\User::SUPER_ADMIN || Auth::guard('admin')->user()->type == App\Model\Common\User::QUAN_TRI_VIEN)
 		// create_link: "{{ route('User.create') }}"
+        export_link: "{!! route('User.exportExcel') !!}",
 		@endif
 	});
+
+    app.controller('User', function($scope, $rootScope, $http) {
+        $scope.loading = {};
+
+        $(document).on('click', '.export-button', function(event) {
+            event.preventDefault();
+            let data = {};
+            mergeSearchV2(data);
+            window.location.href = $(this).attr('href') + "?" + $.param(data);
+        })
+    });
 
 </script>
 @include('partial.confirm')

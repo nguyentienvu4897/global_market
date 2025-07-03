@@ -13,6 +13,7 @@ use Tymon\JWTAuth\Contracts\JWTSubject;
 use Auth;
 use App\Model\Common\File;
 use Spatie\Permission\Traits\HasRoles;
+use Carbon\Carbon;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -296,5 +297,60 @@ class User extends Authenticatable implements JWTSubject
 
     public function getAvatarAttribute() {
         return $this->image ? $this->image->path : asset('site/images/avatar.png');
+    }
+
+    public static function getTableList($users)
+    {
+        $rows = '';
+
+        \Log::info('start export user loop');
+        foreach ($users as $index => $item) {
+            try {
+                $rows .= '<tr style="font-size: 16px;">';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black; text-align: center" >' . ($index + 1) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($item->name) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->email) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->phone_number) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->account_name) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->getTypeUser($item->type)) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->status == 0 ? 'Khóa' : 'Hoạt động') . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . str_replace('&', ' &amp; ', $item->invite_code) . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . Carbon::parse($item->created_at)->format('d/m/Y H:i:s') . '</td>';
+                $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . Carbon::parse($item->updated_at)->format('d/m/Y H:i:s') . '</td>';
+
+                $rows .= '</tr>';
+            } catch (\Throwable $e) {
+                \Log::error('Error in getTableList at item #' . $index, [
+                    'item_id' => $item->id ?? 'N/A',
+                    'name' => $item->name ?? '',
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ]);
+                \Log::info(var_export($item, true));
+            }
+
+        }
+
+        $table = '<table style="width: 100%">
+            <thead>
+                <tr style="">
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 7px"><b>STT</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 20px"><b>Họ và tên</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 40px"><b>Email</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 14px"><b>Số điện thoại</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 14px"><b>Tên đăng nhập</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 14px"><b>Loại tài khoản</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 12px"><b>Trạng thái</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 14px"><b>Mã giới thiệu</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 18px"><b>Ngày tạo</b></td>
+                    <td style="vertical-align: center; word-wrap: break-word; text-align: center; border: 1px solid black; width: 18px"><b>Ngày cập nhật</b></td>
+                </tr>
+            </thead>
+            <tbody>'
+            . $rows .
+            '</tbody>
+        </table>';
+
+        return $table;
     }
 }

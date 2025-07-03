@@ -8,6 +8,7 @@ use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\DataTables;
 use Validator;
 use App\Employee;
+use App\ExcelExports\UserExcel;
 use Auth;
 use \stdClass;
 use Response;
@@ -220,17 +221,26 @@ class UserController extends Controller
 
 
     // Xuất Excel
-    public function exportExcel()
-    {
-        return (new FastExcel(ThisModel::all()))->download('danh_sach_tai_khoan.xlsx', function ($object) {
-            return [
-                'ID' => $object->id,
-                'Tên' => $object->name,
-                'email' => $object->email,
-                'Loại' => $object->getTypeUser($object->type),
-                'Trạng thái' => $object->status == 0 ? 'Khóa' : 'Hoạt động',
-            ];
-        });
+    // public function exportExcel()
+    // {
+    //     return (new FastExcel(ThisModel::all()))->download('danh_sach_tai_khoan.xlsx', function ($object) {
+    //         return [
+    //             'ID' => $object->id,
+    //             'Tên' => $object->name,
+    //             'email' => $object->email,
+    //             'Loại' => $object->getTypeUser($object->type),
+    //             'Trạng thái' => $object->status == 0 ? 'Khóa' : 'Hoạt động',
+    //         ];
+    //     });
+    // }
+
+    public function exportExcel(Request $request) {
+        $data = ThisModel::searchByFilter($request)->get();
+        $result['CHI_TIET'] = ThisModel::getTableList($data);
+
+        return (new UserExcel())
+            ->forData($result)
+            ->download('danh_sach_tai_khoan.xlsx');
     }
 
     // Xuất PDF
