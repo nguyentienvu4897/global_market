@@ -136,15 +136,14 @@ class User extends Authenticatable implements JWTSubject
 
     public function canEdit()
     {
-        if (Auth::guard('admin')->user()->canDo('Cập nhật tài khoản người dùng')) {
-            return true;
-        }
+        if (Auth::guard('admin')->user()->canDo('Cập nhật người dùng')) return true;
+        if (Auth::guard('admin')->user()->is_ctv && Auth::guard('admin')->user()->id == $this->id) return true;
         return false;
     }
 
     public function canDelete()
     {
-        if (Auth::guard('admin')->user()->canDo('Xóa tài khoản người dùng')) {
+        if (Auth::guard('admin')->user()->canDo('Xóa người dùng')) {
             return true;
         }
         return false;

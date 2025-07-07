@@ -410,12 +410,12 @@ Route::group(['prefix' => 'admin'], function () {
             });
 
             Route::group(['prefix' => 'users', 'middleware' => 'checkType:' . User::SUPER_ADMIN . ',' . User::QUAN_TRI_VIEN], function () {
-                Route::get('/create', 'Common\UserController@create')->name('User.create')->middleware('checkPermission:Thêm mới tài khoản người dùng');
-                Route::post('/', 'Common\UserController@store')->name('User.store')->middleware('checkPermission:Thêm mới tài khoản người dùng');
+                Route::get('/create', 'Common\UserController@create')->name('User.create')->middleware('checkPermission:Thêm mới người dùng');
+                Route::post('/', 'Common\UserController@store')->name('User.store')->middleware('checkPermission:Thêm mới người dùng');
                 Route::get('/', 'Common\UserController@index')->name('User.index')->middleware('checkPermission:Quản lý tài khoản người dùng');
-                Route::get('/{id}/edit', 'Common\UserController@edit')->name('User.edit')->middleware('checkPermission:Cập nhật tài khoản người dùng');
-                Route::get('/{id}/delete', 'Common\UserController@delete')->name('User.delete')->middleware('checkPermission:Xóa tài khoản người dùng');
-                Route::post('/{id}/update', 'Common\UserController@update')->name('User.update')->middleware('checkPermission:Cập nhật tài khoản người dùng');
+                Route::get('/{id}/edit', 'Common\UserController@edit')->name('User.edit')->middleware('checkPermission:Cập nhật người dùng');
+                Route::get('/{id}/delete', 'Common\UserController@delete')->name('User.delete')->middleware('checkPermission:Xóa người dùng');
+                Route::post('/{id}/update', 'Common\UserController@update')->name('User.update')->middleware('checkPermission:Cập nhật người dùng');
                 Route::get('/searchData', 'Common\UserController@searchData')->name('User.searchData');
                 Route::get('/exportExcel', 'Common\UserController@exportExcel')->name('User.exportExcel');
                 Route::get('/exportPdf', 'Common\UserController@exportPDF')->name('User.exportPDF');
