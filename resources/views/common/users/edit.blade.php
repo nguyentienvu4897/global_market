@@ -39,7 +39,9 @@ app.controller('Common', function ($scope, $http) {
 			success: function(response) {
 				if (response.success) {
 					toastr.success(response.message);
-					window.location.href = "{{ route('User.index') }}";
+                    if ({{Auth::guard('admin')->user()->is_super_admin || Auth::guard('admin')->user()->is_admin}}) {
+                        window.location.href = "{{ route('User.index') }}";
+                    }
 				} else {
 					toastr.warning(response.message);
 					$scope.errors = response.errors;
