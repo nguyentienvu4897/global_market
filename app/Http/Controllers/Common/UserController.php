@@ -188,8 +188,10 @@ class UserController extends Controller
             }
 
 			if($request->image) {
-				FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
-				FileHelper::uploadFile($request->image, 'users', $object->id, ThisModel::class, 'image');
+                if ($object->image) {
+                    FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+                }
+				FileHelper::uploadFile($request->image, 'users', $object->id, ThisModel::class, 'image', 99);
 			}
 
 			DB::commit();
