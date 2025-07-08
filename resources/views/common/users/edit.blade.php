@@ -40,6 +40,7 @@ app.controller('Common', function ($scope, $http) {
 				if (response.success) {
 					toastr.success(response.message);
                     if ({{ Auth::guard('admin')->user()->id }} == {{ $object->id }}) {
+                        window.location.href = "{{ route('User.editProfile', $object->id) }}";
                     } else {
                         window.location.href = "{{ route('User.index') }}";
                     }
