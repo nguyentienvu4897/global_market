@@ -6,7 +6,7 @@
     {{ strip_tags($product->intro) }}
 @endsection
 @section('image')
-    {{ ($product->image ? $product->image->path : ($product->galleries && count($product->galleries) > 0 ? $product->galleries[0]->image->path : 'https://placeholder.co/480x480')) }}
+    {{ ($product->image ? $product->image->path : ($product->galleries && count($product->galleries) > 0 ? ($product->galleries[0]->image ? $product->galleries[0]->image->path : 'https://placeholder.co/480x480') : 'https://placeholder.co/480x480')) }}
 @endsection
 
 @section('css')
