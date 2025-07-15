@@ -193,7 +193,17 @@ class FrontController extends Controller
                 }
             }
 
-            return view('site.products.product_detail', compact('categories', 'product', 'productsRelated', 'category', 'arr_product_rate_images', 'bestSellerProducts', 'canReview'));
+            $redirect_aff_url = '';
+            $current_customer = \Auth::guard('client')->user();
+            $product_created_by = User::query()->where('id', $product->created_by)->where('status', 1)->whereNotIn('type', [User::SUPER_ADMIN, User::QUAN_TRI_VIEN])->first();
+            if ($product_created_by) {
+                $redirect_aff_url = $product->aff_link . "?sub_id=" . $current_customer ? $current_customer->invite_code : null . "----";
+            } else {
+                $origin_url = $product->origin_link;
+                $redirect_aff_url = $this->convertShopeeLink($origin_url);
+            }
+
+            return view('site.products.product_detail', compact('categories', 'product', 'productsRelated', 'category', 'arr_product_rate_images', 'bestSellerProducts', 'canReview', 'redirect_aff_url'));
         } catch (\Exception $exception) {
             return view('site.errors');
             Log::error($exception);
@@ -586,10 +596,16 @@ class FrontController extends Controller
         }
 
 
-
+        $generate_links = [];
         $order_last = AffiliateLinkRequest::orderBy('id', 'desc')->first();
         $order_number = $order_last ? $order_last->order_number + 1 : 1;
         foreach ($request->arrGenerateLink as $item) {
+            $url_generated = '';
+            if ($item['campaign_id'] == 1) {
+                $url_generated = $this->convertShopeeLink($item['url_origin']);
+                array_push($generate_links, $url_generated);
+            }
+
             $campaign = array_find_el(AffiliateLinkRequest::CAMPAIGNS, function ($el) use ($item) {
                 return $el['id'] == $item['campaign_id'];
             })['name'];
@@ -597,18 +613,21 @@ class FrontController extends Controller
             $object->user_id = \Auth::guard('client')->user()->id;
             $object->order_number = $order_number;
             $object->url_origin = $item['url_origin'];
+            $object->url_generated = $url_generated ?? null;
             $object->campaign_id = $item['campaign_id'];
             $object->campaign_name = $campaign;
-            $object->status = AffiliateLinkRequest::STATUS_NEW;
+            $object->status = !empty($url_generated) ? AffiliateLinkRequest::STATUS_APPROVED : AffiliateLinkRequest::STATUS_NEW;
             $object->save();
 
-            $ctv_user_ids = SellerRequest::query()->where('status', SellerRequest::STATUS_APPROVED)->whereNotNull('approved_by')->where('campaign_id', $object->campaign_id)->pluck('user_id')->toArray();
-            $ctv_user_ids = array_unique($ctv_user_ids);
-            $ctv_users = User::query()->whereIn('id', $ctv_user_ids)->where('status', 1)->get();
-            foreach ($ctv_users as $ctv_user) {
-                Mail::to($ctv_user->email)->send(new AffiliateLinkRequestToCtvMail($ctv_user, $object));
-                // Mail::to('vudev4897@gmail.com')->send(new AffiliateLinkRequestToCtvMail($ctv_user, $object));
-            }
+
+
+            // $ctv_user_ids = SellerRequest::query()->where('status', SellerRequest::STATUS_APPROVED)->whereNotNull('approved_by')->where('campaign_id', $object->campaign_id)->pluck('user_id')->toArray();
+            // $ctv_user_ids = array_unique($ctv_user_ids);
+            // $ctv_users = User::query()->whereIn('id', $ctv_user_ids)->where('status', 1)->get();
+            // foreach ($ctv_users as $ctv_user) {
+            //     Mail::to($ctv_user->email)->send(new AffiliateLinkRequestToCtvMail($ctv_user, $object));
+            //     // Mail::to('vudev4897@gmail.com')->send(new AffiliateLinkRequestToCtvMail($ctv_user, $object));
+            // }
         }
 
         $users = User::query()->where('type', 1)->where('status', 1)->get();
@@ -618,6 +637,45 @@ class FrontController extends Controller
 
         // Mail::to('vudev4897@gmail.com')->send(new AffiliateLinkRequestMail($request->arrGenerateLink, \Auth::guard('client')->user()));
 
-        return $this->responseSuccess('Gửi yêu cầu thành công!');
+        // return $this->responseSuccess('Gửi yêu cầu thành công!', $generate_links);
+        return Response::json([
+            'success' => true,
+            'result_urls' => $generate_links,
+            'message' => 'Gửi yêu cầu thành công!',
+        ]);
+    }
+
+    public function convertShopeeLink($url)
+    {
+        $invite_code_user = \Auth::guard('client')->user() ? \Auth::guard('client')->user()->invite_code : null;
+        // Nếu đã là dạng rút gọn: https://shopee.vn/product/{shop_id}/{item_id}
+        if (preg_match('#shopee\.vn/product/\d+/\d+#', $url)) {
+            // Phân tích URL
+            $parsedUrl = parse_url($url);
+
+            // Lấy query string hiện tại
+            parse_str($parsedUrl['query'] ?? '', $queryParams);
+
+            // Kiểm tra nếu đã có đủ 3 tham số cần
+            if (
+                isset($queryParams['utm_content']) &&
+                isset($queryParams['utm_medium']) && $queryParams['utm_medium'] === 'affiliates' &&
+                isset($queryParams['utm_source']) && strpos($queryParams['utm_source'], 'an_') === 0
+            ) {
+                return $url;
+            } else {
+                return $url . "?utm_content=$invite_code_user----&utm_medium=affiliates&utm_source=an_17381230248";
+            }
+        }
+
+        // Nếu là dạng dài: chứa -i.{shop_id}.{item_id}
+        if (preg_match('/-i\.(\d+)\.(\d+)/', $url, $matches)) {
+            $shopId = $matches[1];
+            $itemId = $matches[2];
+            return "https://shopee.vn/product/$shopId/$itemId?utm_content=$invite_code_user----&utm_medium=affiliates&utm_source=an_17381230248";
+        }
+
+        // Không khớp định dạng nào
+        return "URL không hợp lệ";
     }
 }

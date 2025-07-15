@@ -650,7 +650,7 @@
             </div>
             <div class="media-content bodycart-mobile">
                 <div class="thumb-1x1">
-                    <img src="<% noti_product.product_image %>" alt="<% noti_product.product_name %>">
+                    <img ng-src="<% noti_product.product_image %>" alt="<% noti_product.product_name %>">
                 </div>
                 <div class="body_content">
                     <h4 class="product-title"><% noti_product.product_name %></h4>

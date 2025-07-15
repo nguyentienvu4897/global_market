@@ -253,7 +253,7 @@
                                                             <a href="javascript:void(0)" class="btn btn-buy-now" ng-click="addToCartCheckoutFromProductDetail()">
                                                             <span class="txt-main text_1">Mua hàng</span></a>
                                                         @else
-                                                            <a href="{{ $product->short_link ?? $product->aff_link }}" class="btn btn-buy-now" target="_blank">
+                                                            <a href="{{ $redirect_aff_url }}" class="btn btn-buy-now" target="_blank">
                                                                 <span class="txt-main text_1">Mua hàng</span></a>
                                                         @endif
                                                     </div>

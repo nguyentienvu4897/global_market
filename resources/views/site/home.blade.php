@@ -130,12 +130,59 @@
             .user-link-section-content {
                 padding: 20px 10px;
             }
+
             .create-user-link-section-title {
                 font-size: 20px;
             }
+
             .create-user-link-section-request-note {
                 font-size: 13px;
             }
+        }
+
+        .create-user-link-section-result-urls .custom-input-url {
+            display: flex;
+        }
+
+        .create-user-link-section-result-urls .custom-input-url input {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+            border-right: none;
+            margin-bottom: 15px;
+            padding: 0 15px;
+        }
+
+        .create-user-link-section-result-urls .custom-input-url .btn-copy {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+            border-left: none;
+        }
+
+        .tooltip-btn {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .tooltip-btn::after {
+            content: attr(data-tooltip);
+            position: absolute;
+            background: #333;
+            color: #fff;
+            padding: 5px;
+            border-radius: 4px;
+            font-size: 12px;
+            white-space: nowrap;
+            top: -45px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.2s ease-in-out;
+            z-index: 100;
+        }
+
+        .tooltip-btn:hover::after {
+            opacity: 1;
         }
     </style>
 @endsection
@@ -231,8 +278,8 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <input type="text" class="form-control" id="name" name="name"
-                                    placeholder="Gắn link sản phẩm ở đây" ng-model="item.url_origin">
+                                <input type="text" class="form-control" placeholder="Gắn link sản phẩm ở đây"
+                                    ng-model="item.url_origin">
                                 <div class="invalid-feedback d-block error" role="alert" style="margin-left: 10px;">
                                     <span ng-if="errors && errors['arrGenerateLink.' + index + '.url_origin']">
                                         <% errors['arrGenerateLink.' + index + '.url_origin'][0] %>
@@ -255,13 +302,34 @@
                         </button>
                     </div>
                     <div class="create-user-link-section-button-add">
-                        <button class="btn btn-add-link" title="Thêm link" ng-click="addArrGenerateLink()">Thêm link</button>
+                        <button class="btn btn-add-link" title="Thêm link" ng-click="addArrGenerateLink()">Thêm
+                            link</button>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="create-user-link-section-request-note">
                         Vui lòng nhập đầy đủ thông tin để tạo link. Mọi yêu cầu đã gửi đi sẽ được xử lý trong thời gian 5
                         - 10 phút.
+                    </div>
+                </div>
+                <div class="col-md-12" ng-if="result_urls.length > 0 && !loading">
+                    <div class="create-user-link-section-title" style="margin-top: 20px;">Kết quả link đã gửi</div>
+                    <div class="create-user-link-section-result-urls">
+                        <div class="create-user-link-section-result-url" ng-repeat="url in result_urls track by $index">
+                            <div class="form-group custom-input-url">
+                                <input type="text" class="form-control" placeholder="Gắn link sản phẩm ở đây"
+                                    ng-model="url">
+
+                                <button class="btn btn-redirect tooltip-btn" data-tooltip="Chuyển link"
+                                    data-bs-placement="top" title="Chuyển link" ng-click="redirectToLink(url)">
+                                    <i class="fa fa-link"></i>
+                                </button>
+                                <button class="btn btn-copy tooltip-btn" data-tooltip="Copy link" data-bs-placement="top"
+                                    title="Copy link" ng-click="copyUrl(url)">
+                                    <i class="fa fa-copy"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -272,7 +340,8 @@
         <section class="section_flash_sale container">
             <div class="box-deal" style="background-image:url({{ getBanner($categorySpecialFlashsale) }});">
                 <div class="title_deal">
-                    <a class="title_fl" href="{{ route('front.show-product-category', $categorySpecialFlashsale->slug) }}"
+                    <a class="title_fl"
+                        href="{{ route('front.show-product-category', $categorySpecialFlashsale->slug) }}"
                         title="{{ $categorySpecialFlashsale->name }}">
                         {{ $categorySpecialFlashsale->name }}
                     </a>
@@ -490,64 +559,65 @@
     </script>
 @endsection
 @push('script')
-<script>
-    app.controller('GenerateLinkController', function($scope, $http) {
-        $scope.loading = false;
-        $scope.errors = {};
-        $scope.canGenerateLink = @json(Auth::guard('client')->check());
-        $scope.campaigns = @json(App\Model\Admin\AffiliateLinkRequest::CAMPAIGNS);
-        $scope.arrGenerateLink = [
-            {
+    <script>
+        app.controller('GenerateLinkController', function($scope, $http) {
+            $scope.loading = false;
+            $scope.errors = {};
+            $scope.canGenerateLink = @json(Auth::guard('client')->check());
+            $scope.campaigns = @json(App\Model\Admin\AffiliateLinkRequest::CAMPAIGNS);
+            $scope.result_urls = [];
+            $scope.arrGenerateLink = [{
                 campaign_id: 1,
                 url_origin: ''
-            },
-        ];
-        $scope.addArrGenerateLink = function() {
-            $scope.arrGenerateLink.push({
-                campaign_id: '',
-                url_origin: ''
-            });
-        }
-        $scope.removeArrGenerateLink = function(index) {
-            $scope.arrGenerateLink.splice(index, 1);
-        }
-        $scope.generateLink = function() {
-            $scope.loading = true;
-            $.ajax({
-                url: '{{ route('front.generate-link') }}',
-                type: 'POST',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                data: {
-                    arrGenerateLink: $scope.arrGenerateLink
-                },
-                success: function(response) {
-                    if (response.success) {
-                        $scope.arrGenerateLink = [
-                            {
-                                campaign_id: 1,
-                                url_origin: ''
-                            },
-                        ];
-                        $scope.errors = {};
-                        toastr.success(response.message);
-                    } else {
-                        $scope.errors = response.errors;
-                        toastr.error(response.message);
+            }, ];
+            $scope.addArrGenerateLink = function() {
+                $scope.arrGenerateLink.push({
+                    campaign_id: '',
+                    url_origin: ''
+                });
+            }
+            $scope.removeArrGenerateLink = function(index) {
+                $scope.arrGenerateLink.splice(index, 1);
+            }
+            $scope.generateLink = function() {
+                $scope.loading = true;
+                $.ajax({
+                    url: '{{ route('front.generate-link') }}',
+                    type: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    data: {
+                        arrGenerateLink: $scope.arrGenerateLink
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            $scope.result_urls = response.result_urls;
+                            $scope.errors = {};
+                            toastr.success(response.message);
+                        } else {
+                            $scope.errors = response.errors;
+                            toastr.error(response.message);
+                            $scope.loading = false;
+                        }
+                    },
+                    error: function(response) {
+                        console.log(response);
+                        $scope.loading = false;
+                    },
+                    complete: function() {
+                        $scope.$applyAsync();
                         $scope.loading = false;
                     }
-                },
-                error: function(response) {
-                    console.log(response);
-                    $scope.loading = false;
-                },
-                complete: function() {
-                    $scope.$applyAsync();
-                    $scope.loading = false;
-                }
-            });
-        }
-    });
-</script>
+                });
+            }
+            $scope.redirectToLink = function(url) {
+                window.open(url, '_blank');
+            }
+            $scope.copyUrl = function(url) {
+                navigator.clipboard.writeText(url);
+                toastr.success('Đã sao chép link');
+            }
+        });
+    </script>
 @endpush

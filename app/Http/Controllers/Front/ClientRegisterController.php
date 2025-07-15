@@ -145,6 +145,13 @@ class ClientRegisterController extends Controller
             $object->parent_id = $request->invite_code ? User::where('invite_code', $request->invite_code)->first()->id : null;
             $object->save();
 
+            do {
+                $inviteCode = substr(str_shuffle(str_repeat('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 8)), 0, 8);
+            } while (User::where('invite_code', $inviteCode)->exists());
+
+            $object->invite_code = $inviteCode;
+            $object->save();
+
             // Xác minh email
             $token = Str::random(64);
             $hashedToken = Hash::make($token);

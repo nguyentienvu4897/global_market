@@ -3,7 +3,9 @@ namespace App\ExcelImports;
 
 use App\Model\Admin\Order;
 use App\Model\Admin\OrderDetail;
+use App\Model\Admin\OrderRevenueDetail;
 use App\Model\Admin\Product;
+use App\Model\Common\User;
 use DateTime;
 use Carbon\Carbon;
 use PhpOffice\PhpSpreadsheet\Shared\Date;
@@ -37,6 +39,7 @@ class OrderImport implements ToCollection, WithStartRow, WithMultipleSheets
             $product_name = trim($row[2]);
             $total_price = trim($row[3]);
             $total_revenue = trim($row[4]);
+            $sub_id1 = trim($row[5]);
             $status = 30;
             $merchant = 'shopee';
             $comment = null;
@@ -67,6 +70,25 @@ class OrderImport implements ToCollection, WithStartRow, WithMultipleSheets
                 continue;
             }
 
+            $current_user = User::query()->with([
+                'parent' => function ($q) {
+                    $q->with([
+                        'parent' => function ($q) {
+                            $q->with([
+                                'parent' => function ($q) {
+                                    $q->with([
+                                        'parent' => function ($q) {
+                                            $q->where('status', 1)->where('type', 10);
+                                        }
+                                    ])->where('status', 1)->where('type', 10);
+                                }
+                            ])->where('status', 1)->where('type', 10);
+                        }
+                    ])->where('status', 1)->where('type', 10);
+                }
+            ])->where('invite_code', $sub_id1)->where('status', 1)->where('type', 10)->first();
+            $config = \App\Model\Admin\Config::where('id', 1)->select('revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5')->first();
+
             if($order && $order->created_at->greaterThan(Carbon::now()->subMinutes(2))) {
                 $order->total_before_discount += $total_price;
                 $order->total_after_discount += $total_price;
@@ -74,6 +96,76 @@ class OrderImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $order->comment = $comment ?? null;
                 $order->updated_by = Auth::guard('admin')->user()->id;
                 $order->save();
+                if(isset($current_user)) {
+                    $order->customer_name = $current_user->name;
+                    $order->customer_email = $current_user->email;
+                    $order->customer_phone = $current_user->phone_number;
+                    $order->save();
+
+                    $revenue_amount_level_1 = $total_revenue * $config->revenue_percent_1 / 100;
+                    $revenue_amount_level_2 = $total_revenue * $config->revenue_percent_2 / 100;
+                    $revenue_amount_level_3 = $total_revenue * $config->revenue_percent_3 / 100;
+                    $revenue_amount_level_4 = $total_revenue * $config->revenue_percent_4 / 100;
+                    $revenue_amount_level_5 = $total_revenue * $config->revenue_percent_5 / 100;
+
+                    $order_revenue_detail = new OrderRevenueDetail();
+                    $order_revenue_detail->order_id = $order->id;
+                    $order_revenue_detail->order_code = $order->code;
+                    $order_revenue_detail->user_id = $current_user->id;
+                    $order_revenue_detail->user_email = $current_user->email;
+                    $order_revenue_detail->user_level = 5;
+                    $order_revenue_detail->status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+                    $order_revenue_detail->revenue_amount = $revenue_amount_level_5;
+                    $order_revenue_detail->save();
+
+                    if (isset($current_user->parent)) {
+                        $order_revenue_detail = new OrderRevenueDetail();
+                        $order_revenue_detail->order_id = $order->id;
+                        $order_revenue_detail->order_code = $order->code;
+                        $order_revenue_detail->user_id = $current_user->parent->id;
+                        $order_revenue_detail->user_email = $current_user->parent->email;
+                        $order_revenue_detail->user_level = 4;
+                        $order_revenue_detail->status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+                        $order_revenue_detail->revenue_amount = $revenue_amount_level_4;
+                        $order_revenue_detail->save();
+                    }
+
+                    if (isset($current_user->parent) && isset($current_user->parent->parent)) {
+                        $order_revenue_detail = new OrderRevenueDetail();
+                        $order_revenue_detail->order_id = $order->id;
+                        $order_revenue_detail->order_code = $order->code;
+                        $order_revenue_detail->user_id = $current_user->parent->parent->id;
+                        $order_revenue_detail->user_email = $current_user->parent->parent->email;
+                        $order_revenue_detail->user_level = 3;
+                        $order_revenue_detail->status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+                        $order_revenue_detail->revenue_amount = $revenue_amount_level_3;
+                        $order_revenue_detail->save();
+                    }
+
+                    if (isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent)) {
+                        $order_revenue_detail = new OrderRevenueDetail();
+                        $order_revenue_detail->order_id = $order->id;
+                        $order_revenue_detail->order_code = $order->code;
+                        $order_revenue_detail->user_id = $current_user->parent->parent->parent->id;
+                        $order_revenue_detail->user_email = $current_user->parent->parent->parent->email;
+                        $order_revenue_detail->user_level = 2;
+                        $order_revenue_detail->status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+                        $order_revenue_detail->revenue_amount = $revenue_amount_level_2;
+                        $order_revenue_detail->save();
+                    }
+
+                    if (isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent) && isset($current_user->parent->parent->parent->parent)) {
+                        $order_revenue_detail = new OrderRevenueDetail();
+                        $order_revenue_detail->order_id = $order->id;
+                        $order_revenue_detail->order_code = $order->code;
+                        $order_revenue_detail->user_id = $current_user->parent->parent->parent->parent->id;
+                        $order_revenue_detail->user_email = $current_user->parent->parent->parent->parent->email;
+                        $order_revenue_detail->user_level = 1;
+                        $order_revenue_detail->status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+                        $order_revenue_detail->revenue_amount = $revenue_amount_level_1;
+                        $order_revenue_detail->save();
+                    }
+                }
                 $order_details = OrderDetail::where('order_id', $order->id)->where('product_name', $product_name)->first();
                 if(!$order_details) {
                     $order_detail = new OrderDetail();
@@ -104,6 +196,77 @@ class OrderImport implements ToCollection, WithStartRow, WithMultipleSheets
                 $order->created_by = Auth::guard('admin')->user()->id;
                 $order->updated_by = Auth::guard('admin')->user()->id;
                 $order->save();
+
+                if(isset($current_user)) {
+                    $order->customer_name = $current_user->name;
+                    $order->customer_email = $current_user->email;
+                    $order->customer_phone = $current_user->phone_number;
+                    $order->save();
+
+                    $revenue_amount_level_1 = $total_revenue * $config->revenue_percent_1 / 100;
+                    $revenue_amount_level_2 = $total_revenue * $config->revenue_percent_2 / 100;
+                    $revenue_amount_level_3 = $total_revenue * $config->revenue_percent_3 / 100;
+                    $revenue_amount_level_4 = $total_revenue * $config->revenue_percent_4 / 100;
+                    $revenue_amount_level_5 = $total_revenue * $config->revenue_percent_5 / 100;
+
+                    $order_revenue_detail = new OrderRevenueDetail();
+                    $order_revenue_detail->order_id = $order->id;
+                    $order_revenue_detail->order_code = $order->code;
+                    $order_revenue_detail->user_id = $current_user->id;
+                    $order_revenue_detail->user_email = $current_user->email;
+                    $order_revenue_detail->user_level = 5;
+                    $order_revenue_detail->status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+                    $order_revenue_detail->revenue_amount = $revenue_amount_level_5;
+                    $order_revenue_detail->save();
+
+                    if (isset($current_user->parent)) {
+                        $order_revenue_detail = new OrderRevenueDetail();
+                        $order_revenue_detail->order_id = $order->id;
+                        $order_revenue_detail->order_code = $order->code;
+                        $order_revenue_detail->user_id = $current_user->parent->id;
+                        $order_revenue_detail->user_email = $current_user->parent->email;
+                        $order_revenue_detail->user_level = 4;
+                        $order_revenue_detail->status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+                        $order_revenue_detail->revenue_amount = $revenue_amount_level_4;
+                        $order_revenue_detail->save();
+                    }
+
+                    if (isset($current_user->parent) && isset($current_user->parent->parent)) {
+                        $order_revenue_detail = new OrderRevenueDetail();
+                        $order_revenue_detail->order_id = $order->id;
+                        $order_revenue_detail->order_code = $order->code;
+                        $order_revenue_detail->user_id = $current_user->parent->parent->id;
+                        $order_revenue_detail->user_email = $current_user->parent->parent->email;
+                        $order_revenue_detail->user_level = 3;
+                        $order_revenue_detail->status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+                        $order_revenue_detail->revenue_amount = $revenue_amount_level_3;
+                        $order_revenue_detail->save();
+                    }
+
+                    if (isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent)) {
+                        $order_revenue_detail = new OrderRevenueDetail();
+                        $order_revenue_detail->order_id = $order->id;
+                        $order_revenue_detail->order_code = $order->code;
+                        $order_revenue_detail->user_id = $current_user->parent->parent->parent->id;
+                        $order_revenue_detail->user_email = $current_user->parent->parent->parent->email;
+                        $order_revenue_detail->user_level = 2;
+                        $order_revenue_detail->status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+                        $order_revenue_detail->revenue_amount = $revenue_amount_level_2;
+                        $order_revenue_detail->save();
+                    }
+
+                    if (isset($current_user->parent) && isset($current_user->parent->parent) && isset($current_user->parent->parent->parent) && isset($current_user->parent->parent->parent->parent)) {
+                        $order_revenue_detail = new OrderRevenueDetail();
+                        $order_revenue_detail->order_id = $order->id;
+                        $order_revenue_detail->order_code = $order->code;
+                        $order_revenue_detail->user_id = $current_user->parent->parent->parent->parent->id;
+                        $order_revenue_detail->user_email = $current_user->parent->parent->parent->parent->email;
+                        $order_revenue_detail->user_level = 1;
+                        $order_revenue_detail->status = OrderRevenueDetail::STATUS_WAIT_QUYET_TOAN;
+                        $order_revenue_detail->revenue_amount = $revenue_amount_level_1;
+                        $order_revenue_detail->save();
+                    }
+                }
 
                 $order_detail = new OrderDetail();
                 $order_detail->order_id = $order->id;
