@@ -528,15 +528,15 @@ class ClientRegisterController extends Controller
                             'parent' => function ($q) {
                                 $q->with([
                                     'parent' => function ($q) {
-                                        $q->where('status', 1)->where('type', 10);
+                                        $q->where('status', 1)->whereIn('type', [10, 20, 30]);
                                     }
-                                ])->where('status', 1)->where('type', 10);
+                                ])->where('status', 1)->whereIn('type', [10, 20, 30]);
                             }
-                        ])->where('status', 1)->where('type', 10);
+                        ])->where('status', 1)->whereIn('type', [10, 20, 30]);
                     }
-                ])->where('status', 1)->where('type', 10);
+                ])->where('status', 1)->whereIn('type', [10, 20, 30]);
             }
-        ])->where('id', auth()->guard('client')->user()->id)->where('status', 1)->where('type', 10)->first();
+        ])->where('id', auth()->guard('client')->user()->id)->where('status', 1)->whereIn('type', [10, 20, 30])->first();
         $config = \App\Model\Admin\Config::where('id', 1)->select('revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5')->first();
 
         if ($order) {
