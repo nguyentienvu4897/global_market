@@ -78,15 +78,15 @@ class OrderImport implements ToCollection, WithStartRow, WithMultipleSheets
                                 'parent' => function ($q) {
                                     $q->with([
                                         'parent' => function ($q) {
-                                            $q->where('status', 1)->where('type', 10);
+                                            $q->where('status', 1)->whereIn('type', [10, 20, 30]);
                                         }
-                                    ])->where('status', 1)->where('type', 10);
+                                    ])->where('status', 1)->whereIn('type', [10, 20, 30]);
                                 }
-                            ])->where('status', 1)->where('type', 10);
+                            ])->where('status', 1)->whereIn('type', [10, 20, 30]);
                         }
-                    ])->where('status', 1)->where('type', 10);
+                    ])->where('status', 1)->whereIn('type', [10, 20, 30]);
                 }
-            ])->where('invite_code', $sub_id1)->where('status', 1)->where('type', 10)->first();
+            ])->where('invite_code', $sub_id1)->where('status', 1)->whereIn('type', [10, 20, 30])->first();
             $config = \App\Model\Admin\Config::where('id', 1)->select('revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5')->first();
 
             if($order && $order->created_at->greaterThan(Carbon::now()->subMinutes(2))) {
