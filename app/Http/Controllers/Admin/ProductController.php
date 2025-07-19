@@ -28,6 +28,7 @@ use \Carbon\Carbon;
 use DB;
 use App\Helpers\FileHelper;
 use App\Model\Admin\Config;
+use App\Model\Admin\ProductGallery;
 use App\Model\Common\User;
 use App\Model\Common\ActivityLog;
 use Auth;
@@ -375,7 +376,7 @@ class ProductController extends Controller
         $product_ids = explode(',', $request->product_ids);
 
         $products = Product::query()->whereIn('id', $product_ids)->get();
-        
+
         foreach ($products as $object) {
             if ($object->image) {
                 FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
