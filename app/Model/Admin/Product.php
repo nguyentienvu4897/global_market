@@ -194,6 +194,10 @@ class Product extends BaseModel
             $result = $result->where('state', $request->state);
         }
 
+        if (!empty($request->product_ids)) {
+            $product_ids = explode(',', $request->product_ids);
+            $result = $result->whereIn('id', $product_ids);
+        }
 
         $result = $result->orderBy('created_at', 'desc')->select('id', 'name', 'price', 'base_price', 'cate_id', 'created_at', 'created_by', 'updated_by', 'status', 'state', 'type', 'slug', 'intro', 'body', 'origin_link', 'aff_link', 'aff_product_code', 'revenue_price', 'origin');
         return $result;
