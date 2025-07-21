@@ -377,7 +377,7 @@
 
         })
 
-        function removeProductArr() {
+        function removeArr() {
             var product_remove_ids = [];
             var rows_selected = datatable.column(0).checkboxes.selected();
 

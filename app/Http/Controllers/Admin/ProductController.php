@@ -343,7 +343,7 @@ class ProductController extends Controller
     // }
 
     public function exportExcel(Request $request) {
-        $data = ThisModel::searchByFilter($request);
+        $data = ThisModel::searchByFilter($request)->get();
         $result['CHI_TIET'] = ThisModel::getTableList($data);
 
         return (new ProductExcel())
@@ -375,7 +375,7 @@ class ProductController extends Controller
         $product_ids = explode(',', $request->product_ids);
 
         $products = Product::query()->whereIn('id', $product_ids)->get();
-        
+
         foreach ($products as $object) {
             if ($object->image) {
                 FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
