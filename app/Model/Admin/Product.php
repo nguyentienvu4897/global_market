@@ -543,9 +543,11 @@ class Product extends BaseModel
                 } else if (isset($category) && !isset($cate_parent) && !isset($cate_grandparent)) {
                     $level = 1;
                 }
-                $images = [$item->image->path];
+                $images = [$item->image ? $item->image->path : ''];
                 foreach ($item->galleries as $gallery) {
-                    $images[] = $gallery->image->path;
+                    if ($gallery->image) {
+                        $images[] = $gallery->image->path;
+                    }
                 }
                 $images = array_map(function ($image) {
                     return asset(trim($image));
@@ -560,7 +562,7 @@ class Product extends BaseModel
                 // Xử lý intro & body
                 $intro = str_replace(['<br>', '<br/>', '<br />'], "\n", $item->intro);
                 $body = str_replace(['<br>', '<br/>', '<br />'], "\n", $item->body);
-
+                
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($intro) . '</td>';
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($body) . '</td>';
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . join(', ', $images) . '</td>';
