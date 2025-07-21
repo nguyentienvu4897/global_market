@@ -197,7 +197,7 @@ class FrontController extends Controller
             $current_customer = \Auth::guard('client')->user();
             $product_created_by = User::query()->where('id', $product->created_by)->where('status', 1)->whereNotIn('type', [User::SUPER_ADMIN, User::QUAN_TRI_VIEN])->first();
             if ($product_created_by) {
-                $redirect_aff_url = $product->aff_link . "?sub_id=" . $current_customer ? $current_customer->invite_code : null . "----";
+                $redirect_aff_url = $product->aff_link . "?sub_id=" . ($current_customer ? $current_customer->invite_code : null) . "----";
             } else {
                 $origin_url = $product->origin_link;
                 $redirect_aff_url = $this->convertShopeeLink($origin_url);
@@ -438,7 +438,19 @@ class FrontController extends Controller
     public function autoSearchComplete(Request $request)
     {
         if (isset($request->keyword)) {
-            $products = Product::with(['image'])->where('name', 'LIKE', '%' . $request->keyword . '%')->where('status', 1)->orderBy('id', 'DESC')->limit(10)->get();
+            $keyword = preg_replace('/\s+/', ' ', trim($request->keyword)); // xoá khoảng trắng thừa
+            $keywords = explode(' ', $keyword);
+
+            $products = Product::with('image')
+                ->where('status', 1)
+                ->where(function ($query) use ($keywords) {
+                    foreach ($keywords as $word) {
+                        $query->where('name', 'LIKE', '%' . $word . '%');
+                    }
+                })
+                ->orderBy('id', 'DESC')
+                ->limit(10)
+                ->get();
             $view = view("site.partials.ajax_search_results", compact('products'))->render();
         } else {
             $view = '';
