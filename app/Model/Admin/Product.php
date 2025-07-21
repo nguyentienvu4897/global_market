@@ -195,7 +195,7 @@ class Product extends BaseModel
         }
 
 
-        $result = $result->orderBy('created_at', 'desc')->select('id', 'name', 'price', 'base_price', 'cate_id', 'created_at', 'created_by', 'updated_by', 'status', 'state', 'type', 'slug');
+        $result = $result->orderBy('created_at', 'desc')->select('id', 'name', 'price', 'base_price', 'cate_id', 'created_at', 'created_by', 'updated_by', 'status', 'state', 'type', 'slug', 'intro', 'body', 'origin_link', 'aff_link', 'aff_product_code', 'revenue_price', 'origin');
         return $result;
     }
 
@@ -562,7 +562,7 @@ class Product extends BaseModel
                 // Xử lý intro & body
                 $intro = str_replace(['<br>', '<br/>', '<br />'], "\n", $item->intro);
                 $body = str_replace(['<br>', '<br/>', '<br />'], "\n", $item->body);
-                
+
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($intro) . '</td>';
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . htmlspecialchars($body) . '</td>';
                 $rows .= '<td style="vertical-align: center; word-wrap: break-word; border:1px solid black;" >' . join(', ', $images) . '</td>';
