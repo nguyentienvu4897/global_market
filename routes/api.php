@@ -18,4 +18,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::post('/sync-user-account', 'Common\UserController@syncUserAccount')->middleware('verifySyncUserToken');
-Route::get('/v1/get-products', 'Api\ProductController@getProducts')->middleware('verifySyncUserToken');
+Route::post('/v1/get-products', 'Api\ProductController@getProducts')->middleware('verifySyncUserToken');
