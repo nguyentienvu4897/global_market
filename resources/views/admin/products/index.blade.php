@@ -377,7 +377,7 @@
 
         })
 
-        function removeProductArr() {
+        function removeArr() {
             var product_remove_ids = [];
             var rows_selected = datatable.column(0).checkboxes.selected();
 
@@ -409,7 +409,15 @@
 
         $(document).on('click', '.export-button', function(event) {
             event.preventDefault();
+            var product_export_ids = [];
+            var rows_selected = datatable.column(0).checkboxes.selected();
+
+            $.each(rows_selected, function(index, rowId) {
+                product_export_ids.push(rowId);
+            });
+            var product_ids = product_export_ids.join(',');
             let data = {};
+            data.product_ids = product_ids;
             mergeSearchV2(data);
             window.location.href = $(this).attr('href') + "?" + $.param(data);
         })

@@ -194,8 +194,12 @@ class Product extends BaseModel
             $result = $result->where('state', $request->state);
         }
 
+        if (!empty($request->product_ids)) {
+            $product_ids = explode(',', $request->product_ids);
+            $result = $result->whereIn('id', $product_ids);
+        }
 
-        $result = $result->orderBy('created_at', 'desc')->select('id', 'name', 'price', 'base_price', 'cate_id', 'created_at', 'created_by', 'updated_by', 'status', 'state', 'type', 'slug');
+        $result = $result->orderBy('created_at', 'desc')->select('id', 'name', 'price', 'base_price', 'cate_id', 'created_at', 'created_by', 'updated_by', 'status', 'state', 'type', 'slug', 'intro', 'body', 'origin_link', 'aff_link', 'aff_product_code', 'revenue_price', 'origin');
         return $result;
     }
 
@@ -543,9 +547,11 @@ class Product extends BaseModel
                 } else if (isset($category) && !isset($cate_parent) && !isset($cate_grandparent)) {
                     $level = 1;
                 }
-                $images = [$item->image->path];
+                $images = [$item->image ? $item->image->path : ''];
                 foreach ($item->galleries as $gallery) {
-                    $images[] = $gallery->image->path;
+                    if ($gallery->image) {
+                        $images[] = $gallery->image->path;
+                    }
                 }
                 $images = array_map(function ($image) {
                     return asset(trim($image));

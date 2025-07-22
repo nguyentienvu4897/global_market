@@ -344,7 +344,7 @@ class ProductController extends Controller
     // }
 
     public function exportExcel(Request $request) {
-        $data = ThisModel::searchByFilter($request);
+        $data = ThisModel::searchByFilter($request)->get();
         $result['CHI_TIET'] = ThisModel::getTableList($data);
 
         return (new ProductExcel())
