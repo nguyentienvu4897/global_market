@@ -24,7 +24,9 @@ class ProductController extends Controller
             $products = Product::query()
                 ->with([
                     'image',
-                    'category',
+                    'category' => function($query) {
+                        $query->select('id', 'name', 'slug', 'created_at', 'updated_at');
+                    },
                 ])
                 ->where('status', 1)
                 ->select('id', 'aff_product_code', 'name', 'slug', 'status', 'type', 'cate_id', 'price', 'base_price', 'revenue_price', 'body', 'intro', 'short_des', 'origin_id', 'origin', 'origin_link', 'aff_link', 'short_link', 'created_at', 'updated_at');
