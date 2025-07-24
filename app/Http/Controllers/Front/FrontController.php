@@ -193,14 +193,18 @@ class FrontController extends Controller
                 }
             }
 
-            $redirect_aff_url = '';
+            $redirect_aff_url = $product->origin_link;
             $current_customer = \Auth::guard('client')->user();
-            $product_created_by = User::query()->where('id', $product->created_by)->where('status', 1)->whereNotIn('type', [User::SUPER_ADMIN, User::QUAN_TRI_VIEN])->first();
+            $product_created_by = User::query()->where('id', $product->created_by)->where('status', 1)->first();
             if ($product_created_by) {
-                $redirect_aff_url = $product->aff_link . "?sub_id=" . ($current_customer ? $current_customer->invite_code : null) . "----";
-            } else {
                 $origin_url = $product->origin_link;
-                $redirect_aff_url = $this->convertShopeeLink($origin_url);
+                $aff_code = $product_created_by->aff_code;
+                if (!isset($aff_code)) {
+                    $admin_user = User::query()->where('type', 1)->where('status', 1)->first();
+                    $aff_code = $admin_user->aff_code;
+                }
+
+                $redirect_aff_url = $this->convertShopeeLink($origin_url, $aff_code);
             }
 
             return view('site.products.product_detail', compact('categories', 'product', 'productsRelated', 'category', 'arr_product_rate_images', 'bestSellerProducts', 'canReview', 'redirect_aff_url'));
@@ -606,7 +610,7 @@ class FrontController extends Controller
         if ($validate->fails()) {
             return $this->responseErrors('Gửi yêu cầu thất bại!', $validate->errors());
         }
-
+        $admin_user = User::query()->where('type', 1)->where('status', 1)->first();
 
         $generate_links = [];
         $order_last = AffiliateLinkRequest::orderBy('id', 'desc')->first();
@@ -614,7 +618,7 @@ class FrontController extends Controller
         foreach ($request->arrGenerateLink as $item) {
             $url_generated = '';
             if ($item['campaign_id'] == 1) {
-                $url_generated = $this->convertShopeeLink($item['url_origin']);
+                $url_generated = $this->convertShopeeLink($item['url_origin'], $admin_user->aff_code);
                 array_push($generate_links, $url_generated);
             }
 
@@ -657,7 +661,7 @@ class FrontController extends Controller
         ]);
     }
 
-    public function convertShopeeLink($url)
+    public function convertShopeeLink($url, $aff_code = null)
     {
         $invite_code_user = \Auth::guard('client')->user() ? \Auth::guard('client')->user()->invite_code : null;
         // Nếu đã là dạng rút gọn: https://shopee.vn/product/{shop_id}/{item_id}
@@ -676,7 +680,7 @@ class FrontController extends Controller
             ) {
                 return $url;
             } else {
-                return $url . "?utm_content=$invite_code_user----&utm_medium=affiliates&utm_source=an_17381230248";
+                return $url . "?utm_content=$invite_code_user----&utm_medium=affiliates&utm_source=an_".$aff_code;
             }
         }
 
@@ -684,7 +688,7 @@ class FrontController extends Controller
         if (preg_match('/-i\.(\d+)\.(\d+)/', $url, $matches)) {
             $shopId = $matches[1];
             $itemId = $matches[2];
-            return "https://shopee.vn/product/$shopId/$itemId?utm_content=$invite_code_user----&utm_medium=affiliates&utm_source=an_17381230248";
+            return "https://shopee.vn/product/$shopId/$itemId?utm_content=$invite_code_user----&utm_medium=affiliates&utm_source=an_".$aff_code;
         }
 
         // Không khớp định dạng nào

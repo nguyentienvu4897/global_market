@@ -250,7 +250,7 @@
                                                             <span class="txt-main text_1"><i></i>Thêm vào giỏ hàng</span>
                                                         </button> --}}
                                                         @if ($product->button_type == 0)
-                                                            <a href="javascript:void(0)" class="btn btn-buy-now" ng-click="addToCartCheckoutFromProductDetail()">
+                                                            <a href="{{$product->aff_link}}" class="btn btn-buy-now" ng-click="addToCartCheckoutFromProductDetail()">
                                                             <span class="txt-main text_1">Mua hàng</span></a>
                                                         @else
                                                             <a href="{{ $redirect_aff_url }}" class="btn btn-buy-now" target="_blank">

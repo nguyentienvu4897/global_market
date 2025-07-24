@@ -320,6 +320,14 @@
                     </span>
                 </div>
                 <div class="form-group">
+                    <input type="text" placeholder="Mã tiếp thị liên kết" ng-model="aff_code" />
+                    <span class="invalid-feedback d-block error" style="text-align: left;" role="alert"
+                        ng-if="errors && errors['aff_code']">
+                        <% errors['aff_code'][0] %>
+                    </span>
+                </div>
+
+                <div class="form-group">
                     <input type="email" placeholder="Email" ng-model="email" />
                     <span class="invalid-feedback d-block error" style="text-align: left;" role="alert"
                         ng-if="errors && errors['email']">

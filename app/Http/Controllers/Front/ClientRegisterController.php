@@ -678,6 +678,7 @@ class ClientRegisterController extends Controller
             'account_name' => 'required|unique:users,account_name',
             'password' => 'required|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
             'agree_terms' => 'required|in:1',
+            'aff_code' => 'required|unique:users,aff_code',
         ];
         if (isset($request->use_account_client) && $request->use_account_client) {
             $rule['email'] = [
@@ -773,10 +774,12 @@ class ClientRegisterController extends Controller
             $user->password = bcrypt($object->password);
             $user->type = User::CONG_TAC_VIEN;
             $user->status = 1;
+            $user->aff_code = $object->aff_code;
             $user->save();
         } else {
             $user = User::query()->where('id', $object->user_id)->first();
             $user->type = User::CONG_TAC_VIEN;
+            $user->aff_code = $object->aff_code;
             $user->save();
         }
 

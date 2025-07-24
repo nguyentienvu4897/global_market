@@ -154,10 +154,17 @@ class UserController extends Controller
             'password' => 'nullable|min:6|regex:/^[a-zA-Z0-9\@\$\!\%\*\#\?\&]+$/',
 			'password_confirm' => 'required_with:password|same:password',
 			'status' => 'required|in:0,1',
-			'ctv_payment_date' => 'required_if:type,30|integer',
 //			'roles' => 'required|array|min:1',
 //			'roles.*' => 'required|exists:roles,id'
 		];
+
+        if ($request->type == 30) {
+			$rule['ctv_payment_date'] = 'required|integer';
+            $rule['aff_code'] = 'required|unique:users,aff_code,'.$id;
+        }
+        if ($request->type == 1) {
+            $rule['aff_code'] = 'required|unique:users,aff_code,'.$id;
+        }
 
 		$validate = Validator::make(
 			$request->all(),
@@ -179,6 +186,7 @@ class UserController extends Controller
 			$object->phone_number = $request->phone_number;
 			$object->ctv_code = $request->ctv_code;
 			$object->ctv_payment_date = $request->ctv_payment_date;
+			$object->aff_code = $request->aff_code;
 			$object->save();
 
             if ($request->roles) {

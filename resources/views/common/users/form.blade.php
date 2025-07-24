@@ -16,6 +16,16 @@
                             </span>
                         </div>
                     </div>
+                    <div class="col-md-6" ng-if="form.type == 30 || form.type == 1">
+                        <div class="form-group">
+                            <label class="form-label">Mã tiếp thị liên kết</label>
+                            <span class="text-danger">(*)</span>
+                            <input class="form-control" type="text" ng-model="form.aff_code">
+                            <span class="invalid-feedback d-block" role="alert">
+                                <strong><% errors.aff_code[0] %></strong>
+                            </span>
+                        </div>
+                    </div>
                     <div class="col-md-6" ng-if="form.type == 30">
                         <div class="form-group">
                             <label class="form-label">Ngày thanh toán cho sàn (hàng tháng)</label>

@@ -41,6 +41,7 @@ class SellerRequest extends Model
         'approved_by',
         'approved_at',
         'campaign_id',
+        'aff_code',
     ];
 
     public function user()
