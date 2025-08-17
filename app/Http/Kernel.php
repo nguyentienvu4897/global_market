@@ -69,6 +69,7 @@ class Kernel extends HttpKernel
         'clientAuth' => \App\Http\Middleware\ClientAuthenticate::class,
         'throttle.user' => \App\Http\Middleware\ThrottlePerUser::class,
         'verifySyncUserToken' => \App\Http\Middleware\VerifySyncUserToken::class,
+        'checkApiKey' => \App\Http\Middleware\CheckApiKey::class,
     ];
 
     /**
