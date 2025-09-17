@@ -4,11 +4,13 @@ namespace App\Providers;
 use App\Http\View\Composers\FooterComposer;
 use App\Http\View\Composers\HeaderComposer;
 use App\Http\View\Composers\MenuHomePageComposer;
+use App\Services\DatabaseConnectionService;
 use Illuminate\Support\Facades\Schema; //SoftDelete
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Console\Scheduling\Schedule;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +34,10 @@ class AppServiceProvider extends ServiceProvider
         if (config('app.env') != 'local') {
             URL::forceScheme('https');
         }
+
+        // Tối ưu hóa connection khi app khởi động
+        DatabaseConnectionService::optimizeConnections();
+
 
         // if (request()->is('admin/*')) {
         //     config(['session.cookie' => 'admin_session']);
@@ -96,5 +102,17 @@ class AppServiceProvider extends ServiceProvider
             'site.layouts.master',
             HeaderComposer::class
         );
+
+        // Chạy cleanup định kỳ
+        $this->scheduleCleanup();
+    }
+
+    private function scheduleCleanup()
+    {
+        // Chạy cleanup mỗi 5 phút
+        $schedule = app(Schedule::class);
+        $schedule->call(function () {
+            DatabaseConnectionService::cleanupIdleConnections();
+        })->everyFiveMinutes();
     }
 }

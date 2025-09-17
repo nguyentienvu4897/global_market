@@ -1,0 +1,43 @@
+# MySQL Configuration for Global Market
+# Copy this to your MySQL configuration file (my.cnf or my.ini)
+
+[mysqld]
+# Connection Settings
+max_connections = 200
+max_connect_errors = 1000000
+connect_timeout = 10
+wait_timeout = 300
+interactive_timeout = 300
+net_read_timeout = 30
+net_write_timeout = 30
+
+# Buffer Settings
+innodb_buffer_pool_size = 1G
+innodb_log_file_size = 256M
+innodb_log_buffer_size = 16M
+innodb_flush_log_at_trx_commit = 2
+
+# Query Cache
+query_cache_type = 1
+query_cache_size = 64M
+query_cache_limit = 2M
+
+# Thread Settings
+thread_cache_size = 16
+thread_stack = 256K
+
+# Table Settings
+table_open_cache = 2000
+table_definition_cache = 1400
+
+# Connection Pool
+thread_handling = pool-of-threads
+
+# Logging
+slow_query_log = 1
+slow_query_log_file = /var/log/mysql/slow.log
+long_query_time = 2
+
+# Performance Schema
+performance_schema = ON
+performance_schema_max_table_instances = 500

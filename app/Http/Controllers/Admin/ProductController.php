@@ -30,6 +30,7 @@ use App\Helpers\FileHelper;
 use App\Model\Admin\Config;
 use App\Model\Common\User;
 use App\Model\Common\ActivityLog;
+use App\Services\DatabaseConnectionService;
 use Auth;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -40,13 +41,25 @@ class ProductController extends Controller
 
     public function index()
     {
+        // Kiểm tra health từ cache (nhanh)
+        $health = DatabaseConnectionService::checkConnectionHealth();
+
+        if ($health['status'] !== 'healthy') {
+            return redirect()->route('dash')->with('error', 'Database không khả dụng');
+        }
         return view($this->view . '.index');
     }
 
     // Hàm lấy data cho bảng list
     public function searchData(Request $request)
     {
-        $objects = ThisModel::searchByFilter($request);
+        $health = DatabaseConnectionService::checkConnectionHealth();
+
+        if ($health['status'] !== 'healthy') {
+            $objects = [];
+        } else {
+            $objects = ThisModel::searchByFilter($request);
+        }
         return Datatables::of($objects)
             ->addColumn('name', function ($object) {
                 return $object->name;
@@ -170,10 +183,10 @@ class ProductController extends Controller
         }
     }
 
-	public function edit($id)
-	{
-		$object = ThisModel::getDataForEdit($id);
-		if (!$object->canEdit()) return view('not_found');
+    public function edit($id)
+    {
+        $object = ThisModel::getDataForEdit($id);
+        if (!$object->canEdit()) return view('not_found');
         $tags = Tag::query()->where('type', Tag::TYPE_PRODUCT)->latest()->get();
         $config = Config::query()->first(['revenue_percent_1', 'revenue_percent_2', 'revenue_percent_3', 'revenue_percent_4', 'revenue_percent_5']);
         $object->tag_ids = $object->tags->pluck('id')->toArray();
@@ -342,7 +355,8 @@ class ProductController extends Controller
     //     });
     // }
 
-    public function exportExcel(Request $request) {
+    public function exportExcel(Request $request)
+    {
         $data = ThisModel::searchByFilter($request)->get();
         $result['CHI_TIET'] = ThisModel::getTableList($data);
 
@@ -479,9 +493,7 @@ class ProductController extends Controller
             $ids = json_decode($ids, true);
         }
         $products = Product::query()->where('status', 1)->select('id', 'name');
-        if (!Auth::guard('admin')->user()->is_ctv) {
-
-        } else {
+        if (!Auth::guard('admin')->user()->is_ctv) { } else {
             $products = $products->where('created_by', Auth::guard('admin')->user()->id);
         }
         if (!empty($request->keyword)) {

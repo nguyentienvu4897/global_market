@@ -58,8 +58,19 @@ return [
             'prefix_indexes' => true,
             'strict' => true,
             'engine' => null,
+            'pool' => [
+                'min_connections' => 1,
+                'max_connections' => 10,
+                'connect_timeout' => 10.0,
+                'wait_timeout' => 3.0,
+                'heartbeat' => -1,
+                'max_idle_time' => 60.0,
+            ],
             'options' => extension_loaded('pdo_mysql') ? array_filter([
                 PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
+                PDO::ATTR_PERSISTENT => false, // Tắt persistent connection
+                PDO::ATTR_TIMEOUT => 30, // Timeout 30 giây
+                PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION wait_timeout=300, interactive_timeout=300",
             ]) : [],
         ],
 

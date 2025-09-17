@@ -20,6 +20,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\DatabaseConnectionManager::class,
         CustomErrorPageMiddleware::class
     ];
 
@@ -70,6 +71,7 @@ class Kernel extends HttpKernel
         'throttle.user' => \App\Http\Middleware\ThrottlePerUser::class,
         'verifySyncUserToken' => \App\Http\Middleware\VerifySyncUserToken::class,
         'checkApiKey' => \App\Http\Middleware\CheckApiKey::class,
+        'db.health' => \App\Http\Middleware\DatabaseConnectionManager::class,
     ];
 
     /**
