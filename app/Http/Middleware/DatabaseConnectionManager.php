@@ -26,7 +26,7 @@ class DatabaseConnectionManager
             if (config('app.debug')) {
                 $connections = DB::select("SHOW STATUS LIKE 'Threads_connected'");
                 $connected = $connections[0]->Value ?? 0;
-                Log::info("Database connections: {$connected}");
+                // Log::info("Database connections: {$connected}");
             }
         } catch (\Exception $e) {
             Log::error('Database connection failed: ' . $e->getMessage());

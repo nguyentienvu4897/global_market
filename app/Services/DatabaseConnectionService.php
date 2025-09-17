@@ -124,7 +124,7 @@ class DatabaseConnectionService
             DB::statement("SET SESSION net_read_timeout = 30");
             DB::statement("SET SESSION net_write_timeout = 30");
 
-            Log::info("Database connection optimized");
+            // Log::info("Database connection optimized");
             return true;
 
         } catch (\Exception $e) {
