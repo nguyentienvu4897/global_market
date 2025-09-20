@@ -93,9 +93,11 @@ class Order extends Model
     {
         $result = self::query();
 
-        if (!Auth::guard('admin')->user()->is_ctv && !Auth::guard('admin')->user()->is_seller) {
-        } else {
-            $result = $result->where('created_by', Auth::guard('admin')->user()->id);
+        if (Auth::guard('admin')->check()) {
+            if (!Auth::guard('admin')->user()->is_ctv && !Auth::guard('admin')->user()->is_seller) {
+            } else {
+                $result = $result->where('created_by', Auth::guard('admin')->user()->id);
+            }
         }
 
         if (!empty($request->code)) {

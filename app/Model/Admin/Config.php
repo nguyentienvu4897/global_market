@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Model\Admin;
+
 use App\Helpers\FileHelper;
 use Auth;
 use App\Model\BaseModel;
@@ -45,8 +46,37 @@ class Config extends BaseModel
                         ->with(['image'])
                         ->orderBy('sort', 'ASC');
                 },
-                ])
+            ])
             ->firstOrFail();
+    }
+
+    /**
+     * Lấy config với cache (24 giờ)
+     */
+    public static function getCachedConfig()
+    {
+        return \Cache::remember('app_config', 86400, function () {
+            return self::with(['image'])->where('id', 1)->first();
+        });
+    }
+
+    /**
+     * Lấy config với cache vĩnh viễn (chỉ clear khi update)
+     */
+    public static function getPermanentConfig()
+    {
+        return \Cache::rememberForever('app_config_permanent', function () {
+            return self::with(['image'])->where('id', 1)->first();
+        });
+    }
+
+    /**
+     * Clear config cache khi update
+     */
+    public static function clearConfigCache()
+    {
+        \Cache::forget('app_config');
+        \Cache::forget('app_config_permanent');
     }
 
     public function syncGalleries($galleries)
@@ -80,5 +110,4 @@ class Config extends BaseModel
             }
         }
     }
-
 }
