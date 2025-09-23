@@ -19,6 +19,7 @@ use \Carbon\Carbon;
 use DB;
 use App\Http\Traits\ResponseTrait;
 use App\Helpers\FileHelper;
+use App\Model\Admin\Product;
 use App\Model\Common\User;
 
 class UserController extends Controller
@@ -69,8 +70,11 @@ class UserController extends Controller
                 if ($object->canEdit()) {
                     $result = '<a href="' . route($this->route . '.edit', $object->id) . '" title="Sửa" class="btn btn-sm btn-primary edit"><i class="fas fa-pencil-alt"></i></a> ';
                 }
-                if ($object->canDelete()) {
-                    $result .= '<a href="' . route($this->route . '.delete', $object->id) . '" title="Khóa" class="btn btn-sm btn-danger confirm"><i class="fas fa-times"></i></a>';
+                if ($object->canDelete() && $object->status == 1 && $object->type != ThisModel::SUPER_ADMIN && $object->id != 1) {
+                    $result .= '<a href="' . route($this->route . '.delete', $object->id) . '" title="Khóa" class="btn btn-sm btn-danger confirm"><i class="fas fa-lock"></i></a>';
+                }
+                if ($object->canDelete() && $object->status == 0 && $object->type != ThisModel::SUPER_ADMIN && $object->id != 1) {
+                    $result .= '<a href="' . route($this->route . '.delete', $object->id) . '" title="Xóa" class="btn btn-sm btn-danger confirm"><i class="fas fa-trash"></i></a>';
                 }
                 return $result;
             })
@@ -211,8 +215,23 @@ class UserController extends Controller
 				"alert-type" => "warning"
 			);
 		} else {
-			$object->status = 0;
-			$object->save();
+            if ($object->status == 1) {
+                $object->status = 0;
+                $object->save();
+            } else {
+                if ($object->image) {
+                    FileHelper::forceDeleteFiles($object->image->id, $object->id, ThisModel::class, 'image');
+                }
+                if ($object->roles) {
+                    $object->roles()->sync([]);
+                }
+                $products = Product::query()->where('created_by', $object->id)->get();
+                foreach ($products as $product) {
+                    $product->created_by = 1;
+                    $product->save();
+                }
+                $object->delete();
+            }
 			$message = array(
 				"message" => "Thao tác thành công!",
 				"alert-type" => "success"
