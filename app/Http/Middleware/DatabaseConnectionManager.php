@@ -18,25 +18,36 @@ class DatabaseConnectionManager
      */
     public function handle(Request $request, Closure $next)
     {
-        try {
-            // Kiểm tra kết nối database trước khi xử lý request
-            DB::connection()->getPdo();
+        // Chỉ kiểm tra database health cho API routes và admin routes
+        if ($request->is('api/*') || $request->is('admin/*')) {
+            try {
+                // Sử dụng cache để tránh query liên tục
+                $health = \App\Services\DatabaseConnectionService::getHealthStatus();
 
-            // Log số lượng connection hiện tại (chỉ trong development)
-            if (config('app.debug')) {
-                $connections = DB::select("SHOW STATUS LIKE 'Threads_connected'");
-                $connected = $connections[0]->Value ?? 0;
-                // Log::info("Database connections: {$connected}");
+                // Nếu cache cũ hơn 60 giây, kiểm tra lại
+                if (!$health['timestamp'] || $health['timestamp']->diffInSeconds(now()) > 60) {
+                    $health = \App\Services\DatabaseConnectionService::checkConnectionHealth();
+                }
+
+                if ($health['status'] !== 'healthy') {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'Dịch vụ tạm thời không khả dụng. Vui lòng thử lại sau.',
+                        'error' => 'Database connection failed'
+                    ], 503);
+                }
+            } catch (\Exception $e) {
+                // Chỉ log error nếu không phải "Too many connections"
+                if (strpos($e->getMessage(), 'Too many connections') === false) {
+                    Log::error('Database connection failed: ' . $e->getMessage());
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Dịch vụ tạm thời không khả dụng. Vui lòng thử lại sau.',
+                    'error' => 'Database connection failed'
+                ], 503);
             }
-        } catch (\Exception $e) {
-            Log::error('Database connection failed: ' . $e->getMessage());
-
-            // Trả về lỗi 503 Service Unavailable
-            return response()->json([
-                'success' => false,
-                'message' => 'Dịch vụ tạm thời không khả dụng. Vui lòng thử lại sau.',
-                'error' => 'Database connection failed'
-            ], 503);
         }
 
         return $next($request);

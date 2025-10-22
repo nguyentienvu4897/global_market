@@ -41,25 +41,13 @@ class ProductController extends Controller
 
     public function index()
     {
-        // Kiểm tra health từ cache (nhanh)
-        $health = DatabaseConnectionService::checkConnectionHealth();
-
-        if ($health['status'] !== 'healthy') {
-            return redirect()->route('dash')->with('error', 'Database không khả dụng');
-        }
         return view($this->view . '.index');
     }
 
     // Hàm lấy data cho bảng list
     public function searchData(Request $request)
     {
-        $health = DatabaseConnectionService::checkConnectionHealth();
-
-        if ($health['status'] !== 'healthy') {
-            $objects = [];
-        } else {
-            $objects = ThisModel::searchByFilter($request);
-        }
+        $objects = ThisModel::searchByFilter($request);
         return Datatables::of($objects)
             ->addColumn('name', function ($object) {
                 return $object->name;

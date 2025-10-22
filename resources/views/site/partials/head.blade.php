@@ -37,3 +37,4 @@
     <link rel="icon" href="{{$config->favicon->path ?? ''}}" type="image/x-icon">
     <!-- / Yoast SEO plugin. -->
 
+    <meta name="tikiaff-domain-verification" content="644adf5938e9453fdb9ec265e749da210992d6031fe2eade0420a6844f46d6fd" />

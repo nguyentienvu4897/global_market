@@ -16,13 +16,18 @@ class DatabaseConnectionService
         try {
             $startTime = microtime(true);
 
-            // Test connection
-            DB::connection()->getPdo();
+            // Test connection với timeout ngắn
+            $pdo = DB::connection()->getPdo();
+
+            // Kiểm tra connection có hoạt động không
+            if (!$pdo) {
+                throw new \Exception('No database connection available');
+            }
 
             $endTime = microtime(true);
             $responseTime = round(($endTime - $startTime) * 1000, 2);
 
-            // Lấy thông tin kết nối
+            // Lấy thông tin kết nối với timeout
             $connections = DB::select("SHOW STATUS LIKE 'Threads_connected'");
             $maxConnections = DB::select("SHOW VARIABLES LIKE 'max_connections'");
 
@@ -39,16 +44,15 @@ class DatabaseConnectionService
                 'timestamp' => now()
             ];
 
-            // Cache health data for 30 seconds
-            Cache::put('db_health', $healthData, 30);
+            // Cache health data for 60 seconds
+            Cache::put('db_health', $healthData, 60);
 
             // Log warning if usage is high
             if ($usagePercent > 80) {
-                Log::warning("Database connection usage high", $healthData);
+                Log::warning("Database connection usage high: {$usagePercent}%");
             }
 
             return $healthData;
-
         } catch (\Exception $e) {
             $errorData = [
                 'status' => 'unhealthy',
@@ -56,8 +60,12 @@ class DatabaseConnectionService
                 'timestamp' => now()
             ];
 
-            Cache::put('db_health', $errorData, 30);
-            Log::error('Database health check failed', $errorData);
+            Cache::put('db_health', $errorData, 60);
+
+            // Không log "Too many connections" để tránh spam
+            if (strpos($e->getMessage(), 'Too many connections') === false) {
+                Log::error('Database health check failed: ' . $e->getMessage());
+            }
 
             return $errorData;
         }
@@ -105,7 +113,6 @@ class DatabaseConnectionService
             }
 
             return $killedCount;
-
         } catch (\Exception $e) {
             Log::error('Failed to cleanup idle connections: ' . $e->getMessage());
             return 0;
@@ -126,7 +133,6 @@ class DatabaseConnectionService
 
             // Log::info("Database connection optimized");
             return true;
-
         } catch (\Exception $e) {
             Log::error('Failed to optimize connections: ' . $e->getMessage());
             return false;
