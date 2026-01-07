@@ -45,7 +45,12 @@
                     <div class="list-menu toggle-mn list-info">
                         <div class="content-contact clearfix">
                             <span class="list_footer">
-                                <b>Trụ sở chính: </b>{{ $config->address_company }}
+                                <b>Đơn vị chủ quản: </b>{{ $config->address_company }}
+                            </span>
+                        </div>
+                        <div class="content-contact clearfix">
+                            <span class="list_footer">
+                                <b>Mã số thuế: </b>{{ $config->tax_code }}
                             </span>
                         </div>
                         <div class="content-contact clearfix">
@@ -175,7 +180,7 @@
             <div class="row tablet">
                 <div id="copyright" class="col-lg-12 col-md-12 col-xs-12 fot_copyright">
                     <span class="wsp">
-                        <span class="mobile">© Bản quyền thuộc về <b>{{ $config->web_title }}</b>
+                        <span class="mobile">© Bản quyền thuộc về <b>{{ $config->short_name_company }}</b>
                         </span>
                     </span>
                 </div>
