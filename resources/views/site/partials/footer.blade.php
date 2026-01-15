@@ -89,6 +89,7 @@
                             <a href="{{ route('front.contact-us') }}" title="Liên hệ">Liên hệ</a>
                         </li>
                     </ul>
+                    <script language="JavaScript" src="https://dunsregistered.dnb.com" type="text/javascript"></script>
                     <div class="social-footer">
                         <div class="social toggle-mn">
                             <a class="fb" href="{{ $config->facebook }}" target="_blank" aria-label="Facebook"
