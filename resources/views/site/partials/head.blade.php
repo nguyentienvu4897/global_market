@@ -38,4 +38,4 @@
     <!-- / Yoast SEO plugin. -->
 
     <meta name="tikiaff-domain-verification" content="644adf5938e9453fdb9ec265e749da210992d6031fe2eade0420a6844f46d6fd" />
-    <meta name="google-site-verification" content="cwdraqyj--KMmDuyK0Lf5hh4UwHrHdkEsWUEHVJZRGs" />
+    <meta name="google-site-verification" content="cp3DIeDplniCfTx9iww-JQI0_WNv9UFOY2UEbQsPMBQ" />
