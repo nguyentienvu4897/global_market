@@ -39,7 +39,7 @@
         </div>
     </section>
     <section class="blogpage">
-        <div class="container layout-article" itemscope itemtype="https://schema.org/Article">
+        <div class="container layout-article">
             <div class="bg_blog">
                 <article class="article-main">
                     <div class="row">

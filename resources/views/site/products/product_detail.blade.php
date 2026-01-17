@@ -81,7 +81,7 @@
                 </ul>
             </div>
         </section>
-        <section class="product layout-product" itemscope itemtype="https://schema.org/Product">
+        <section class="product layout-product">
             <div class="container">
                 <div class="details-product">
                     <div class="row">
